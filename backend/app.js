@@ -21,6 +21,9 @@ async function main() {
 }
 main();
 
+// so passport is for hashing password and 
+// checking if password is the same as in database when account was created
+
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
