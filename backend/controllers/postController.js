@@ -18,7 +18,7 @@ const getPost = async (req, res) => {
   }
 
   const post = await Post.findById(id);
-  if (!user) {
+  if (!post) {
     return res.status(404).json({ error: 'No such post' });
   }
   res.status(200).json(post);
@@ -26,16 +26,16 @@ const getPost = async (req, res) => {
 
 // create a new post
 const createPost = asyncHandler(async (req, res, next) => {
-  const {title, likes, body, comments, author } = req.body;
+  const { title, likes, body, comments, author } = req.body;
   // store new post in db
-    const newPost = await Post.create({
-        title,
-        likes,
-        body,
-        comments,
-        author
-    });
-    res.status(200).json(newPost);
+  const newPost = await Post.create({
+    title,
+    likes,
+    body,
+    comments,
+    author,
+  });
+  res.status(200).json(newPost);
 });
 
 // delete a post
@@ -52,18 +52,18 @@ const deletePost = async (req, res) => {
     return res.status(400).json({ error: 'That post no longer exists.' });
   }
 
-  res.status(200).json(user);
+  res.status(200).json(post);
 };
 
-// update a user
-const updateUser = async (req, res) => {
+// update a post
+const updatePost = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'No such user' });
+    return res.status(400).json({ error: 'No such post' });
   }
 
-  const user = await User.findOneAndUpdate(
+  const post = await Post.findOneAndUpdate(
     { _id: id },
     // req.body contains all the previous fields in the model
     {
@@ -71,17 +71,17 @@ const updateUser = async (req, res) => {
     }
   );
 
-  if (!user) {
-    return res.status(400).json({ error: 'No such user' });
+  if (!post) {
+    return res.status(400).json({ error: 'No such post' });
   }
 
-  res.status(200).json(user);
+  res.status(200).json(post);
 };
 
 module.exports = {
-  getUsers: getPosts,
-  getUser,
-  createUser,
-  deleteUser,
-  updateUser,
+  getPosts,
+  getPost,
+  createPost,
+  deletePost,
+  updatePost,
 };

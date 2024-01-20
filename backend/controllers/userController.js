@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 // get all users
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({}).sort({name: 1});
+  const users = await User.find({}).sort({ name: 1 });
   res.status(200).json(users);
 });
 
@@ -28,6 +28,8 @@ const getUser = async (req, res) => {
 // create a new user
 const createUser = asyncHandler(async (req, res, next) => {
   const { username, password, email, first_name, last_name } = req.body;
+  //LocalStrategy will check for us if this account already exists
+  
   // store new user in db
   bcrypt.hash(password, 10, async (err, hashedPassword) => {
     if (err) {

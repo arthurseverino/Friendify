@@ -23,7 +23,7 @@ async function main() {
 main();
 
 // so passport is for hashing password and 
-// checking if password is the same as in database when account was created
+// LocalStrategy checks if username and password exists in the db
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
@@ -70,7 +70,7 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
   console.log(
-    'Path: ' + req.path + ', Method: ' + req.method + ', Params: ' + req.params.id
+    'Path: ' + req.path + ', Method: ' + req.method + ', Params: ' + req.params
   );
   next();
 });
@@ -80,7 +80,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 
 app.use((err, req, res, next) => {
-  res.status(500).send(err.stack); // Send error response
+  res.status(500).send(err.stack);
 });
 
 app.listen(process.env.PORT || 3000, () => {

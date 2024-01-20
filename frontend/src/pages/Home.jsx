@@ -20,7 +20,9 @@ const Home = () => {
   return (
     <div className="home">
       <h1>My Timeline</h1>
-      {posts && posts.map((post) => <PostDetails key={post._id} post={post} />)}
+      {posts
+        ? posts.map((post) => <PostDetails key={post._id} post={post} />)
+        : 'No posts yet'}
     </div>
   );
 };

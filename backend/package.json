@@ -2,7 +2,7 @@
   "name": "social-network",
   "version": "1.0.0",
   "description": "",
-  "main": "../frontend/src/main.jsx",
+  "main": "app.js",
   "scripts": {
     "check": "npx eslint-config-prettier ./app.js",
     "dev": "nodemon app.js"
