@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const router = express.Router();
 const {
   getUsers,
   getUser,
@@ -9,13 +10,11 @@ const {
   updateUser,
 } = require('../controllers/userController');
 
-const router = express.Router();
-
 // GET all users
 router.get('/', getUsers);
 
 // GET a single user
-// the profile page 
+// the profile page
 router.get('/:id', getUser);
 
 // POST a new user
@@ -27,14 +26,9 @@ router.delete('/:id', deleteUser);
 // UPDATE a user
 router.patch('/:id', updateUser);
 
-// api/users/login
-router.get('/login', (req, res) => {
-  res.send('login not implemented yet' + req.path);
-});
-// This directly below and above should be react router links as they are not RESTful API routes
-router.get('/signup', (req, res) => {
-  res.send('signup not implemented yet' + req.path);
-});
+// Get requests for these are handled by react router
+/* router.get('/login');
+router.get('/signup'); */
 
 router.post(
   '/login',
@@ -43,7 +37,6 @@ router.post(
     failureRedirect: '/login',
   })
 );
-
 
 router.post(
   '/signup',

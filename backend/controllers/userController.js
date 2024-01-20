@@ -4,10 +4,9 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
-
 // get all users
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({}).sort({ createdAt: -1 });
+  const users = await User.find({}).sort({name: 1});
   res.status(200).json(users);
 });
 

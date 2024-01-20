@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/users');
+const postRoutes = require('./routes/posts');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const session = require('express-session');
@@ -76,6 +77,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
 app.use((err, req, res, next) => {
   res.status(500).send(err.stack); // Send error response

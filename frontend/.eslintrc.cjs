@@ -29,5 +29,8 @@ module.exports = {
     'no-new-wrappers': 'warn',
     'no-undef': 'off',
     'no-unused-vars': 'off',
+    'react/prop-types': 'off',
+    'react/jsx-no-target-blank': 'off',
+    'react-hooks/exhaustive-deps': 'off',
   },
 };
