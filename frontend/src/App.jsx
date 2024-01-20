@@ -17,8 +17,9 @@ function App() {
         <div className="pages">
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/api/users/signup" element={<SignupForm />} />
-            <Route path="/api/users/login" element={<LoginForm />} />
+            <Route path="/posts" element={<Home />} />
+            <Route path="/users/signup" element={<SignupForm />} />
+            <Route path="/users/login" element={<LoginForm />} />
           </Routes>
         </div>
       </BrowserRouter>

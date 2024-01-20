@@ -8,7 +8,7 @@ const Home = () => {
   //only ran once when Home is rendered, because of the empty array
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('/api/posts');
+      const response = await fetch('/posts');
       const data = await response.json();
       if (response.ok) {
         setPosts(data);

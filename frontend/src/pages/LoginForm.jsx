@@ -1,59 +1,60 @@
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState([]);
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
-  // const history = useHistory();
-  const dispatch = useDispatch();
+const LoginForm = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const res = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (data.errors) {
-        setErrors(data.errors);
-      } else {
-        // history.push('/');
-        dispatch(sessionActions.restoreUser());
-      }
-    } catch (err) {
-      console.error(err);
+    const response = await fetch('/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    if (!response.ok) {
+      setError('An error occurred. Please try again.');
+      return;
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <ul>
-        {errors.map((error, idx) => (
-          <li key={idx}>{error}</li>
-        ))}
-      </ul>
-      <label htmlFor="email">Email</label>
-      <input
-        type="text"
-        id="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="login">
+      <div className="login__wrapper">
+        <div className="login__left">
+          <h3 className="login__logo">Facebook Clone</h3>
+          Login to Facebook Clone
+        </div>
+        <div className="login__right">
+          <form onSubmit={handleSubmit} className="login__form">
+            <input
+              type="text"
+              placeholder="Username"
+              className="login__input"
+              name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              className="login__input"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit" className="login__btn">
+              Log In
+            </button>
+            or 
+            <Link to="/users/signup" className="login__link">
+              Create New Account
+            </Link>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -11,21 +11,31 @@ const SignupForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/api/users/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password, email, firstName, lastName }),
-    });
-    const data = await response.json();
-    if (data.errors) {
-      setError(data.errors);
-    } else {
-      setUsername('');
-      setPassword('');
-      setEmail('');
-      setFirstName('');
-      setLastName('');
-      setError(null);
+    try {
+      const response = await fetch('/users/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          password,
+          email,
+          firstName,
+          lastName,
+        }),
+      });
+      const data = await response.json();
+      if (data.errors) {
+        setError(data.errors);
+      } else {
+        setUsername('');
+        setPassword('');
+        setEmail('');
+        setFirstName('');
+        setLastName('');
+        setError(null);
+      }
+    } catch (err) {
+      setError(err);
     }
   };
 

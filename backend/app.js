@@ -22,9 +22,8 @@ async function main() {
 }
 main();
 
-// so passport is for hashing password and
-// LocalStrategy checks if username and password exists in the db
-
+// bcrypt is for hashing password 
+// PassportJS/LocalStrategy checks if username and password exists in the db
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
@@ -64,7 +63,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(methodOverride('_method'));
-app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -74,11 +79,11 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use('/api/users', userRoutes);
-app.use('/api/posts', postRoutes);
+app.use('/users', userRoutes);
+app.use('/posts', postRoutes);
 
 app.use((err, req, res, next) => {
-  res.status(500).send(err.stack);
+  res.status(500).send(`err.stack: ${err.stack}, err.status: ${err.status}`);
 });
 
 app.listen(process.env.PORT || 3000, () => {

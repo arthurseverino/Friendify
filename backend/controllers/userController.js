@@ -30,24 +30,19 @@ const createUser = asyncHandler(async (req, res, next) => {
   const { username, password, email, first_name, last_name } = req.body;
   // store new user in db
   bcrypt.hash(password, 10, async (err, hashedPassword) => {
-    if (err) {
-      return next(err);
-    }
-    const user = await User.create({
-      username,
-      password: hashedPassword,
-      email,
-      first_name,
-      last_name,
-    });
-    // authenticate the user
-    req.login(user, (err) => {
-      if (err) {
-        return next(err);
-      }
+    try {
+      const user = await User.create({
+        username,
+        password: hashedPassword,
+        email,
+        first_name,
+        last_name,
+      });
       // if successful, respond with the new user
       return res.status(200).json(user);
-    });
+    } catch (err) {
+      return next(err);
+    }
   });
 });
 
