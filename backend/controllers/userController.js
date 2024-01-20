@@ -1,86 +1,94 @@
 const User = require('../models/userModel');
+const asyncHandler = require('express-async-handler');
+const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
-// get all workouts
-const getUsers = async (req, res) => {
-  const workouts = await Workout.find({}).sort({ createdAt: -1 });
 
-  res.status(200).json(workouts);
-};
+// get all users
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({}).sort({ createdAt: -1 });
+  res.status(200).json(users);
+});
 
-// get a single workout
+// get a single user
 const getUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: 'No such workout' });
+    return res.status(404).json({ error: 'No such user' });
   }
 
-  const workout = await Workout.findById(id);
-
-  if (!workout) {
-    return res.status(404).json({ error: 'No such workout' });
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).json({ error: 'No such user' });
   }
-
-  res.status(200).json(workout);
+  res.status(200).json(user);
 };
 
-// create a new workout
-const createUser = async (req, res) => {
-  const { title, load, reps } = req.body;
+// create a new user
+const createUser = asyncHandler(async (req, res, next) => {
+  const { username, password, email, first_name, last_name } = req.body;
+  // store new user in db
+  bcrypt.hash(password, 10, async (err, hashedPassword) => {
+    if (err) {
+      return next(err);
+    }
+    const user = await User.create({
+      username,
+      password: hashedPassword,
+      email,
+      first_name,
+      last_name,
+    });
+    res.status(200).json(user);
+  });
+});
 
-  // add to the database
-  try {
-    const workout = await Workout.create({ title, load, reps });
-    res.status(200).json(workout);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// delete a workout
+// delete a user
 const deleteUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'No such workout' });
+    return res.status(400).json({ error: 'No such user' });
   }
 
-  const workout = await Workout.findOneAndDelete({ _id: id });
+  const user = await User.findOneAndDelete({ _id: id });
 
-  if (!workout) {
-    return res.status(400).json({ error: 'No such workout' });
+  if (!user) {
+    return res.status(400).json({ error: 'No such user' });
   }
 
-  res.status(200).json(workout);
+  res.status(200).json(user);
 };
 
-// update a workout
-const updateUser= async (req, res) => {
+// update a user
+const updateUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'No such workout' });
+    return res.status(400).json({ error: 'No such user' });
   }
 
-  const workout = await Workout.findOneAndUpdate(
+  const user = await User.findOneAndUpdate(
     { _id: id },
+    // req.body contains all the previous fields in the model
     {
       ...req.body,
     }
   );
 
-  if (!workout) {
-    return res.status(400).json({ error: 'No such workout' });
+  if (!user) {
+    return res.status(400).json({ error: 'No such user' });
   }
 
-  res.status(200).json(workout);
+  res.status(200).json(user);
 };
 
 module.exports = {
-  getWorkouts,
-  getWorkout,
-  createWorkout,
-  deleteWorkout,
-  updateWorkout,
+  getUsers,
+  getUser,
+  createUser,
+  deleteUser,
+  updateUser,
 };

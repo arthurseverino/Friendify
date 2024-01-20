@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -8,23 +9,31 @@ const userSchema = new Schema(
       required: true,
     },
     password: {
-      type: Number,
+      type: String,
       required: true,
     },
     email: {
-      type: Number,
+      type: String,
       required: true,
     },
     first_name: {
-      type: Number,
+      type: String,
       required: true,
     },
     last_name: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
   { timestamps: true }
 );
+
+userSchema.virtual('url').get(function () {
+  return '/users/' + this._id;
+});
+
+userSchema.virtual('name').get(function () {
+  return this.first_name + ' ' + this.last_name;
+});
 
 module.exports = mongoose.model('User', userSchema);
