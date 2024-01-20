@@ -13,6 +13,7 @@ const {
 /* 
 
 router.get('/login');
+router.get('/signup');
 
 <Route path="/api/users/signup" element={<SignupForm />} />
 <Route path="/api/users/login" element={<LoginForm />} />
