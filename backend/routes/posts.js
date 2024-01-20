@@ -6,7 +6,7 @@ const {
   createPost,
   deletePost,
   updatePost,
-} = require('../controllers/userController');
+} = require('../controllers/postController');
 
 //pass in jwt token here maybe?
 

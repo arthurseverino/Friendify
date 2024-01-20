@@ -11,35 +11,31 @@ const {
 } = require('../controllers/userController');
 
 /* 
-Get requests for these are handled by react router
+
 router.get('/login');
-router.get('/signup'); 
+
+<Route path="/api/users/signup" element={<SignupForm />} />
+<Route path="/api/users/login" element={<LoginForm />} />
+
+passport.authenticate('local', {
+  successRedirect: '/login',
+  failureRedirect: '/signup',
+}),
 */
 
-// GET all users
-// this function might be useless too but you need it before you use :id
+// GET all users, a list of all users
 router.get('/', getUsers);
 
-// GET a single user
-// the profile page
+// GET a single user, the profile page
 router.get('/:id', getUser);
 
-// POST a new user
-router.post(
-  '/signup',
-  passport.authenticate('local', {
-    successRedirect: '/login',
-    failureRedirect: '/signup',
-  }),
-  createUser
-);
+// CREATE a new user, you can create a new user from the signup page
+router.post('/signup', createUser);
 
-
-
-// DELETE a user, should you be able to delete users?
+// DELETE a user, you can delete a user from its profile page
 router.delete('/:id', deleteUser);
 
-// UPDATE a user
+// UPDATE a user, you can update a user from its profile page
 router.patch('/:id', updateUser);
 
 router.get('/logout', (req, res, next) => {

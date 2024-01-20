@@ -28,8 +28,6 @@ const getUser = async (req, res) => {
 // create a new user
 const createUser = asyncHandler(async (req, res, next) => {
   const { username, password, email, first_name, last_name } = req.body;
-  //LocalStrategy will check for us if this account already exists
-  
   // store new user in db
   bcrypt.hash(password, 10, async (err, hashedPassword) => {
     if (err) {
@@ -42,7 +40,14 @@ const createUser = asyncHandler(async (req, res, next) => {
       first_name,
       last_name,
     });
-    res.status(200).json(user);
+    // authenticate the user
+    req.login(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      // if successful, respond with the new user
+      return res.status(200).json(user);
+    });
   });
 });
 

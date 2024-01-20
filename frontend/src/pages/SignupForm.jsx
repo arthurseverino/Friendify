@@ -19,6 +19,13 @@ const SignupForm = () => {
     const data = await response.json();
     if (data.errors) {
       setError(data.errors);
+    } else {
+      setUsername('');
+      setPassword('');
+      setEmail('');
+      setFirstName('');
+      setLastName('');
+      setError(null);
     }
   };
 

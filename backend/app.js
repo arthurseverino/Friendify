@@ -22,7 +22,7 @@ async function main() {
 }
 main();
 
-// so passport is for hashing password and 
+// so passport is for hashing password and
 // LocalStrategy checks if username and password exists in the db
 
 passport.use(
@@ -69,9 +69,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  console.log(
-    'Path: ' + req.path + ', Method: ' + req.method + ', Params: ' + req.params
-  );
+  console.log('Path: ' + req.path + ', Method: ' + req.method);
   next();
 });
 
