@@ -47,6 +47,9 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+//called in the background by passport.authenticate
+// it logs out the user
+// 
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
@@ -79,8 +82,11 @@ app.use((req, res, next) => {
 });
 
 // routes
+// keep users, make posts / 
+// this means <Route path="/posts" element={Home} /> in frontend/src/App.js
+// <Route path="/" element={<Navigate to="/posts" />} />
 app.use('/users', userRoutes);
-app.use('/posts', postRoutes);
+app.use('/', postRoutes);
 
 app.use((err, req, res, next) => {
   res.status(500).send(`err.stack: ${err.stack}, err.status: ${err.status}`);

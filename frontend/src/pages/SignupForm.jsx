@@ -40,61 +40,65 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="signup">
-      <div className="signup__wrapper">
-        <div className="signup__left">
-          <h3 className="signup__logo">Facebook Clone</h3>
-          Connect with friends and the world around you on Facebook Clone.
-        </div>
-        <div className="signup__right">
-          <form onSubmit={handleSubmit} className="signup__form">
-            <input
-              type="text"
-              placeholder="Username"
-              className="signup__input"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="signup__input"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="signup__input"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="First Name"
-              className="signup__input"
-              name="firstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Last Name"
-              className="signup__input"
-              name="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <button className="signup__button">Sign Up</button>
-            <span className="signup__error">{error}</span>
-            <Link to="/login" className="signup__loginLink">
-              Already have an account?
-            </Link>
-          </form>
-        </div>
+    <div className="signupPage">
+      <h3>Sign up for free </h3>
+      <h5>
+        <Link to="/users/login" className="signupLoginLink">
+          Already have an account?
+        </Link>
+      </h5>
+      <div className="signupFormContainer">
+        <form onSubmit={handleSubmit} className="signupForm">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            className="signupInput"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            className="signupInput"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            placeholder="Email"
+            className="signupInput"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <label htmlFor="firstName">First Name</label>
+          <input
+            type="text"
+            placeholder="First Name"
+            className="signupInput"
+            name="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            type="text"
+            placeholder="Last Name"
+            className="signupInput"
+            name="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <button className="signupButton">Sign Up</button>
+          <span className="signupError">{error}</span>
+        </form>
       </div>
     </div>
   );

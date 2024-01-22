@@ -39,9 +39,9 @@ router.post(
   '/login',
   //authenticate the user, this calls req.login()
   passport.authenticate('local', {
-    // successRedirect: '/posts/:id',
+    // just want this to be /posts, not  '/users/posts'
     successRedirect: '/posts',
-    failureRedirect: '/login',
+    failureRedirect: '/users/login',
   })
 );
 

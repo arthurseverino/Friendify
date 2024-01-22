@@ -21,39 +21,34 @@ const LoginForm = () => {
 
   return (
     <div className="login">
-      <div className="login__wrapper">
-        <div className="login__left">
-          <h3 className="login__logo">Facebook Clone</h3>
-          Login to Facebook Clone
-        </div>
-        <div className="login__right">
-          <form onSubmit={handleSubmit} className="login__form">
-            <input
-              type="text"
-              placeholder="Username"
-              className="login__input"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="login__input"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit" className="login__btn">
-              Log In
-            </button>
-            or 
-            <Link to="/users/signup" className="login__link">
-              Create New Account
-            </Link>
-          </form>
-        </div>
-      </div>
+      <h3>Sign in to your account </h3>
+      <h5>
+        or
+        <Link to="/users/signup" className="signupLoginLink">
+          Sign up for a new account
+        </Link>
+      </h5>
+      <label htmlFor="username">Username</label>
+      <form onSubmit={handleSubmit} className="loginForm">
+        <input
+          type="text"
+          className="loginInput"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          className="loginInput"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit" className="loginButton">
+          Sign In
+        </button>
+      </form>
     </div>
   );
 };
