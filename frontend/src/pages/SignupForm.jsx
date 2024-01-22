@@ -6,13 +6,12 @@ const SignupForm = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/users/signup', {
+      const response = await fetch('http://localhost:3000/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -20,7 +19,6 @@ const SignupForm = () => {
           password,
           email,
           firstName,
-          lastName,
         }),
       });
       const data = await response.json();
@@ -31,7 +29,6 @@ const SignupForm = () => {
         setPassword('');
         setEmail('');
         setFirstName('');
-        setLastName('');
         setError(null);
       }
     } catch (err) {
@@ -87,17 +84,8 @@ const SignupForm = () => {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            type="text"
-            placeholder="Last Name"
-            className="signupInput"
-            name="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
           <button className="signupButton">Sign Up</button>
-          <span className="signupError">{error}</span>
+          {error && <p className="error">{error}</p>}
         </form>
       </div>
     </div>

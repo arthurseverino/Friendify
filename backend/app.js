@@ -82,16 +82,13 @@ app.use((req, res, next) => {
 });
 
 // routes
-// keep users, make posts / 
-// this means <Route path="/posts" element={Home} /> in frontend/src/App.js
-// <Route path="/" element={<Navigate to="/posts" />} />
 app.use('/users', userRoutes);
-app.use('/', postRoutes);
+app.use('/posts', postRoutes);
 
 app.use((err, req, res, next) => {
   res.status(500).send(`err.stack: ${err.stack}, err.status: ${err.status}`);
 });
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3001, () => {
   console.log('Server listening on port: ', process.env.PORT);
 });

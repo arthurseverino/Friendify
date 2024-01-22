@@ -27,23 +27,21 @@ const getUser = async (req, res) => {
 
 // create a new user
 const createUser = asyncHandler(async (req, res, next) => {
-  const { username, password, email, first_name, last_name } = req.body;
-  // store new user in db
-  bcrypt.hash(password, 10, async (err, hashedPassword) => {
-    try {
-      const user = await User.create({
-        username,
-        password: hashedPassword,
-        email,
-        first_name,
-        last_name,
-      });
-      // if successful, respond with the new user
-      return res.status(200).json(user);
-    } catch (err) {
-      return next(err);
-    }
-  });
+  const { username, password, email, firstName } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      username,
+      password: hashedPassword,
+      email,
+      firstName,
+    });
+    // const userResponse = await User.findById(user._id).select('-password');
+    return res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    return next(err);
+  }
 });
 
 // delete a user

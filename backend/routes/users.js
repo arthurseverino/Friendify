@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
@@ -37,14 +38,13 @@ router.post('/signup', createUser);
 // LOGIN a user, handle login form submission
 router.post(
   '/login',
-  //authenticate the user, this calls req.login()
   passport.authenticate('local', {
-    // just want this to be /posts, not  '/users/posts'
-    successRedirect: '/posts',
-    failureRedirect: '/users/login',
+    successRedirect: `http://localhost:${process.env.PORT}/posts`,
+    failureRedirect: '/login',
   })
 );
 
+// LOGOUT a user, handle logout
 router.get('/logout', (req, res, next) => {
   req.logout();
   res.redirect('/');

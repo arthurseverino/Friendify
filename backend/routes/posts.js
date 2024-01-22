@@ -11,11 +11,11 @@ const {
 //jwt.verify here? 
 
 // GET all posts 
-// Show your posts and whatever users you are following 
-// (Home Page)
+// Show your posts and whatever users you are following (Home Page)
 router.get('/', getPosts);
 
 // GET a single post
+//check other projects, does it open another page? 
 router.get('/:id', getPost);
 
 // POST(Create) a new post

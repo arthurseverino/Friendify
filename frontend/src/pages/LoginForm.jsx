@@ -8,7 +8,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/users/login', {
+    const response = await fetch('http://localhost:3000/users/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -28,7 +28,7 @@ const LoginForm = () => {
           Sign up for a new account
         </Link>
       </h5>
-      <label htmlFor="username">Username</label>
+      <label htmlFor="username">Email, not username :)</label>
       <form onSubmit={handleSubmit} className="loginForm">
         <input
           type="text"
@@ -48,6 +48,7 @@ const LoginForm = () => {
         <button type="submit" className="loginButton">
           Sign In
         </button>
+        {error && <p className="error">{error}</p>}
       </form>
     </div>
   );
