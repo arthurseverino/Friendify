@@ -8,23 +8,35 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:3000/users/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-    if (!response.ok) {
-      setError('An error occurred. Please try again.');
-      return;
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        // The response was successful
+        setUsername('');
+        setPassword('');
+        setError(null);
+        window.location.href = '/api/posts';
+      } else {
+        // The response was not successful
+        const errorData = await response.json();
+        setError(errorData.message);
+      }
+    } catch (err) {
+      setError(err);
     }
   };
 
   return (
     <div className="login">
-      <h3>Sign in to your account </h3>
+      <h1>Sign in to your account </h1>
       <h5>
         or
-        <Link to="/users/signup" className="signupLoginLink">
+        <Link to="/api/users/signup" className="signupLoginLink">
           Sign up for a new account
         </Link>
       </h5>

@@ -1,12 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
+const bcrypt = require('bcryptjs');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/userModel');
 
@@ -22,8 +24,8 @@ async function main() {
 }
 main();
 
-// bcrypt is for hashing password 
-// PassportJS/LocalStrategy checks if username and password exists in the db
+
+//get rid of passport js because idk what done does, waht dsrialize is doing, whwere the session secret is even used... 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
@@ -49,7 +51,7 @@ passport.serializeUser((user, done) => {
 
 //called in the background by passport.authenticate
 // it logs out the user
-// 
+//
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
@@ -75,15 +77,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use((req, res, next) => {
-  console.log('Path: ' + req.path + ', Method: ' + req.method);
-  next();
-});
+// app.use(express.static(path.join(__dirname, '../frontend')));
 
 // routes
-app.use('/users', userRoutes);
-app.use('/posts', postRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
 app.use((err, req, res, next) => {
   res.status(500).send(`err.stack: ${err.stack}, err.status: ${err.status}`);

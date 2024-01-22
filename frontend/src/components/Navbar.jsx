@@ -8,7 +8,7 @@ const Navbar = () => {
       <Link to="/">
         <h1>My App</h1>
       </Link>
-      <Link to="/logout">
+      <Link to="/api/users/logout">
         <h2>Logout</h2>
       </Link>
     </header>

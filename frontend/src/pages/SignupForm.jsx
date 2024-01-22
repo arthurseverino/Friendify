@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const SignupForm = () => {
@@ -7,11 +7,12 @@ const SignupForm = () => {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/users/signup', {
+      const response = await fetch('/api/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -21,15 +22,19 @@ const SignupForm = () => {
           firstName,
         }),
       });
-      const data = await response.json();
-      if (data.errors) {
-        setError(data.errors);
-      } else {
+
+      if (response.ok) {
+        // The response was successful
         setUsername('');
         setPassword('');
         setEmail('');
         setFirstName('');
         setError(null);
+        navigate('/api/users/login');
+      } else {
+        // The response was not successful
+        const errorData = await response.json();
+        setError(errorData.message);
       }
     } catch (err) {
       setError(err);
@@ -38,9 +43,9 @@ const SignupForm = () => {
 
   return (
     <div className="signupPage">
-      <h3>Sign up for free </h3>
+      <h1>Sign up for free </h1>
       <h5>
-        <Link to="/users/login" className="signupLoginLink">
+        <Link to="/api/users/login" className="signupLoginLink">
           Already have an account?
         </Link>
       </h5>

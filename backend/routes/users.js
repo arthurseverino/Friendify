@@ -11,15 +11,6 @@ const {
   updateUser,
 } = require('../controllers/userController');
 
-/* 
-
-passport.authenticate('local', {
-  successRedirect: '/login',
-  failureRedirect: '/signup',
-}),
-
-*/
-
 // GET all users, a list of all users
 router.get('/', getUsers);
 
@@ -36,13 +27,25 @@ router.patch('/:id', updateUser);
 router.post('/signup', createUser);
 
 // LOGIN a user, handle login form submission
-router.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: `http://localhost:${process.env.PORT}/posts`,
-    failureRedirect: '/login',
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    if (!user) {
+      return res.status(401).json({ error: info.message });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+      return res.redirect(`http://localhost:${process.env.PORT}/api/posts`);
+    });
   })
-);
+  (req, res, next);
+});
 
 // LOGOUT a user, handle logout
 router.get('/logout', (req, res, next) => {

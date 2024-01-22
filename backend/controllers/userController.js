@@ -29,6 +29,14 @@ const getUser = async (req, res) => {
 const createUser = asyncHandler(async (req, res, next) => {
   const { username, password, email, firstName } = req.body;
   try {
+    // Check if a user with the same username or email already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: 'User with this username or email already exists' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       username,
@@ -36,8 +44,8 @@ const createUser = asyncHandler(async (req, res, next) => {
       email,
       firstName,
     });
-    // const userResponse = await User.findById(user._id).select('-password');
-    return res.status(200).json(user);
+    const userResponse = await User.findById(user._id).select('-password');
+    return res.status(200).json(userResponse);
   } catch (err) {
     console.log(err);
     return next(err);

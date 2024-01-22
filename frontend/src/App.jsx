@@ -16,9 +16,9 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/users/signup" element={<SignupForm />} />
-          <Route path="/users/login" element={<LoginForm />} />
-          <Route path="/posts" element={<Home />} />
+          <Route path="/api/users/signup" element={<SignupForm />} />
+          <Route path="/api/users/login" element={<LoginForm />} />
+          <Route path="/api/posts" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>
