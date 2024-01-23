@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const verifyToken = require('../authMiddleware');
 const router = express.Router();
 const {
   getUsers,
@@ -12,16 +13,17 @@ const {
 } = require('../controllers/userController');
 
 // GET all users, a list of all users
-router.get('/', getUsers);
+// does this even exist lol
+router.get('/', verifyToken, getUsers);
 
 // GET a single user, the profile page
-router.get('/:id', getUser);
+router.get('/:id', verifyToken, getUser);
 
 // DELETE a user, you can delete a user from its profile page
-router.delete('/:id', deleteUser);
+router.delete('/:id', verifyToken, deleteUser);
 
 // UPDATE a user, you can update a user from its profile page
-router.patch('/:id', updateUser);
+router.patch('/:id', verifyToken, updateUser);
 
 // CREATE a new user, you can create a new user from the signup page
 router.post('/signup', createUser);
@@ -30,26 +32,28 @@ router.post('/signup', createUser);
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
-      console.error(err);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
     if (!user) {
       return res.status(401).json({ error: info.message });
     }
+    //Password is correct, create and assign a token
     req.logIn(user, (err) => {
       if (err) {
-        console.error(err);
         return res.status(500).json({ error: 'Internal Server Error' });
       }
-      return res.redirect(`http://localhost:${process.env.PORT}/api/posts`);
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '5m',
+      });
+      return res.json({ token: token }); // send the token to the client
     });
-  })
-  (req, res, next);
+  })(req, res, next);
 });
 
 // LOGOUT a user, handle logout
-router.get('/logout', (req, res, next) => {
+router.get('/logout', verifyToken, (req, res, next) => {
   req.logout();
+  localStorage.removeItem('token');
   res.redirect('/');
 });
 

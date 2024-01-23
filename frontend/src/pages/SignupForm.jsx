@@ -22,7 +22,6 @@ const SignupForm = () => {
           firstName,
         }),
       });
-
       if (response.ok) {
         // The response was successful
         setUsername('');
@@ -33,8 +32,8 @@ const SignupForm = () => {
         navigate('/api/users/login');
       } else {
         // The response was not successful
-        const errorData = await response.json();
-        setError(errorData.message);
+        const data = await response.json();
+        setError(data.error);
       }
     } catch (err) {
       setError(err);

@@ -9,7 +9,11 @@ const Home = () => {
   //only ran once when Home is rendered, because of the empty array
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('/api/posts');
+      const response = await fetch('/api/posts', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setPosts(data);
@@ -33,8 +37,15 @@ const Home = () => {
 
   return (
     <div className="home">
-      <h1>My Timeline</h1>
-      <h3>{`Hi, ${user.firstName}`}</h3>
+      <h1>{`Hi, ${user.firstName}`}</h1>
+      <h2>My Timeline: </h2>
+      <button
+        onClick={() => {
+          window.location.href = '/api/posts';
+        }}>
+        {' '}
+        + Create Post{' '}
+      </button>
       {error && <div>Error: {error}</div>}
       {posts
         ? posts.map((post) => <PostDetails key={post._id} post={post} />)

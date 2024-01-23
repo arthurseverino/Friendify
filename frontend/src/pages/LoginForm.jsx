@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-const LoginForm = () => {
+const LoginForm = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch('/api/users/login', {
@@ -20,11 +20,14 @@ const LoginForm = () => {
         setUsername('');
         setPassword('');
         setError(null);
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        setUser({ username });
         window.location.href = '/api/posts';
       } else {
         // The response was not successful
-        const errorData = await response.json();
-        setError(errorData.message);
+        const data = await response.json();
+        setError(data.error);
       }
     } catch (err) {
       setError(err);
@@ -41,7 +44,7 @@ const LoginForm = () => {
         </Link>
       </h5>
       <label htmlFor="username">Email, not username :)</label>
-      <form onSubmit={handleSubmit} className="loginForm">
+      <form onSubmit={handleLogin} className="loginForm">
         <input
           type="text"
           className="loginInput"

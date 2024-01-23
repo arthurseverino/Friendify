@@ -44,23 +44,6 @@ passport.use(
   })
 );
 
-//called in the background by passport.authenticate
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-//called in the background by passport.authenticate
-// it logs out the user
-//
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
-
 // express app
 const app = express();
 
@@ -68,13 +51,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(methodOverride('_method'));
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 app.use(passport.initialize());
 app.use(passport.session());
 // app.use(express.static(path.join(__dirname, '../frontend')));
@@ -84,7 +60,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 
 app.use((err, req, res, next) => {
-  res.status(500).send(`err.stack: ${err.stack}, err.status: ${err.status}`);
+  res.status(500).send(`err.stack dummy: ${err.stack}, err.status: ${err.status}`);
 });
 
 app.listen(process.env.PORT || 3001, () => {
