@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 // pages
@@ -11,11 +11,9 @@ import LoginForm from './pages/LoginForm';
 import Index from './pages/Index';
 
 function App() {
-  const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem('token');
-    navigate('/');
-
+    window.location.href = '/';
   };
   const isLoggedIn = localStorage.getItem('token');
 

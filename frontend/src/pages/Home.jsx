@@ -31,15 +31,17 @@ const Home = () => {
     fetchPosts();
 
     const fetchUser = async () => {
-      const response = await fetch('/api/users/:id', {
+      const response = await fetch('/api/users', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.ok) {
         const data = await response.json();
+        console.log('data', data);
         setUser(data);
       } else {
+        
         setError('Failed to fetch user');
       }
     };
@@ -48,7 +50,7 @@ const Home = () => {
 
   return (
     <div className="home">
-      <h1>{`Hi, ${user.firstName}`}</h1>
+      <h1>{user ? `Hi, ${user.firstName}` : 'Loading...'}</h1>
       <h2>My Timeline: </h2>
       <button
         onClick={() => {
