@@ -32,7 +32,7 @@ opts.secretOrKey = process.env.JWT_SECRET;
 passport.use(
   new JwtStrategy(opts, async (jwt_payload, done) => {
     try {
-      const user = await User.findById(jwt_payload.id); // replace with your User model
+      const user = await User.findById(jwt_payload.id);
       if (user) {
         return done(null, user);
       } else {

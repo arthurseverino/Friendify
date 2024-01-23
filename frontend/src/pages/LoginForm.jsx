@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -27,7 +27,6 @@ const LoginForm = ({ setUser }) => {
         setError(null);
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        setUser({ username });
         navigate('/api/posts');
       } else {
         // The response was not successful

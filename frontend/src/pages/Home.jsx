@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import PostDetails from '../components/PostDetails';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [posts, setPosts] = useState(null);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   //only ran once when Home is rendered, because of the empty array
   useEffect(() => {
@@ -50,7 +52,7 @@ const Home = () => {
       <h2>My Timeline: </h2>
       <button
         onClick={() => {
-          window.location.href = '/api/posts';
+          navigate('/api/posts');
         }}>
         {' '}
         + Create Post{' '}

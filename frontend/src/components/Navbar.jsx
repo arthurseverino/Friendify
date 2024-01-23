@@ -1,14 +1,12 @@
 import { Link } from 'react-router-dom';
 
-// if user is logged in I want Navbar to redirect to /posts:
-// return isAuthenticated ? <Route path = "/" element={element} /> : <Navigate to="/users/login" />;
-const Navbar = ({ user, logout }) => {
+const Navbar = ({ logout, isLoggedIn }) => {
   return (
     <header className="Navbar">
-      <Link to="/">
+      <Link to={isLoggedIn ? '/api/posts' : '/'}>
         <h1>My App</h1>
       </Link>
-      {user && <button onClick={logout}>Logout</button>}
+      {isLoggedIn && <button onClick={logout}>Logout</button>}
     </header>
   );
 };

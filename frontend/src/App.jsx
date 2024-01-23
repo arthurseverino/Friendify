@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 // pages
@@ -11,32 +11,22 @@ import LoginForm from './pages/LoginForm';
 import Index from './pages/Index';
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    // Check local storage for user details
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
-      setUser(JSON.parse(loggedInUser));
-    }
-  }, []);
-
+  const navigate = useNavigate();
   const logout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
+    localStorage.removeItem('token');
+    navigate('/');
+
   };
+  const isLoggedIn = localStorage.getItem('token');
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar user={user} logout={logout} />
+        <Navbar logout={logout} isLoggedIn={isLoggedIn} />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/api/users/signup" element={<SignupForm />} />
-          <Route
-            path="/api/users/login"
-            element={<LoginForm setUser={setUser} />}
-          />
+          <Route path="/api/users/login" element={<LoginForm />} />
           <Route path="/api/posts" element={<Home />} />
         </Routes>
       </BrowserRouter>
