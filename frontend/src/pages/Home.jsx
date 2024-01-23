@@ -8,10 +8,15 @@ const Home = () => {
 
   //only ran once when Home is rendered, because of the empty array
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('You must be logged in to view this page');
+      return;
+    }
     const fetchPosts = async () => {
       const response = await fetch('/api/posts', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response.ok) {
@@ -24,7 +29,11 @@ const Home = () => {
     fetchPosts();
 
     const fetchUser = async () => {
-      const response = await fetch('/api/users/:id');
+      const response = await fetch('/api/users/:id', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setUser(data);

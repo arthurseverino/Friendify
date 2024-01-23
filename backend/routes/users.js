@@ -13,7 +13,7 @@ const {
 } = require('../controllers/userController');
 
 // GET all users, a list of all users
-// does this even exist lol
+// shows all users and buttons for sending follow requests to users the user is not already following or have a pending request.
 router.get('/', verifyToken, getUsers);
 
 // GET a single user, the profile page

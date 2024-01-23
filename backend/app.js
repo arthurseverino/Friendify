@@ -6,7 +6,6 @@ const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
 const methodOverride = require('method-override');
 const cors = require('cors');
-const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const LocalStrategy = require('passport-local').Strategy;
@@ -24,8 +23,6 @@ async function main() {
 }
 main();
 
-
-//get rid of passport js because idk what done does, waht dsrialize is doing, whwere the session secret is even used... 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
