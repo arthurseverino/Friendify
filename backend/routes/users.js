@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const verifyToken = require('../authMiddleware');
+const User = require('../models/userModel');
 const router = express.Router();
 const {
   getUsers,
@@ -14,47 +14,39 @@ const {
 
 // GET all users, a list of all users
 // shows all users and buttons for sending follow requests to users the user is not already following or have a pending request.
-router.get('/', verifyToken, getUsers);
+router.get('/', passport.authenticate('jwt', { session: false }), getUsers);
 
 // GET a single user, the profile page
-router.get('/:id', verifyToken, getUser);
+router.get('/:id', passport.authenticate('jwt', { session: false }), getUser);
 
 // DELETE a user, you can delete a user from its profile page
-router.delete('/:id', verifyToken, deleteUser);
+router.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  deleteUser
+);
 
 // UPDATE a user, you can update a user from its profile page
-router.patch('/:id', verifyToken, updateUser);
+router.patch(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  updateUser
+);
 
 // CREATE a new user, you can create a new user from the signup page
 router.post('/signup', createUser);
 
 // LOGIN a user, handle login form submission
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    if (!user) {
-      return res.status(401).json({ error: info.message });
-    }
+router.post(
+  '/login',
+  passport.authenticate('local'),
+  async (req, res, next) => {
     //Password is correct, create and assign a token
-    req.logIn(user, (err) => {
-      if (err) {
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: '5m',
-      });
-      return res.json({ token: token }); // send the token to the client
+    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
+      expiresIn: '5m',
     });
-  })(req, res, next);
-});
-
-// LOGOUT a user, handle logout
-router.get('/logout', verifyToken, (req, res, next) => {
-  req.logout();
-  localStorage.removeItem('token');
-  res.redirect('/');
-});
+    return res.json({ token: token }); // send the token to the client
+  }
+);
 
 module.exports = router;

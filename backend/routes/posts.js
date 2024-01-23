@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../authMiddleware');
+const passport = require('passport');
 const {
   getPosts,
   getPost,
@@ -9,23 +9,29 @@ const {
   updatePost,
 } = require('../controllers/postController');
 
-//jwt.verify here?
-
 // GET all posts
 // Show your posts and whatever users you are following (Home Page)
-router.get('/', verifyToken, getPosts);
+router.get('/', passport.authenticate('jwt', { session: false }), getPosts);
 
 // GET a single post
 //check other projects, does it open another page?
-router.get('/:id', verifyToken, getPost);
+router.get('/:id', passport.authenticate('jwt', { session: false }), getPost);
 
 // POST(Create) a new post
-router.post('/', verifyToken, createPost);
+router.post('/', passport.authenticate('jwt', { session: false }), createPost);
 
 // DELETE a post
-router.delete('/:id', verifyToken, deletePost);
+router.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  deletePost
+);
 
 // UPDATE a post
-router.patch('/:id', verifyToken, updatePost);
+router.patch(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  updatePost
+);
 
 module.exports = router;

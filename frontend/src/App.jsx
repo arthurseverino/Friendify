@@ -21,14 +21,22 @@ function App() {
     }
   }, []);
 
+  const logout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar user={user} />
+        <Navbar user={user} logout={logout} />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/api/users/signup" element={<SignupForm />} />
-          <Route path="/api/users/login" element={<LoginForm setUser={setUser} />} />
+          <Route
+            path="/api/users/login"
+            element={<LoginForm setUser={setUser} />}
+          />
           <Route path="/api/posts" element={<Home />} />
         </Routes>
       </BrowserRouter>

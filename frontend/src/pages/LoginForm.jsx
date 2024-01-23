@@ -1,13 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const LoginForm = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!username || !password) {
+      setError('Username and password are required');
+      return;
+    }
     try {
       const response = await fetch('/api/users/login', {
         method: 'POST',
@@ -23,7 +28,7 @@ const LoginForm = ({ setUser }) => {
         const data = await response.json();
         localStorage.setItem('token', data.token);
         setUser({ username });
-        window.location.href = '/api/posts';
+        navigate('/api/posts');
       } else {
         // The response was not successful
         const data = await response.json();
