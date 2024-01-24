@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
 import PostDetails from '../components/PostDetails';
-import { useNavigate } from 'react-router-dom';
 
 const Home = ({ token, userId }) => {
   const [posts, setPosts] = useState(null);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   //only ran once when Home is rendered, because of the empty array
   useEffect(() => {
-    if (!token) {
+    if (!token || !userId) {
       setError('You must be logged in to view this page');
       return;
     }
@@ -18,6 +16,7 @@ const Home = ({ token, userId }) => {
       const response = await fetch(`/api/users/${userId}/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       });
       if (response.ok) {
@@ -29,6 +28,7 @@ const Home = ({ token, userId }) => {
     };
     fetchPosts();
 
+    //you get the user through the database with its userId
     const fetchUser = async () => {
       const response = await fetch(`/api/users/${userId}`, {
         headers: {
@@ -37,22 +37,25 @@ const Home = ({ token, userId }) => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log('data', data);
         setUser(data);
+        console.log('Data of user that is logged in: ', user);
       } else {
         setError('Failed to fetch user');
       }
     };
     fetchUser();
-  }, []);
+    console.log('User: ', user);
+  }, [userId, token]);
 
   return (
     <div className="home">
+      <h1>Home</h1>
       <h1>{user ? `Hi, ${user.firstName}` : 'Loading...'}</h1>
       <h2>My Timeline: </h2>
       <button
+        className="createPostButton"
         onClick={() => {
-          navigate(`/api/users/${userId}/posts`);
+          'Dialog or new page?';
         }}>
         {' '}
         + Create Post{' '}

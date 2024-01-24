@@ -29,6 +29,7 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_SECRET;
 
 passport.use(
+  // The payload typically contains the ID of the user
   new JwtStrategy(opts, async (jwt_payload, done) => {
     try {
       const user = await User.findById(jwt_payload.id);
@@ -61,6 +62,7 @@ passport.use(
 
       if (!validPassword) {
         return done(null, false, {
+          //error: 'Password is not correct. Please try again',
           message: 'Password is not correct. Please try again',
         });
       }
