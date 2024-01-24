@@ -11,7 +11,7 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 // get a single user
-const getUser = async (req, res) => {
+const getUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -23,7 +23,7 @@ const getUser = async (req, res) => {
     return res.status(404).json({ error: 'No such user' });
   }
   res.status(200).json(user);
-};
+});
 
 // create a new user
 const createUser = asyncHandler(async (req, res, next) => {
@@ -53,7 +53,7 @@ const createUser = asyncHandler(async (req, res, next) => {
 });
 
 // delete a user
-const deleteUser = async (req, res) => {
+const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -67,10 +67,10 @@ const deleteUser = async (req, res) => {
   }
 
   res.status(200).json(user);
-};
+});
 
 // update a user
-const updateUser = async (req, res) => {
+const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -90,7 +90,7 @@ const updateUser = async (req, res) => {
   }
 
   res.status(200).json(user);
-};
+});
 
 module.exports = {
   getUsers,

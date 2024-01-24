@@ -10,7 +10,7 @@ const getPosts = asyncHandler(async (req, res) => {
 });
 
 // get a single post
-const getPost = async (req, res) => {
+const getPost = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -22,7 +22,7 @@ const getPost = async (req, res) => {
     return res.status(404).json({ error: 'No such post' });
   }
   res.status(200).json(post);
-};
+});
 
 // create a new post
 const createPost = asyncHandler(async (req, res, next) => {
@@ -39,7 +39,7 @@ const createPost = asyncHandler(async (req, res, next) => {
 });
 
 // delete a post
-const deletePost = async (req, res) => {
+const deletePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -53,10 +53,10 @@ const deletePost = async (req, res) => {
   }
 
   res.status(200).json(post);
-};
+});
 
 // update a post
-const updatePost = async (req, res) => {
+const updatePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -76,7 +76,7 @@ const updatePost = async (req, res) => {
   }
 
   res.status(200).json(post);
-};
+});
 
 module.exports = {
   getPosts,

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import PostDetails from '../components/PostDetails';
 import { useNavigate } from 'react-router-dom';
 
-const Home = ({token, userId}) => {
+const Home = ({ token, userId }) => {
   const [posts, setPosts] = useState(null);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ const Home = ({token, userId}) => {
       return;
     }
     const fetchPosts = async () => {
-      const response = await fetch('/api/posts', {
+      const response = await fetch(`/api/users/${userId}/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -52,7 +52,7 @@ const Home = ({token, userId}) => {
       <h2>My Timeline: </h2>
       <button
         onClick={() => {
-          navigate('/api/posts');
+          navigate(`/api/users/${userId}/posts`);
         }}>
         {' '}
         + Create Post{' '}

@@ -15,21 +15,21 @@ router.get('/', passport.authenticate('jwt', { session: false }), getPosts);
 
 // GET a single post
 //check other projects, does it open another page?
-router.get('/:id', passport.authenticate('jwt', { session: false }), getPost);
+router.get('/:postId', passport.authenticate('jwt', { session: false }), getPost);
 
 // POST(Create) a new post
 router.post('/', passport.authenticate('jwt', { session: false }), createPost);
 
 // DELETE a post
 router.delete(
-  '/:id',
+  '/:postId',
   passport.authenticate('jwt', { session: false }),
   deletePost
 );
 
 // UPDATE a post
 router.patch(
-  '/:id',
+  '/:postId',
   passport.authenticate('jwt', { session: false }),
   updatePost
 );

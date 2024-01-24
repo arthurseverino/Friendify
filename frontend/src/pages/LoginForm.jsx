@@ -1,19 +1,11 @@
-import { Link, useNavigate, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-const LoginForm = () => {
+const LoginForm = ({ token, userId }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const history = useHistory();
-  const isLoggedIn = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      history.push('/api/posts');
-    }
-  }, [isLoggedIn, history]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,7 +27,7 @@ const LoginForm = () => {
         setError(null);
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        navigate('/api/posts');
+        navigate(`/api/users/${userId}/posts`);
       } else {
         // The response was not successful
         const data = await response.json();
@@ -55,7 +47,7 @@ const LoginForm = () => {
           Sign up for a new account
         </Link>
       </h5>
-      <label htmlFor="username">Email, not username :)</label>
+      <label htmlFor="username">Ask for Email, not username</label>
       <form onSubmit={handleLogin} className="loginForm">
         <input
           type="text"

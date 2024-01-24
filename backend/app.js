@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/users');
-const postRoutes = require('./routes/posts');
 const cors = require('cors');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
@@ -83,9 +82,8 @@ app.use(cors());
 
 // routes
 app.use('/api/users', userRoutes);
-// app.use('/api/posts', postRoutes);
-app.use('/api/users/:id/posts', postRoutes);
 
+// sending errors to client... 
 app.use((err, req, res, next) => {
   res
     .status(500)

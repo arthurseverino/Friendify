@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const postRoutes = require('./posts');
 const router = express.Router();
 const {
   getUsers,
@@ -38,7 +39,7 @@ router.post('/signup', createUser);
 // LOGIN a user, handle login form submission
 router.post(
   '/login',
-  // move this to a function, loginUser in userController.js 
+  // move this to a function, loginUser in userController.js
   passport.authenticate('local', { failWithError: true, session: false }),
   async (req, res, next) => {
     try {
@@ -51,6 +52,13 @@ router.post(
       next(error);
     }
   }
+);
+
+// GET posts on timeline, shows all posts from users the user is following
+router.use(
+  '/:id/posts',
+  passport.authenticate('jwt', { session: false }),
+  postRoutes
 );
 
 module.exports = router;
