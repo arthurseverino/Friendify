@@ -47,6 +47,11 @@ router.post(
       const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
         expiresIn: '1h',
       });
+      console.log(
+        'user that just logged in, in router.post(/login) in users.js right after: const token = jwt.sign({ id: req.user.id }: ',
+        req.user
+      );
+      console.log('token that will be sent to the client that was assigned to the user:  ', token);
       return res.json({ token: token }); // send the token to the client
     } catch (error) {
       next(error);

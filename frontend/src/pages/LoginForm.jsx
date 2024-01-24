@@ -27,6 +27,7 @@ const LoginForm = ({ userId }) => {
         setError(null);
         const data = await response.json();
         localStorage.setItem('token', data.token);
+        console.log('data.token in handleLogin in LoginForm.jsx: ', data.token);
         setTimeout(() => {
           navigate(`/api/users/${userId}/posts`);
         }, 0);

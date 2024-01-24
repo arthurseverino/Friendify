@@ -5,6 +5,10 @@ const mongoose = require('mongoose');
 
 // get all posts
 const getPosts = asyncHandler(async (req, res) => {
+  console.log(
+    'getting posts in postController.js, req.user is currently: ',
+    req.user
+  );
   const posts = await Post.find({}).sort({ createdAt: -1 });
   res.status(200).json(posts);
 });

@@ -33,6 +33,7 @@ passport.use(
   new JwtStrategy(opts, async (jwt_payload, done) => {
     try {
       const user = await User.findById(jwt_payload.id);
+      console.log('jwt_payload.id: ', jwt_payload.id);
       if (user) {
         return done(null, user);
       } else {
@@ -68,6 +69,10 @@ passport.use(
       }
 
       // User found and password is correct
+      console.log(
+        'user in passport.use(local) LocalStrategy in app.js: ',
+        user
+      );
       return done(null, user);
     } catch (err) {
       return done(err);
@@ -85,12 +90,12 @@ app.use(cors());
 // routes
 app.use('/api/users', userRoutes);
 
-// sending errors to client... 
+// sending errors to client...
 app.use((err, req, res, next) => {
   res
     .status(500)
     .send(
-      `This message is coming from your backend error handler in app.js! Here is your err.stack: ${err.stack}, err.status: ${err.status}, err.message: ${err.message}, err.name: ${err.name}, err.code: ${err.code}, err.value: ${err.value}, err.kind: ${err.kind}, err.path: ${err.path}, err.reason: ${err.reason}, err.errors: ${err.errors}. Enjoy`
+      `This message is coming from your backend error handler in app.js! Here is your err.stack: ${err.stack}----------------------------- err.status: ${err.status}------------------------------- err.message: ${err.message},----------------------------- err.name: ${err.name} ----------------------------------Enjoy!`
     );
 });
 

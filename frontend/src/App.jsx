@@ -11,21 +11,19 @@ import SignupForm from './pages/SignupForm';
 import LoginForm from './pages/LoginForm';
 import Index from './pages/Index';
 
-
 function App() {
   const logout = () => {
     localStorage.removeItem('token');
     window.location.href = '/';
   };
 
-  
   let decodedToken;
   let userId;
   const token = localStorage.getItem('token');
   if (token) {
     decodedToken = jwtDecode(token);
-    console.log(decodedToken); // Add this line
     userId = decodedToken.id;
+    console.log('userId of user that is currently logged in: ', userId);
   }
 
   return (

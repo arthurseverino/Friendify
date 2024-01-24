@@ -5,7 +5,6 @@ const postSchema = new Schema(
   {
     title: {
       type: String,
-      required: true,
     },
     body: {
       type: String,
@@ -22,7 +21,6 @@ const postSchema = new Schema(
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
     },
   },
   { timestamps: true }
