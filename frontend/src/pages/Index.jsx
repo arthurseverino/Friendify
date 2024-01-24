@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
 const Index = () => {
+  // sign in as guest would go here !
+  // first page the user sees, should be beautiful :) 
   return (
     <div>
       <h2>Facebook Clone </h2>

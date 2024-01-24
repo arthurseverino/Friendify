@@ -1,11 +1,19 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate, useHistory } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const history = useHistory();
+  const isLoggedIn = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push('/api/posts');
+    }
+  }, [isLoggedIn, history]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -31,10 +39,10 @@ const LoginForm = () => {
       } else {
         // The response was not successful
         const data = await response.json();
-        setError(data.error);
+        setError('setError error:', data.error);
       }
     } catch (err) {
-      setError(err);
+      setError('try/catch error:', err);
     }
   };
 

@@ -23,6 +23,8 @@ async function main() {
 }
 main();
 
+const app = express();
+
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_SECRET;
@@ -50,14 +52,18 @@ passport.use(
       const user = await User.findOne({ username });
 
       if (!user) {
-        return done(null, false, { message: 'Invalid username or password.' });
+        return done(null, false, {
+          message: 'Username does not exist. Please try again.',
+        });
       }
 
       // Check the password
       const validPassword = await bcrypt.compare(password, user.password);
 
       if (!validPassword) {
-        return done(null, false, { message: 'Invalid username or password.' });
+        return done(null, false, {
+          message: 'Password is not correct. Please try again',
+        });
       }
 
       // User found and password is correct
@@ -68,24 +74,23 @@ passport.use(
   })
 );
 
-// express app
-const app = express();
-
 // middleware
+app.use(passport.initialize());
 app.use(express.json());
 app.use(cors());
-app.use(passport.initialize());
-// app.use(express.static(path.join(__dirname, '../frontend')));
+// app.use(express.urlencoded({ extended: true/false? }));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/api/users', userRoutes);
-app.use('/api/posts', postRoutes);
+// app.use('/api/posts', postRoutes);
+app.use('/api/users/:id/posts', postRoutes);
 
 app.use((err, req, res, next) => {
   res
     .status(500)
     .send(
-      `Here is your err.stack dummy: ${err.stack}, AND your err.status: ${err.status}`
+      `This message is coming from your backend error handler in app.js! Here is your err.stack: ${err.stack}, err.status: ${err.status}, err.message: ${err.message}, err.name: ${err.name}, err.code: ${err.code}, err.value: ${err.value}, err.kind: ${err.kind}, err.path: ${err.path}, err.reason: ${err.reason}, err.errors: ${err.errors}. Enjoy`
     );
 });
 

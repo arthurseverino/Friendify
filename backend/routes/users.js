@@ -38,17 +38,18 @@ router.post('/signup', createUser);
 // LOGIN a user, handle login form submission
 router.post(
   '/login',
-  passport.authenticate('local', { failWithError: true, session: false}),
+  // move this to a function, loginUser in userController.js 
+  passport.authenticate('local', { failWithError: true, session: false }),
   async (req, res, next) => {
-    //Password is correct, create and assign a token
-    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-      expiresIn: '5m',
-    });
-    return res.json({ token: token }); // send the token to the client
-  },
-  (error, req, res, next) => {
-    // Handle error
-    return res.status(500).json({ error: error.toString() });
+    try {
+      // Password and username are correct, create a token or get a token if it already exists
+      const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+      });
+      return res.json({ token: token }); // send the token to the client
+    } catch (error) {
+      next(error);
+    }
   }
 );
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import PostDetails from '../components/PostDetails';
 import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
+const Home = ({token, userId}) => {
   const [posts, setPosts] = useState(null);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
@@ -10,7 +10,6 @@ const Home = () => {
 
   //only ran once when Home is rendered, because of the empty array
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (!token) {
       setError('You must be logged in to view this page');
       return;
@@ -31,7 +30,7 @@ const Home = () => {
     fetchPosts();
 
     const fetchUser = async () => {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`/api/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -41,7 +40,6 @@ const Home = () => {
         console.log('data', data);
         setUser(data);
       } else {
-        
         setError('Failed to fetch user');
       }
     };
