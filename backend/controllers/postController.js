@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 // get all posts
 const getPosts = asyncHandler(async (req, res) => {
   console.log(
-    'getting posts in postController.js, req.user is currently: ',
+    'getting posts of user that is logged in, in postController.js, req.user is currently: ',
     req.user
   );
   const posts = await Post.find({}).sort({ createdAt: -1 });

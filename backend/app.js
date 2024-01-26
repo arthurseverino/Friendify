@@ -25,21 +25,27 @@ main();
 const app = express();
 
 const opts = {};
+//this extracts the JWT from Authorization Header 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+console.log('opts.jwtFromRequest in app.js: ', opts.jwtFromRequest);
 opts.secretOrKey = process.env.JWT_SECRET;
+console.log('opts.secretOrKey in app.js: ', opts.secretOrKey);
+
 
 passport.use(
   // The payload typically contains the ID of the user
   new JwtStrategy(opts, async (jwt_payload, done) => {
     try {
       const user = await User.findById(jwt_payload.id);
-      console.log('jwt_payload.id: ', jwt_payload.id);
+      console.log('jwt_payload.id in JWTStrategy in app.js: ', jwt_payload.id);
       if (user) {
+        console.log('user in JWTStrategy in app.js: ', user);
         return done(null, user);
-      } else {
-        return done(null, false);
       }
+      console.log('If the JWT is not valid in JWTStrategy, Passport will send a 401 Unauthorized response, this is the user that is not valid: ', user);
+      return done(null, false);
     } catch (err) {
+      console.log('try/catch error in JWTStrategy in app.js: ', err);
       return done(err, false);
     }
   })
