@@ -22,14 +22,17 @@ const LoginForm = () => {
 
       if (response.ok) {
         // The response was successful
-        console.log('submitting form now... ');
         setUsername('');
         setPassword('');
         setError(null);
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        navigate(`/api/users/${data.userID}/posts`);
-        console.log('data.userID is not fucking me! ', data.userID);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        navigate(`/api/users/${data.user.id}/posts`);
+        console.log(
+          'data.user.id should be good after clicking login in LoginForm: ',
+          data.user.id
+        );
       } else {
         console.log('the response was not successful');
       }

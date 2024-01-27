@@ -33,15 +33,13 @@ passport.use(
   // The payload typically contains the ID of the user
   new JwtStrategy(opts, async (jwt_payload, done) => {
     try {
-      console.log('opts in JWTStrategy: ', opts);
       const user = await User.findById(jwt_payload.id);
-      console.log('jwt_payload.id in JWTStrategy in app.js: ', jwt_payload.id);
       if (user) {
         console.log('user in JWTStrategy in app.js: ', user);
         return done(null, user);
       }
       console.log(
-        'If the JWT is not valid in JWTStrategy, Passport will send a 401 Unauthorized response, this is the user that is not valid: ',
+        '401 Unauthorized response in JWTStrategy, user that is not valid: ',
         user
       );
       return done(null, false);

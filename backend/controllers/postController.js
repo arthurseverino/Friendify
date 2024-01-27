@@ -2,15 +2,13 @@ const Post = require('../models/postModel');
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
+const User = require('../models/userModel');
 
-// get all posts
+// get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
-  console.log(
-    'getting posts of user that is logged in, in postController.js, req.user is currently: ',
-    req.user
-  );
+  const user = await User.findById(req.params.id);
   const posts = await Post.find({}).sort({ createdAt: -1 });
-  res.status(200).json(posts);
+  res.status(200).json({ user, posts });
 });
 
 // get a single post

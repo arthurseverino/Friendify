@@ -31,9 +31,11 @@ const loginUser = asyncHandler(async (req, res) => {
   const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
     expiresIn: '1h',
   });
-  console.log('user just logged in, loginUser function in backend: ', req.user);
-  //send token and userID to the client
-  return res.status(200).json({ token, userID: req.user.id });
+  const user = await User.findById(req.user.id);
+  //send token and user to the client
+  console.log('user loginUser function in backend: ', user);
+  console.log('token loginUser function in backend: ', token);  
+  return res.status(200).json({ token, user });
 });
 
 // create a new user
