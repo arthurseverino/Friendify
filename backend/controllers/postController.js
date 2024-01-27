@@ -6,9 +6,8 @@ const User = require('../models/userModel');
 
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
   const posts = await Post.find({}).sort({ createdAt: -1 });
-  res.status(200).json({ user, posts });
+  res.status(200).json(posts);
 });
 
 // get a single post

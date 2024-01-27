@@ -11,35 +11,34 @@ import LoginForm from './pages/LoginForm';
 import Index from './pages/Index';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const token = localStorage.getItem('token');
 
+  // if user is in LocalStorage, then the user is logged in so set them to the Current User
   useEffect(() => {
-    // Check if user details are in local storage, 
-    // if true, that means the user is logged in, set that to the Current User
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
-      setUser(JSON.parse(loggedInUser));
+    const userLoggedIn = localStorage.getItem('userId');
+    if (userLoggedIn) {
+      setCurrentUserId(userLoggedIn);
+      console.log('Current User Id in App.jsx: ', currentUserId);
     }
   }, []);
 
   const logout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    localStorage.clear();
     window.location.href = '/';
   };
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar logout={logout} userId={user?.id} />
+        <Navbar logout={logout} userId={currentUserId} />
         <Routes>
-          <Route path="/" element={user ? <Home /> : <Index />} />
+          <Route path="/" element={<Index />} />
           <Route path="/api/users/signup" element={<SignupForm />} />
           <Route path="/api/users/login" element={<LoginForm />} />
           <Route
             path={`/api/users/:userId/posts`}
-            element={<Home token={token} user={user} />}
+            element={<Home token={token}/>}
           />
         </Routes>
       </BrowserRouter>

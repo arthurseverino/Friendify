@@ -27,13 +27,14 @@ const LoginForm = () => {
         setError(null);
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        navigate(`/api/users/${data.user.id}/posts`);
+        localStorage.setItem('userId', data.user._id);
+        navigate(`/api/users/${data.user._id}/posts`);
         console.log(
-          'data.user.id should be good after clicking login in LoginForm: ',
-          data.user.id
+          'data.user._id after submitting LoginForm: ',
+          data.user._id
         );
       } else {
+        setError('the response was not successful');
         console.log('the response was not successful');
       }
     } catch (err) {

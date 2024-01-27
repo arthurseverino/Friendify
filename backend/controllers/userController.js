@@ -33,8 +33,7 @@ const loginUser = asyncHandler(async (req, res) => {
   });
   const user = await User.findById(req.user.id);
   //send token and user to the client
-  console.log('user loginUser function in backend: ', user);
-  console.log('token loginUser function in backend: ', token);  
+  console.log('user.id backend LoginUser: ', user.id);  
   return res.status(200).json({ token, user });
 });
 
