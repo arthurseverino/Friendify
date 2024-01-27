@@ -15,7 +15,11 @@ router.get('/', passport.authenticate('jwt', { session: false }), getPosts);
 
 // GET a single post
 //check other projects, does it open another page?
-router.get('/:postId', passport.authenticate('jwt', { session: false }), getPost);
+router.get(
+  '/:postId',
+  passport.authenticate('jwt', { session: false }),
+  getPost
+);
 
 // POST(Create) a new post
 router.post('/', passport.authenticate('jwt', { session: false }), createPost);

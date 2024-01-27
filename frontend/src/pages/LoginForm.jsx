@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-const LoginForm = ({ userId }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -22,22 +22,20 @@ const LoginForm = ({ userId }) => {
 
       if (response.ok) {
         // The response was successful
+        console.log('submitting form now... ');
         setUsername('');
         setPassword('');
         setError(null);
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        console.log('data.token in handleLogin in LoginForm.jsx: ', data.token);
-        setTimeout(() => {
-          navigate(`/api/users/${userId}/posts`);
-        }, 0);
+        navigate(`/api/users/${data.userID}/posts`);
+        console.log('data.userID is not fucking me! ', data.userID);
       } else {
-        // The response was not successful
-        const data = await response.json();
-        setError('setError error:', data.error);
+        console.log('the response was not successful');
       }
     } catch (err) {
-      setError('try/catch error:', err);
+      console.log('my try/catch console.log err: ', err);
+      setError('my try/catch SetError err.message:', err.message);
     }
   };
 

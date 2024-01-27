@@ -15,6 +15,7 @@ function App() {
   const logout = () => {
     localStorage.removeItem('token');
     window.location.href = '/';
+
   };
 
   let decodedToken;
@@ -23,7 +24,7 @@ function App() {
   if (token) {
     decodedToken = jwtDecode(token);
     userId = decodedToken.id;
-    console.log('userId of user that is currently logged in: ', userId);
+    console.log('FRONTEND app.jsx userId that is currently logged in. Might be null because it gets done before other things : ', userId);
   }
 
   return (
@@ -35,7 +36,7 @@ function App() {
           <Route path="/api/users/signup" element={<SignupForm />} />
           <Route
             path="/api/users/login"
-            element={<LoginForm userId={userId} />}
+            element={<LoginForm/>}
           />
           <Route
             path={`/api/users/${userId}/posts`}

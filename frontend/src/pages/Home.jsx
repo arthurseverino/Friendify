@@ -8,7 +8,7 @@ const Home = ({ token, userId }) => {
 
   //only ran once when Home is rendered, because of the empty array
   useEffect(() => {
-    if (!token || !userId) {
+    if (!token) {
       setError('You must be logged in to view this page');
       return;
     }

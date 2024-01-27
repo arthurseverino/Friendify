@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
+const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
@@ -23,6 +24,16 @@ const getUser = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: 'No such user' });
   }
   res.status(200).json(user);
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+  // Password and username are correct, create a token or get a token if it already exists
+  const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
+    expiresIn: '1h',
+  });
+  console.log('user just logged in, loginUser function in backend: ', req.user);
+  //send token and userID to the client
+  return res.status(200).json({ token, userID: req.user.id });
 });
 
 // create a new user
@@ -98,4 +109,5 @@ module.exports = {
   createUser,
   deleteUser,
   updateUser,
+  loginUser,
 };
