@@ -16,7 +16,7 @@ const {
 // shows all users and buttons for sending follow requests to users the user is not already following or have a pending request.
 router.get('/', passport.authenticate('jwt', { session: false }), getUsers);
 
-// GET a single user, the profile page
+// GET a single users data
 router.get('/:id', passport.authenticate('jwt', { session: false }), getUser);
 
 // DELETE a user, you can delete a user from its profile page
@@ -47,6 +47,7 @@ router.post(
 // GET posts on timeline, shows all posts from users the user is following
 router.use(
   '/:id/posts',
+  passport.authenticate('jwt', { session: false }),
   postRoutes
 );
 

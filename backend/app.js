@@ -24,31 +24,6 @@ main();
 
 const app = express();
 
-const opts = {};
-//this extracts the JWT from Authorization Header
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.JWT_SECRET;
-
-passport.use(
-  // The payload typically contains the ID of the user
-  new JwtStrategy(opts, async (jwt_payload, done) => {
-    try {
-      const user = await User.findById(jwt_payload.id);
-      if (user) {
-        return done(null, user);
-      }
-      console.log(
-        '401 Unauthorized response in JWTStrategy, user that is not valid: ',
-        user
-      );
-      return done(null, false);
-    } catch (err) {
-      console.log('try/catch error in JWTStrategy in app.js: ', err);
-      return done(err, false);
-    }
-  })
-);
-
 passport.use(
   'local',
   new LocalStrategy(async (username, password, done) => {
@@ -75,6 +50,30 @@ passport.use(
       return done(null, user);
     } catch (err) {
       return done(err);
+    }
+  })
+);
+
+const opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = process.env.JWT_SECRET;
+
+passport.use(
+  // The payload typically contains the ID of the user
+  new JwtStrategy(opts, async (jwt_payload, done) => {
+    try {
+      const user = await User.findById(jwt_payload.id);
+      if (user) {
+        return done(null, user);
+      }
+      console.log(
+        '401 Unauthorized response in JWTStrategy, user that is not valid: ',
+        user
+      );
+      return done(null, false);
+    } catch (err) {
+      console.log('try/catch error in JWTStrategy in app.js: ', err);
+      return done(err, false);
     }
   })
 );

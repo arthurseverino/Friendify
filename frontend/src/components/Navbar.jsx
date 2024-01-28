@@ -6,7 +6,7 @@ const Navbar = ({ logout, userId }) => {
       <Link to={userId ? `/api/users/${userId}/posts` : '/'}>
         <h1>My App</h1>
       </Link>
-      { <button onClick={logout}>Logout</button>}
+      { userId && <button onClick={logout}>Logout</button>}
     </header>
   );
 };

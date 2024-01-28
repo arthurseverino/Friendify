@@ -29,10 +29,6 @@ const LoginForm = () => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.user._id);
         navigate(`/api/users/${data.user._id}/posts`);
-        console.log(
-          'data.user._id after submitting LoginForm: ',
-          data.user._id
-        );
       } else {
         setError('the response was not successful');
         console.log('the response was not successful');

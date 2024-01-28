@@ -10,17 +10,33 @@ import SignupForm from './pages/SignupForm';
 import LoginForm from './pages/LoginForm';
 import Index from './pages/Index';
 
+function Redirector({isLoading}) {
+  const navigate = useNavigate();
+  const userLoggedInId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    if (!isLoading && userLoggedInId) {
+      navigate(`/api/users/${userLoggedInId}/posts`);
+    }
+  }, [navigate, userLoggedInId, isLoading]);
+
+  return null;
+}
+
 function App() {
   const [currentUserId, setCurrentUserId] = useState(null);
-  const token = localStorage.getItem('token');
+  const [token, setToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // if user is in LocalStorage, then the user is logged in so set them to the Current User
+  // redirect them to their posts page but I get unauthorized
   useEffect(() => {
-    const userLoggedIn = localStorage.getItem('userId');
-    if (userLoggedIn) {
-      setCurrentUserId(userLoggedIn);
-      console.log('Current User Id in App.jsx: ', currentUserId);
+    const userLoggedInId = localStorage.getItem('userId');
+    if (userLoggedInId) {
+      setCurrentUserId(userLoggedInId);
+      setToken(localStorage.getItem('token'));
     }
+    setIsLoading(false);
   }, []);
 
   const logout = () => {
@@ -28,18 +44,20 @@ function App() {
     window.location.href = '/';
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>; // Render a loading message while the app is in loading state
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar logout={logout} userId={currentUserId} />
+        <Navbar logout={logout} userId={currentUserId} key={currentUserId} />
+        <Redirector isLoading={isLoading} />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/api/users/signup" element={<SignupForm />} />
           <Route path="/api/users/login" element={<LoginForm />} />
-          <Route
-            path={`/api/users/:userId/posts`}
-            element={<Home token={token}/>}
-          />
+          <Route path={`/api/users/:userId/posts`} element={<Home isLoading={isLoading} />} />
         </Routes>
       </BrowserRouter>
     </div>

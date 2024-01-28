@@ -11,7 +11,7 @@ const {
 
 // GET all posts
 // Show your posts and whatever users you are following (Home Page)
-router.get('/', passport.authenticate('jwt', { session: false }), getPosts);
+router.get('/', getPosts);
 
 // GET a single post
 //check other projects, does it open another page?
