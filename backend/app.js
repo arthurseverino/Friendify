@@ -66,10 +66,7 @@ passport.use(
       if (user) {
         return done(null, user);
       }
-      console.log(
-        '401 Unauthorized response in JWTStrategy, user that is not valid: ',
-        user
-      );
+      console.log('Does my code ever enter here lol ');
       return done(null, false);
     } catch (err) {
       console.log('try/catch error in JWTStrategy in app.js: ', err);

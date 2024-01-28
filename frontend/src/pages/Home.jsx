@@ -19,11 +19,9 @@ const Home = ({ isLoading }) => {
             return;
           }
           const response = await fetch(`/api/users/${userId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
+          console.log(`Authorization: Bearer ${token} in Home.jsx`);
           if (!response.ok) {
             setError('Failed to fetch user');
             console.error('Response not ok. Failed to fetch user');
@@ -33,10 +31,7 @@ const Home = ({ isLoading }) => {
           setUser(data);
 
           const postsResponse = await fetch(`/api/users/${userId}/posts`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
           if (!postsResponse.ok) {
             setError('Failed to fetch posts');
