@@ -64,9 +64,10 @@ passport.use(
     try {
       const user = await User.findById(jwt_payload.id);
       if (user) {
+        console.log('IF user is found in JWTStrategy in app.js:', user);
         return done(null, user);
       }
-      console.log('Does my code ever enter here lol ');
+      console.log('IF user cannot be found in JWTStrategy in app.js:');
       return done(null, false);
     } catch (err) {
       console.log('try/catch error in JWTStrategy in app.js: ', err);
