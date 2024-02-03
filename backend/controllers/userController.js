@@ -28,7 +28,9 @@ const getUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   // Password and username are correct, create a token or get a token if it already exists
-  const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
+    expiresIn: '45m',
+  });
   const user = await User.findById(req.user.id);
   //send token and user to the client
   return res.status(200).json({ token, user });

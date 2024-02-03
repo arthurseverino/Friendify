@@ -27,10 +27,9 @@ const getPost = asyncHandler(async (req, res) => {
 
 // create a new post
 const createPost = asyncHandler(async (req, res, next) => {
-  const { title, likes, body, comments, author } = req.body;
+  const {likes, body, comments, author } = req.body;
   // store new post in db
   const newPost = await Post.create({
-    title,
     likes,
     body,
     comments,
