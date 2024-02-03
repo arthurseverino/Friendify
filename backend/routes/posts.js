@@ -37,18 +37,7 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   deletePost
 );
-*/
-/*
-// GET a single post
-router.get(
-  '/:postId',
-  passport.authenticate('jwt', { session: false }),
-  getPost
-);
 
-*/
-
-/*
 // UPDATE a post
 router.patch(
   '/:postId',

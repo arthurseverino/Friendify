@@ -86,21 +86,32 @@ const updateUser = asyncHandler(async (req, res) => {
   res.status(200).json(user);
 });
 
-// delete a user
+// In this code, the /:id/follow route receives the ID of the user to follow as a URL parameter. It finds the user with this ID and the current user in the database. If the current user is not already following the user, it adds the current user's ID to the user's followers array and the user's ID to the current user's following array. If the current user is already following the user, it sends a 403 Forbidden response.
+
+const followUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  const currentUser = await User.findById(req.user._id);
+
+  if (!user.followers.includes(req.user._id)) {
+    await user.updateOne({ $push: { followers: req.user._id } });
+    await currentUser.updateOne({ $push: { following: req.params.id } });
+    res.status(200).json('User has been followed');
+  } else {
+    res.status(403).json('You already follow this user');
+  }
+});
+
 /*
+// delete a user
 const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: 'No such user' });
   }
-
   const user = await User.findOneAndDelete({ _id: id });
-
   if (!user) {
     return res.status(400).json({ error: 'No such user' });
   }
-
   res.status(200).json(user);
 });
 */
@@ -111,5 +122,5 @@ module.exports = {
   createUser,
   updateUser,
   loginUser,
-  // deleteUser,
+  followUser,
 };

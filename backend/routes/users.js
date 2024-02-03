@@ -9,7 +9,7 @@ const {
   createUser,
   updateUser,
   loginUser,
-  // deleteUser,
+  followUser,
 } = require('../controllers/userController');
 
 // GET all users, a list of all users
@@ -36,7 +36,11 @@ router.post(
   loginUser
 );
 
-
+router.post(
+  '/:id/follow',
+  passport.authenticate('jwt', { session: false }),
+  followUser
+);
 
 // this is router.use so it will go to router.get(/) in posts.js
 // GET posts on timeline, shows all posts from users the user is following
@@ -45,14 +49,5 @@ router.use(
   passport.authenticate('jwt', { session: false }),
   postRoutes
 );
-
-/*
-// DELETE a user, you can delete a user from its profile page
-router.delete(
-  '/:id',
-  passport.authenticate('jwt', { session: false }),
-  deleteUser
-);
-*/
 
 module.exports = router;

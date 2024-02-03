@@ -22,7 +22,13 @@ const createPost = asyncHandler(async (req, res, next) => {
   res.status(200).json(newPost);
 });
 
-const likePost = async (req, res) => {
+
+
+
+
+// In this code, likePost finds the post with the provided ID and adds the user's ID to the likes array if it's not already there, or removes it if it is. addComment creates a new comment with the provided text and the user's ID as the author, saves it, finds the post with the provided ID, and adds the comment's ID to the comments array.
+
+const likePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
 
   if (!post.likes.includes(req.user._id)) {
@@ -32,9 +38,9 @@ const likePost = async (req, res) => {
     await post.updateOne({ $pull: { likes: req.user._id } });
     res.status(200).json('The post has been unliked');
   }
-};
+});
 
-const addComment = async (req, res) => {
+const addComment = asyncHandler(async (req, res) => {
   const comment = new Comment({
     text: req.body.text,
     author: req.user._id,
@@ -45,7 +51,9 @@ const addComment = async (req, res) => {
   await post.updateOne({ $push: { comments: comment._id } });
 
   res.status(200).json('The comment has been added');
-};
+});
+
+
 
 /*
 // delete a post
@@ -64,25 +72,7 @@ const deletePost = asyncHandler(async (req, res) => {
 
   res.status(200).json(post);
 });
-*/
-// get a single post
-/*
-const getPost = asyncHandler(async (req, res) => {
-  const { id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: 'No such post' });
-  }
-
-  const post = await Post.findById(id);
-  if (!post) {
-    return res.status(404).json({ error: 'No such post' });
-  }
-  res.status(200).json(post);
-});
-
-*/
-/*
 // update a post
 const updatePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
