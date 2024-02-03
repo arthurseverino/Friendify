@@ -43,11 +43,11 @@ const SignupForm = () => {
   return (
     <div className="signupPage">
       <h1>Sign up for free </h1>
-      <h5>
+      <h3>
         <Link to="/api/users/login" className="signupLoginLink">
           Already have an account?
         </Link>
-      </h5>
+      </h3>
       <div className="signupFormContainer">
         <form onSubmit={handleSubmit} className="signupForm">
           <label htmlFor="username">Username</label>
