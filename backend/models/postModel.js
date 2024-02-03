@@ -20,9 +20,9 @@ const postSchema = new Schema(
       ref: 'User',
     },
   },
-  { timestamps: true }
 );
 
+//i dont use the virtual anywhere, should I ? 
 postSchema.virtual('url').get(function () {
   return '/posts/' + this._id;
 });

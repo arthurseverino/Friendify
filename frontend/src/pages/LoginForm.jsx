@@ -42,14 +42,14 @@ const LoginForm = () => {
   return (
     <div className="login">
       <h1>Sign in to your account </h1>
-      <h5>
+      <h3>
         or
         <Link to="/api/users/signup" className="signupLoginLink">
           Sign up for a new account
         </Link>
-      </h5>
-      <label htmlFor="username">Ask for Email, not username</label>
+      </h3>
       <form onSubmit={handleLogin} className="loginForm">
+        <label htmlFor="username">Ask for Email, not username</label>
         <input
           type="text"
           className="loginInput"

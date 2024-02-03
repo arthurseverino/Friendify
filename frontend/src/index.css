@@ -70,4 +70,20 @@ button {
 
 button:hover {
   border-color: #646cff;
+  transform: scale(1.05);
 }
+
+dialog {
+  border-radius: 8px;
+  padding: 2em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 30vh;
+  min-width: 30vw;
+}
+
+.post-details{
+  border: 2px solid blue;
+}
+
+
+

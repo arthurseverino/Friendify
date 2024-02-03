@@ -6,7 +6,7 @@ const User = require('../models/userModel');
 
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({}).sort({ createdAt: -1 });
+  const posts = await Post.find({});
   res.status(200).json(posts);
 });
 
@@ -27,11 +27,11 @@ const getPost = asyncHandler(async (req, res) => {
 
 // create a new post
 const createPost = asyncHandler(async (req, res, next) => {
-  const {likes, body, comments, author } = req.body;
+  const { body, likes, comments, author } = req.body;
   // store new post in db
   const newPost = await Post.create({
-    likes,
     body,
+    likes,
     comments,
     author,
   });

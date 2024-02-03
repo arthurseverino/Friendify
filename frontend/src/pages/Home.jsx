@@ -6,52 +6,17 @@ const Home = ({ isLoading }) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
-  const dialogRef = useRef(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const postRef = useRef(null);
 
-  useEffect(() => {
-    if (!isLoading) {
-      const handleSubmitPost = async (e) => {
-        e.preventDefault();
-
-        const newPost = {
-          body: postRef.current.value,
-          likes: 0,
-          comments: [],
-          author: user.firstName,
-          createdAt: new Date().toISOString(),
-        };
-
-        const response = await fetch(`/api/users/${userId}/posts`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(newPost),
-        });
-
-        // Add the new post to the posts array
-        setPosts((prevPosts) => [newPost, ...prevPosts]);
-
-        // Clear the textarea and close the dialog
-        postRef.current.value = '';
-        dialogRef.current.close();
-      };
-    }
-  });
+  const userId = localStorage.getItem('userId');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (!isLoading) {
       const fetchUserAndPosts = async () => {
         try {
-          const userId = localStorage.getItem('userId');
-          const token = localStorage.getItem('token');
-          if (!userId || !token) {
-            setError('No user ID or token in local storage');
-            console.error('No user ID or token in local storage');
-            return;
-          }
           const response = await fetch(`/api/users/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -72,7 +37,11 @@ const Home = ({ isLoading }) => {
             return;
           }
           const postsData = await postsResponse.json();
-          setPosts(postsData.posts);
+          if (Array.isArray(postsData.posts)) {
+            setPosts(postsData.posts);
+          } else {
+            console.error('postsData.posts is not an array:', postsData.posts);
+          }
         } catch (err) {
           console.error('Ultimately Failed in the try/catch');
         }
@@ -81,13 +50,39 @@ const Home = ({ isLoading }) => {
     }
   }, [isLoading]);
 
-  function handleCreatePost() {
-    dialogRef.current.showModal();
-  }
+  const handleSubmitPost = async (e) => {
+    e.preventDefault();
 
-  function handleCloseDialog() {
-    dialogRef.current.close();
-  }
+    const newPost = {
+      body: postRef.current.value,
+      likes: 0,
+      comments: [],
+      author: userId,
+    };
+
+    const response = await fetch(`/api/users/${userId}/posts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(newPost),
+    });
+    if (!response.ok) {
+      const data = await response.json();
+      console.error('Failed to create post', data);
+      return;
+    }
+
+    const data = await response.json();
+    console.log('New post created', data);
+    // Add the new post to the posts array
+    setPosts((prevPosts) => [data, ...prevPosts]);
+
+    // Clear the textarea and close the dialog
+    postRef.current.value = '';
+    setIsDialogOpen(false);
+  };
 
   return (
     <div className="home">
@@ -95,17 +90,22 @@ const Home = ({ isLoading }) => {
       <h1>{user ? `Hi there, ${user.firstName}` : 'Loading...'}</h1>
       <h2>My Timeline: </h2>
 
-      <button className="createPostButton" onClick={handleCreatePost}>
+      <button
+        className="createPostButton"
+        onClick={() => {
+          setIsDialogOpen(true);
+        }}>
         {' '}
         + Create Post{' '}
       </button>
 
-      <dialog ref={dialogRef}>
-        <button onClick={handleCloseDialog}>X</button>
+      <dialog open={isDialogOpen}>
+        <button onClick={() => setIsDialogOpen(false)}>Close</button>
+
         <form onSubmit={handleSubmitPost}>
           <textarea
             ref={postRef}
-            placeholder={`What's on your mind, ${user.firstName}?`}
+            placeholder={`What's on your mind, ${user ? user.firstName : ''}?`}
             required
           />
           <button type="submit">Post</button>

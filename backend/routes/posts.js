@@ -14,7 +14,7 @@ const {
 router.get('/', getPosts);
 
 // GET a single post
-// check other projects, does it open another page?
+// I don't think we have to get a single post tbh
 router.get(
   '/:postId',
   passport.authenticate('jwt', { session: false }),
