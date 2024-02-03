@@ -49,7 +49,7 @@ const Home = ({ isLoading }) => {
 
     const newPost = {
       body: postRef.current.value,
-      likes: 0,
+      likes: [],
       comments: [],
       author: userId,
     };
@@ -62,20 +62,15 @@ const Home = ({ isLoading }) => {
       },
       body: JSON.stringify(newPost),
     });
-    if (!response.ok) {
+    if (response.ok) {
       const data = await response.json();
-      console.error('Failed to create post', data);
-      return;
+      console.log('New post created', data);
+      // Add the new post to the posts array
+      setPosts((prevPosts) => [data, ...prevPosts]);
+      // Clear the textarea and close the dialog
+      postRef.current.value = '';
+      setIsDialogOpen(false);
     }
-
-    const data = await response.json();
-    console.log('New post created', data);
-    // Add the new post to the posts array
-    setPosts((prevPosts) => [data, ...prevPosts]);
-
-    // Clear the textarea and close the dialog
-    postRef.current.value = '';
-    setIsDialogOpen(false);
   };
 
   return (

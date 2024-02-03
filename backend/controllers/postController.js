@@ -22,38 +22,42 @@ const createPost = asyncHandler(async (req, res, next) => {
   res.status(200).json(newPost);
 });
 
-
-
-
-
 // In this code, likePost finds the post with the provided ID and adds the user's ID to the likes array if it's not already there, or removes it if it is. addComment creates a new comment with the provided text and the user's ID as the author, saves it, finds the post with the provided ID, and adds the comment's ID to the comments array.
 
 const likePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
 
+  if (!post) {
+    return res.status(404).json({ message: 'Post not found' });
+  }
+
   if (!post.likes.includes(req.user._id)) {
     await post.updateOne({ $push: { likes: req.user._id } });
-    res.status(200).json('The post has been liked');
   } else {
     await post.updateOne({ $pull: { likes: req.user._id } });
-    res.status(200).json('The post has been unliked');
   }
+
+  const updatedPost = await Post.findById(req.params.postId);
+  res.status(200).json({ post: updatedPost });
 });
 
 const addComment = asyncHandler(async (req, res) => {
-  const comment = new Comment({
+  const post = await Post.findById(req.params.postId);
+
+  if (!post) {
+    return res.status(404).json({ message: 'Post not found' });
+  }
+
+  const comment = {
     text: req.body.text,
     author: req.user._id,
-  });
-  await comment.save();
+  };
 
-  const post = await Post.findById(req.params.postId);
-  await post.updateOne({ $push: { comments: comment._id } });
+  await post.updateOne({ $push: { comments: comment } });
 
-  res.status(200).json('The comment has been added');
+  const updatedPost = await Post.findById(req.params.postId).populate('comments.author', 'username');
+  res.status(200).json({ post: updatedPost });
 });
-
-
 
 /*
 // delete a post
