@@ -10,7 +10,7 @@ const Navbar = ({ logout, userId }) => {
         <>
           <Link to={`/api/users/${userId}`}>Profile</Link>
           <Link to="/api/users">Users</Link>
-          <Link to={`/api/users/${userId}/allPosts`}>All Posts</Link>
+          <Link to={`/api/users/${userId}/posts/allPosts`}>All Posts</Link>
           <button onClick={logout}>Logout</button>
         </>
       )}

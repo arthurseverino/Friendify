@@ -39,6 +39,7 @@ const Users = () => {
 
   return (
     <div className="users">
+      <h1> ALL USERS </h1>
       {users.map((user) => (
         <div key={user._id}>
           <Link to={`/api/users/${user._id}`}>{user.username}</Link>

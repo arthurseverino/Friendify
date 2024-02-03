@@ -8,7 +8,7 @@ function AllPosts() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${userId}/allPosts`, {
+      const response = await fetch(`/api/users/${userId}/posts/allPosts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {
@@ -24,6 +24,7 @@ function AllPosts() {
 
   return (
     <div>
+      <h1>ALL POSTS </h1>
       {posts
         ? posts.map((post) => <PostDetails key={post._id} post={post} />)
         : 'No posts yet! Create a post or follow someone to see it here.'}

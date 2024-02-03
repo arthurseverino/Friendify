@@ -39,7 +39,8 @@ function Profile() {
 
   return (
     <div className="profile">
-      <h2>{user.username}</h2>
+      <h1> MY PROFILE </h1>
+      <h2> Username: {user.username}</h2>
       {posts.length > 0 ? (
         posts.map((post) => <PostDetails key={post._id} post={post} />)
       ) : (

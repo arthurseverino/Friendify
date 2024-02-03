@@ -16,7 +16,7 @@ const {
 router.get('/', getPosts);
 
 // GET all posts in the database
-// the full route here is /api/users/:userId/allPosts
+// the full route here is /api/users/:userId/posts/allPosts
 router.get(
   '/allPosts',
   passport.authenticate('jwt', { session: false }),

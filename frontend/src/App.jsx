@@ -6,12 +6,12 @@ import Home from './pages/Home';
 import Users from './pages/Users';
 import Profile from './pages/Profile';
 import AllPosts from './pages/AllPosts';
+import LoginForm from './pages/LoginForm';
+import Index from './pages/Index';
 
 // components
 import Navbar from './components/Navbar';
 import SignupForm from './pages/SignupForm';
-import LoginForm from './pages/LoginForm';
-import Index from './pages/Index';
 
 function Redirector({ isLoading }) {
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ function App() {
             path={`/api/users/:userId/posts`}
             element={<Home isLoading={isLoading} />}
           />
-          <Route path="/api/users/:userId/allPosts" element={<AllPosts />} />
+          <Route path="/api/users/:userId/posts/allPosts" element={<AllPosts />} />
         </Routes>
       </BrowserRouter>
     </div>
