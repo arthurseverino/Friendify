@@ -6,13 +6,22 @@ const {
   createPost,
   likePost,
   addComment,
+  getAllPosts,
   //deletePost,
   //updatePost,
 } = require('../controllers/postController');
 
-// GET all posts
-// Show your posts and whatever users you are following (Home Page)
+// Get all your posts and whatever users you are following (Home Page)
+// the full route here is /api/users/:userId/posts
 router.get('/', getPosts);
+
+// GET all posts in the database
+// the full route here is /api/users/:userId/allPosts
+router.get(
+  '/allPosts',
+  passport.authenticate('jwt', { session: false }),
+  getAllPosts
+);
 
 // POST(Create) a new post
 router.post('/', passport.authenticate('jwt', { session: false }), createPost);

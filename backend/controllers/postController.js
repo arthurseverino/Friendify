@@ -1,9 +1,25 @@
 const Post = require('../models/postModel');
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
+const User = require('../models/userModel');
+
+
 
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
+  const currentUser = await User.findById(req.user._id);
+  const followingIds = currentUser.following;
+  followingIds.push(req.user._id); // Include the current user's ID
+
+  const posts = await Post.find({
+    author: { $in: followingIds },
+  }).populate('author', 'username');
+
+  res.status(200).json(posts);
+});
+
+//show all posts in the database
+const getAllPosts = asyncHandler(async (req, res) => {
   //populate('author', 'username') replaces the author field, which is an ID, with the corresponding user document from the User collection, and selects only the username field.
   const posts = await Post.find({}).populate('author', 'username');
 
@@ -109,6 +125,7 @@ module.exports = {
   createPost,
   likePost,
   addComment,
+  getAllPosts,
   //deletePost,
   //updatePost,
 };

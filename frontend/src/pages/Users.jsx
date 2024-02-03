@@ -8,7 +8,7 @@ const Users = () => {
   useEffect(() => {
     // Fetch all users and set them in state
     const fetchUsers = async () => {
-      const response = await fetch('api/users', {
+      const response = await fetch('/api/users', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -25,7 +25,7 @@ const Users = () => {
 
   const handleFollow = async (userIdToFollow) => {
     // Follow the user
-    const response = await fetch(`api/users/${userIdToFollow}/follow`, {
+    const response = await fetch(`/api/users/${userIdToFollow}/follow`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

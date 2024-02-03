@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Users from './pages/Users';
 import Profile from './pages/Profile';
+import AllPosts from './pages/AllPosts';
 
 // components
 import Navbar from './components/Navbar';
@@ -65,6 +66,7 @@ function App() {
             path={`/api/users/:userId/posts`}
             element={<Home isLoading={isLoading} />}
           />
+          <Route path="/api/users/:userId/allPosts" element={<AllPosts />} />
         </Routes>
       </BrowserRouter>
     </div>

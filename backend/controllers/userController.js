@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
+const Post = require('../models/postModel');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 

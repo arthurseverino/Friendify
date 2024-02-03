@@ -1,25 +1,36 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import PostDetails from '../components/PostDetails';
 
 function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch(`api/users/${id}`, {
+    const fetchUserAndPosts = async () => {
+      const userResponse = await fetch(`/api/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.json();
-      setUser(data);
+      const userData = await userResponse.json();
+      setUser(userData);
+
+      const postsResponse = await fetch(`/api/users/${id}/posts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const postsData = await postsResponse.json();
+      setPosts(postsData);
+
       setLoading(false);
     };
 
-    fetchUser();
+    fetchUserAndPosts();
   }, [id]);
 
   if (loading) {
@@ -29,11 +40,11 @@ function Profile() {
   return (
     <div className="profile">
       <h2>{user.username}</h2>
-      {user.posts.map((post) => (
-        <div key={post._id}>
-          <p>{post.content}</p>
-        </div>
-      ))}
+      {posts.length > 0 ? (
+        posts.map((post) => <PostDetails key={post._id} post={post} />)
+      ) : (
+        <p>No posts yet!</p>
+      )}
     </div>
   );
 }

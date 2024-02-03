@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import PostDetails from '../components/PostDetails';
-import { useParams } from 'react-router-dom';
 
 const Home = ({ isLoading }) => {
   const [user, setUser] = useState(null);
