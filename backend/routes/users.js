@@ -7,9 +7,9 @@ const {
   getUsers,
   getUser,
   createUser,
-  deleteUser,
   updateUser,
   loginUser,
+  // deleteUser,
 } = require('../controllers/userController');
 
 // GET all users, a list of all users
@@ -18,13 +18,6 @@ router.get('/', passport.authenticate('jwt', { session: false }), getUsers);
 
 // GET a single users data
 router.get('/:id', passport.authenticate('jwt', { session: false }), getUser);
-
-// DELETE a user, you can delete a user from its profile page
-router.delete(
-  '/:id',
-  passport.authenticate('jwt', { session: false }),
-  deleteUser
-);
 
 // UPDATE a user, you can update a user from its profile page
 router.patch(
@@ -43,6 +36,8 @@ router.post(
   loginUser
 );
 
+
+
 // this is router.use so it will go to router.get(/) in posts.js
 // GET posts on timeline, shows all posts from users the user is following
 router.use(
@@ -50,5 +45,14 @@ router.use(
   passport.authenticate('jwt', { session: false }),
   postRoutes
 );
+
+/*
+// DELETE a user, you can delete a user from its profile page
+router.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  deleteUser
+);
+*/
 
 module.exports = router;

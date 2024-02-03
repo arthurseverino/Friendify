@@ -7,9 +7,7 @@ const Home = ({ isLoading }) => {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   const postRef = useRef(null);
-
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('token');
 
@@ -37,11 +35,7 @@ const Home = ({ isLoading }) => {
             return;
           }
           const postsData = await postsResponse.json();
-          if (Array.isArray(postsData.posts)) {
-            setPosts(postsData.posts);
-          } else {
-            console.error('postsData.posts is not an array:', postsData.posts);
-          }
+          setPosts(postsData);
         } catch (err) {
           console.error('Ultimately Failed in the try/catch');
         }

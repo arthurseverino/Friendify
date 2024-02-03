@@ -3,39 +3,57 @@ const router = express.Router();
 const passport = require('passport');
 const {
   getPosts,
-  getPost,
   createPost,
-  deletePost,
-  updatePost,
+  likePost,
+  addComment,
+  //deletePost,
+  //updatePost,
 } = require('../controllers/postController');
 
 // GET all posts
 // Show your posts and whatever users you are following (Home Page)
 router.get('/', getPosts);
 
-// GET a single post
-// I don't think we have to get a single post tbh
-router.get(
-  '/:postId',
-  passport.authenticate('jwt', { session: false }),
-  getPost
-);
-
 // POST(Create) a new post
 router.post('/', passport.authenticate('jwt', { session: false }), createPost);
 
+// POST(Like) a post
+router.post(
+  '/:postId/like',
+  passport.authenticate('jwt', { session: false }),
+  likePost
+);
+
+// POST(Add comment) to a post
+router.post(
+  '/:postId/comments',
+  passport.authenticate('jwt', { session: false }),
+  addComment
+);
+/*
 // DELETE a post
 router.delete(
   '/:postId',
   passport.authenticate('jwt', { session: false }),
   deletePost
 );
+*/
+/*
+// GET a single post
+router.get(
+  '/:postId',
+  passport.authenticate('jwt', { session: false }),
+  getPost
+);
 
+*/
+
+/*
 // UPDATE a post
 router.patch(
   '/:postId',
   passport.authenticate('jwt', { session: false }),
   updatePost
 );
-
+*/
 module.exports = router;

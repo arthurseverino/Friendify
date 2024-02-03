@@ -1,31 +1,34 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
-
-const userSchema = new Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    firstName: {
-      type: String,
-      required: true,
-    },
+const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
   },
-  { timestamps: true }
-);
-
-userSchema.virtual('url').get(function () {
-  return '/users/' + this._id;
+  password: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  firstName: {
+    type: String,
+    required: true,
+  },
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 userSchema.virtual('name').get(function () {
