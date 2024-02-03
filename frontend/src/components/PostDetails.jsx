@@ -7,9 +7,7 @@ const PostDetails = ({ post }) => {
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('token');
 
-
-
-  //do i need this useEffect? 
+  //do i need this useEffect? useEffect is used to fetch the post details from the server when the component mounts.
   useEffect(() => {
     async function fetchPost() {
       const response = await fetch(`/api/users/${userId}/posts/${post._id}`, {
@@ -26,10 +24,6 @@ const PostDetails = ({ post }) => {
 
     fetchPost();
   }, [post._id, token]);
-
-
-
-
 
   async function handleLike() {
     const response = await fetch(
