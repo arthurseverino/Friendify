@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 
 // pages
 import Home from './pages/Home';
+import Users from './pages/Users';
+import Profile from './pages/Profile';
 
 // components
 import Navbar from './components/Navbar';
@@ -10,7 +12,7 @@ import SignupForm from './pages/SignupForm';
 import LoginForm from './pages/LoginForm';
 import Index from './pages/Index';
 
-function Redirector({isLoading}) {
+function Redirector({ isLoading }) {
   const navigate = useNavigate();
   const userLoggedInId = localStorage.getItem('userId');
 
@@ -43,9 +45,9 @@ function App() {
     localStorage.clear();
     window.location.href = '/';
   };
-
+  // Render a loading message while the app is in loading state
   if (isLoading) {
-    return <div>Loading...</div>; // Render a loading message while the app is in loading state
+    return <div>Loading...</div>;
   }
 
   return (
@@ -55,9 +57,14 @@ function App() {
         <Redirector isLoading={isLoading} />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/api/users" element={<Users />} />
+          <Route path="/api/users/:id" element={<Profile />} />
           <Route path="/api/users/signup" element={<SignupForm />} />
           <Route path="/api/users/login" element={<LoginForm />} />
-          <Route path={`/api/users/:userId/posts`} element={<Home isLoading={isLoading} />} />
+          <Route
+            path={`/api/users/:userId/posts`}
+            element={<Home isLoading={isLoading} />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

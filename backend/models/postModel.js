@@ -23,7 +23,7 @@ const postSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-  },
+  }
 });
 
 //i dont use the virtual anywhere, should I ?

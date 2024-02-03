@@ -7,11 +7,19 @@ const mongoose = require('mongoose');
 
 // shows all users
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({}).sort({ name: 1 });
-  res.status(200).json(users);
+  const users = await User.find({}).sort({ username: 1 });
+
+  const usersWithIsFollowing = users.map((user) => ({
+    ...user._doc,
+    isFollowing: user.followers.includes(req.user._id),
+  }));
+
+  res.status(200).json(usersWithIsFollowing);
 });
 
 // get a single user, this is their profile page with all their posts
+// In this code, Post.find({ author: id }) finds all posts where the author field is equal to id, which is the ID of the user. The posts are then included in the response by spreading the user document into a new object and adding a posts property that contains the posts.
+
 const getUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -23,9 +31,12 @@ const getUser = asyncHandler(async (req, res) => {
   if (!user) {
     return res.status(404).json({ error: 'No such user' });
   }
-  res.status(200).json(user);
+
+  const posts = await Post.find({ author: id });
+  res.status(200).json({ ...user._doc, posts });
 });
 
+// login a user
 const loginUser = asyncHandler(async (req, res) => {
   // Password and username are correct, create a token or get a token if it already exists
   const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {

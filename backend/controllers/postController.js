@@ -6,6 +6,7 @@ const { body, validationResult } = require('express-validator');
 const getPosts = asyncHandler(async (req, res) => {
   //populate('author', 'username') replaces the author field, which is an ID, with the corresponding user document from the User collection, and selects only the username field.
   const posts = await Post.find({}).populate('author', 'username');
+
   res.status(200).json(posts);
 });
 
@@ -55,7 +56,10 @@ const addComment = asyncHandler(async (req, res) => {
 
   await post.updateOne({ $push: { comments: comment } });
 
-  const updatedPost = await Post.findById(req.params.postId).populate('comments.author', 'username');
+  const updatedPost = await Post.findById(req.params.postId).populate(
+    'comments.author',
+    'username'
+  );
   res.status(200).json({ post: updatedPost });
 });
 
