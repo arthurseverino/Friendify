@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import PostDetails from '../components/PostDetails';
 
+//filter the posts to only include the posts made by the current user
 function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
@@ -24,7 +25,8 @@ function Profile() {
           Authorization: `Bearer ${token}`,
         },
       });
-      const postsData = await postsResponse.json();
+      let postsData = await postsResponse.json();
+      postsData = postsData.filter((post) => post.author._id === id);
       setPosts(postsData);
 
       setLoading(false);
@@ -39,8 +41,7 @@ function Profile() {
 
   return (
     <div className="profile">
-      <h1> MY PROFILE </h1>
-      <h2> Username: {user.username}</h2>
+      <h1> {user.username}&apos;s PROFILE </h1>
       {posts.length > 0 ? (
         posts.map((post) => <PostDetails key={post._id} post={post} />)
       ) : (

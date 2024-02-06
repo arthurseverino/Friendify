@@ -13,7 +13,7 @@ const getPosts = asyncHandler(async (req, res) => {
 
   const posts = await Post.find({
     author: { $in: followingIds },
-  }).populate('author', 'username');
+  }).sort('-createdAt').populate('author', 'username');
 
   res.status(200).json(posts);
 });
@@ -21,7 +21,7 @@ const getPosts = asyncHandler(async (req, res) => {
 //show all posts in the database
 const getAllPosts = asyncHandler(async (req, res) => {
   //populate('author', 'username') replaces the author field, which is an ID, with the corresponding user document from the User collection, and selects only the username field.
-  const posts = await Post.find({}).populate('author', 'username');
+  const posts = await Post.find({}).sort('-createdAt').populate('author', 'username');
 
   res.status(200).json(posts);
 });
