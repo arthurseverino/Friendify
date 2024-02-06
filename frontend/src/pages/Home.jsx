@@ -74,10 +74,7 @@ const Home = ({ isLoading }) => {
 
   return (
     <div className="home">
-      <h1>Home</h1>
       <h1>{user ? `Hi there, ${user.username}` : 'Loading...'}</h1>
-      <h2>My Timeline: </h2>
-
       <button
         className="createPostButton"
         onClick={() => {
@@ -86,6 +83,7 @@ const Home = ({ isLoading }) => {
         {' '}
         + Create Post{' '}
       </button>
+      <h2>Your Feed: </h2>
 
       <dialog open={isDialogOpen}>
         <button onClick={() => setIsDialogOpen(false)}>Close</button>

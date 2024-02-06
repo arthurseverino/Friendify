@@ -23,13 +23,17 @@ const SignupForm = () => {
         setUsername('');
         setPassword('');
         setError(null);
+        console.log('User created successfully: ', data.username);
         navigate('/api/users/login');
       } else {
-        setError(data.errors.map((error) => error.msg).join(', '));
-        //setError(data.error);
+        setError(
+          data.errors
+            ? data.errors.map((error) => error.msg).join(', ')
+            : ' Server error '
+        );
       }
     } catch (err) {
-      setError(err);
+      console.error('try/catch error: ', err);
     }
   };
 
@@ -50,7 +54,6 @@ const SignupForm = () => {
             name="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
           <label htmlFor="password">Password</label>
           <input
@@ -60,10 +63,15 @@ const SignupForm = () => {
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
           <button className="signupButton">Sign Up</button>
-          {error && <p className="error">{error}</p>}
+          {error && (
+            <ul className="error">
+              {error.split(', ').map((err, index) => (
+                <li key={index}>{err}</li>
+              ))}
+            </ul>
+          )}
         </form>
       </div>
     </div>

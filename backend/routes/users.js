@@ -30,11 +30,7 @@ router.patch(
 router.post('/signup', createUser);
 
 // LOGIN a user, handle login form submission
-router.post(
-  '/login',
-  passport.authenticate('local', { failWithError: true, session: false }),
-  loginUser
-);
+router.post('/login', loginUser);
 
 router.post(
   '/:id/follow',

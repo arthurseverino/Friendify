@@ -37,31 +37,6 @@ const getUser = asyncHandler(async (req, res) => {
   res.status(200).json({ ...user._doc, posts });
 });
 
-
-// login a user
-const loginUser = [
-  // validation and sanitization middleware
-  check('username')
-    .trim() // remove leading and trailing whitespace
-    .notEmpty()
-    .withMessage('Username is required'),
-  check('password').notEmpty().withMessage('Password is required'),
-  asyncHandler(async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    // Password and username are correct, create a token or get a token if it already exists
-    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-      expiresIn: '45m',
-    });
-    const user = await User.findById(req.user.id);
-    //send token and user to the client
-    return res.status(200).json({ token, user });
-  }),
-];
-
 // create a new user
 const createUser = [
   // validation and sanitization middleware
@@ -80,8 +55,8 @@ const createUser = [
   check('password')
     .notEmpty()
     .withMessage('Password is required')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long'),
+    .isLength({ min: 4 })
+    .withMessage('Password must be at least 4 characters long'),
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -96,6 +71,38 @@ const createUser = [
     });
     const userResponse = await User.findById(user._id).select('-password');
     return res.status(200).json(userResponse);
+  }),
+];
+
+// login a user
+const loginUser = [
+  // validation and sanitization middleware
+  check('username')
+    .trim() // remove leading and trailing whitespace
+    .notEmpty()
+    .withMessage('Username is required'),
+  check('password').notEmpty().withMessage('Password is required'),
+
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+
+    // Check if user exists and if password is correct
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      errors.errors.push({ msg: 'Invalid username or password' });
+    }
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Password and username are correct, create a token or get a token if it already exists
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '45m',
+    });
+    //send token and user to the client
+    return res.status(200).json({ token, user });
   }),
 ];
 
@@ -136,7 +143,6 @@ const followUser = asyncHandler(async (req, res) => {
     res.status(403).json('You already follow this user');
   }
 });
-
 
 module.exports = {
   getUsers,

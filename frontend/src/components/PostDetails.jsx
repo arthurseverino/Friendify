@@ -85,7 +85,10 @@ const PostDetails = ({ post: initialPost }) => {
       {post.comments.map((comment) => (
         <div key={comment._id}>
           <p>
-            {comment.author.username}: {comment.text}
+            <Link to={`/api/users/${comment.author._id}`}>
+              {comment.author.username}
+            </Link>
+            : {comment.text}
           </p>
         </div>
       ))}

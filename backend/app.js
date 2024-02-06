@@ -4,10 +4,8 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/users');
 const cors = require('cors');
 const passport = require('passport');
-const bcrypt = require('bcryptjs');
 const User = require('./models/userModel');
 const JwtStrategy = require('passport-jwt').Strategy;
-const LocalStrategy = require('passport-local').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const mongoDB = process.env.MONGO_URL;
@@ -23,36 +21,6 @@ async function main() {
 main();
 
 const app = express();
-
-passport.use(
-  'local',
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      // Find the user by username
-      const user = await User.findOne({ username });
-
-      if (!user) {
-        return done(null, false, {
-          error: 'Username does not exist. Please try again.',
-        });
-      }
-
-      // Check the password
-      const validPassword = await bcrypt.compare(password, user.password);
-
-      if (!validPassword) {
-        return done(null, false, {
-          error: 'Password is not correct. Please try again',
-        });
-      }
-
-      // User found and password is correct
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
-  })
-);
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -83,11 +51,19 @@ app.use(express.urlencoded({ extended: true }));
 // routes
 app.use('/api/users', userRoutes);
 
-// Error handling 
+// Error handling
 app.use((err, req, res, next) => {
-  res.status(500).json({ error: err.message });
-});
+  // Log the error for debugging purposes
+  console.error('err.stack: ', err.stack);
+  console.error('err.message: ', err.message);
+  console.error('err.status: ', err.status);
 
-app.listen(process.env.PORT || 3001, () => {
+  // Check if err has a status property and use that, otherwise default to 500
+  const status = err.status || 500;
+
+  // Respond with the status and the error message
+  res.status(status).json({ error: err.message });
+});
+app.listen(process.env.PORT || 3000, () => {
   console.log('Server listening on port: ', process.env.PORT);
 });
