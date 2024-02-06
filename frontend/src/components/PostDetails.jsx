@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-
-// You can use a state for the entire post and update it when the like button is clicked or a comment is added. 
+// You can use a state for the entire post and update it when the like button is clicked or a comment is added.
 const PostDetails = ({ post: initialPost }) => {
   const [post, setPost] = useState(initialPost);
   const [comment, setComment] = useState('');
@@ -60,7 +60,12 @@ const PostDetails = ({ post: initialPost }) => {
 
   return (
     <div className="post-details">
-      <p>Author: {post.author?.username}</p>
+      <p>
+        Author:{' '}
+        <Link to={`/api/users/${post.author._id}`}>
+          {post.author?.username}
+        </Link>
+      </p>
       <p>{post.body}</p>
       <p>{post.likes ? post.likes.length : 0} likes</p>
 

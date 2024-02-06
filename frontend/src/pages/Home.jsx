@@ -75,7 +75,7 @@ const Home = ({ isLoading }) => {
   return (
     <div className="home">
       <h1>Home</h1>
-      <h1>{user ? `Hi there, ${user.firstName}` : 'Loading...'}</h1>
+      <h1>{user ? `Hi there, ${user.username}` : 'Loading...'}</h1>
       <h2>My Timeline: </h2>
 
       <button
@@ -93,7 +93,7 @@ const Home = ({ isLoading }) => {
         <form onSubmit={handleSubmitPost}>
           <textarea
             ref={postRef}
-            placeholder={`What's on your mind, ${user ? user.firstName : ''}?`}
+            placeholder={`What's on your mind, ${user ? user.username : ''}?`}
             required
           />
           <button type="submit">Post</button>

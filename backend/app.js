@@ -66,10 +66,8 @@ passport.use(
       if (user) {
         return done(null, user);
       }
-      console.log('IF user cannot be found in JWTStrategy in app.js:');
       return done(null, false);
     } catch (err) {
-      console.log('try/catch error in JWTStrategy in app.js: ', err);
       return done(err, false);
     }
   })
@@ -85,13 +83,9 @@ app.use(express.urlencoded({ extended: true }));
 // routes
 app.use('/api/users', userRoutes);
 
-// sending errors to client...
+// Error handling 
 app.use((err, req, res, next) => {
-  res
-    .status(500)
-    .send(
-      `This message is coming from your backend error handler in app.js! Here is your err.stack: ${err.stack}----------------------------- err.status: ${err.status}------------------------------- err.message: ${err.message},----------------------------- err.name: ${err.name} ----------------------------------Enjoy!`
-    );
+  res.status(500).json({ error: err.message });
 });
 
 app.listen(process.env.PORT || 3001, () => {

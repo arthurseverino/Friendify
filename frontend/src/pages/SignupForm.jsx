@@ -4,8 +4,6 @@ import { useState } from 'react';
 const SignupForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -18,22 +16,17 @@ const SignupForm = () => {
         body: JSON.stringify({
           username,
           password,
-          email,
-          firstName,
         }),
       });
+      const data = await response.json();
       if (response.ok) {
-        // The response was successful
         setUsername('');
         setPassword('');
-        setEmail('');
-        setFirstName('');
         setError(null);
         navigate('/api/users/login');
       } else {
-        // The response was not successful
-        const data = await response.json();
-        setError(data.error);
+        setError(data.errors.map((error) => error.msg).join(', '));
+        //setError(data.error);
       }
     } catch (err) {
       setError(err);
@@ -68,25 +61,6 @@ const SignupForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-          />
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            placeholder="Email"
-            className="signupInput"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <label htmlFor="firstName">First Name</label>
-          <input
-            type="text"
-            placeholder="First Name"
-            className="signupInput"
-            name="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
           />
           <button className="signupButton">Sign Up</button>
           {error && <p className="error">{error}</p>}

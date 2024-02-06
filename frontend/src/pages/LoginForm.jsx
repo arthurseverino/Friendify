@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -9,33 +9,26 @@ const LoginForm = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!username || !password) {
-      setError('Username and password are required');
-      return;
-    }
     try {
       const response = await fetch('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-
+      const data = await response.json();
       if (response.ok) {
         // The response was successful
         setUsername('');
         setPassword('');
         setError(null);
-        const data = await response.json();
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.user._id);
         navigate(`/api/users/${data.user._id}/posts`);
       } else {
-        setError('the response was not successful');
-        console.log('the response was not successful');
+        setError(data.errors.map((error) => error.msg).join(', '));
       }
     } catch (err) {
-      console.log('my try/catch console.log err: ', err);
-      setError('my try/catch SetError err.message:', err.message);
+      setError(err);
     }
   };
 
@@ -49,7 +42,7 @@ const LoginForm = () => {
         </Link>
       </h3>
       <form onSubmit={handleLogin} className="loginForm">
-        <label htmlFor="username">Ask for Email, not username</label>
+        <label htmlFor="username">Username</label>
         <input
           type="text"
           className="loginInput"

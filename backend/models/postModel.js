@@ -23,10 +23,10 @@ const postSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-  }
+  },
 });
 
-//i dont use the virtual anywhere, should I ?
+//maybe i should use this url to make code cleaner 
 postSchema.virtual('url').get(function () {
   return '/posts/' + this._id;
 });

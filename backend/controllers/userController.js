@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
-const { body, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const Post = require('../models/postModel');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
@@ -19,7 +19,7 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 // get a single user, this is their profile page with all their posts
-// In this code, Post.find({ author: id }) finds all posts where the author field is equal to id, which is the ID of the user. The posts are then included in the response by spreading the user document into a new object and adding a posts property that contains the posts.
+// The posts are then included in the response by spreading the user document into a new object and adding a posts property that contains the posts.
 
 const getUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -37,43 +37,67 @@ const getUser = asyncHandler(async (req, res) => {
   res.status(200).json({ ...user._doc, posts });
 });
 
-// login a user
-const loginUser = asyncHandler(async (req, res) => {
-  // Password and username are correct, create a token or get a token if it already exists
-  const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-    expiresIn: '45m',
-  });
-  const user = await User.findById(req.user.id);
-  //send token and user to the client
-  return res.status(200).json({ token, user });
-});
 
-// create a new user
-const createUser = asyncHandler(async (req, res, next) => {
-  const { username, password, email, firstName } = req.body;
-  try {
-    // Check if a user with the same username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ error: 'User with this username or email already exists' });
+// login a user
+const loginUser = [
+  // validation and sanitization middleware
+  check('username')
+    .trim() // remove leading and trailing whitespace
+    .notEmpty()
+    .withMessage('Username is required'),
+  check('password').notEmpty().withMessage('Password is required'),
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
+    // Password and username are correct, create a token or get a token if it already exists
+    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
+      expiresIn: '45m',
+    });
+    const user = await User.findById(req.user.id);
+    //send token and user to the client
+    return res.status(200).json({ token, user });
+  }),
+];
+
+// create a new user
+const createUser = [
+  // validation and sanitization middleware
+  check('username')
+    .trim() // remove leading and trailing whitespace
+    .notEmpty()
+    .withMessage('Username is required')
+    .isLength({ min: 3 })
+    .withMessage('Username must be at least 3 characters long')
+    .custom(async (username) => {
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        throw new Error('Username already in use');
+      }
+    }),
+  check('password')
+    .notEmpty()
+    .withMessage('Password is required')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long'),
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       username,
       password: hashedPassword,
-      email,
-      firstName,
     });
     const userResponse = await User.findById(user._id).select('-password');
     return res.status(200).json(userResponse);
-  } catch (err) {
-    console.log(err);
-    return next(err);
-  }
-});
+  }),
+];
 
 // update a user, you can update your name and profile pic but thats it
 const updateUser = asyncHandler(async (req, res) => {
@@ -113,20 +137,6 @@ const followUser = asyncHandler(async (req, res) => {
   }
 });
 
-/*
-// delete a user
-const deleteUser = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'No such user' });
-  }
-  const user = await User.findOneAndDelete({ _id: id });
-  if (!user) {
-    return res.status(400).json({ error: 'No such user' });
-  }
-  res.status(200).json(user);
-});
-*/
 
 module.exports = {
   getUsers,

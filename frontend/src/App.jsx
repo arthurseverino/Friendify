@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 // pages
@@ -15,13 +21,14 @@ import SignupForm from './pages/SignupForm';
 
 function Redirector({ isLoading }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const userLoggedInId = localStorage.getItem('userId');
 
   useEffect(() => {
-    if (!isLoading && userLoggedInId) {
+    if (!isLoading && userLoggedInId && location.pathname === '/') {
       navigate(`/api/users/${userLoggedInId}/posts`);
     }
-  }, [navigate, userLoggedInId, isLoading]);
+  }, [navigate, userLoggedInId, isLoading, location]);
 
   return null;
 }
@@ -46,6 +53,7 @@ function App() {
     localStorage.clear();
     window.location.href = '/';
   };
+
   // Render a loading message while the app is in loading state
   if (isLoading) {
     return <div>Loading...</div>;
@@ -66,7 +74,10 @@ function App() {
             path={`/api/users/:userId/posts`}
             element={<Home isLoading={isLoading} />}
           />
-          <Route path="/api/users/:userId/posts/allPosts" element={<AllPosts />} />
+          <Route
+            path="/api/users/:userId/posts/allPosts"
+            element={<AllPosts />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
