@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import PostDetails from '../components/PostDetails';
 
-//filter the posts to only include the posts made by the current user
 function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
@@ -13,17 +12,13 @@ function Profile() {
   useEffect(() => {
     const fetchUserAndPosts = async () => {
       const userResponse = await fetch(`/api/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const userData = await userResponse.json();
       setUser(userData);
 
       const postsResponse = await fetch(`/api/users/${id}/posts`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       let postsData = await postsResponse.json();
       postsData = postsData.filter((post) => post.author._id === id);

@@ -4,7 +4,6 @@ const { body, validationResult } = require('express-validator');
 const User = require('../models/userModel');
 
 
-
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
   const currentUser = await User.findById(req.user._id);

@@ -1,5 +1,5 @@
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   useNavigate,
@@ -61,7 +61,7 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
+      <HashRouter>
         <Navbar logout={logout} userId={currentUserId} key={currentUserId} />
         <Redirector isLoading={isLoading} />
         <Routes>
@@ -79,7 +79,7 @@ function App() {
             element={<AllPosts />}
           />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }

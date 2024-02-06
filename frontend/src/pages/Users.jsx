@@ -10,9 +10,7 @@ const Users = () => {
     // Fetch all users and set them in state
     const fetchUsers = async () => {
       const response = await fetch('/api/users', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {
         console.error('Failed to fetch users');
@@ -28,9 +26,7 @@ const Users = () => {
     // Follow the user
     const response = await fetch(`/api/users/${userIdToFollow}/follow`, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     if (!response.ok) {
       console.error('Failed to follow user');

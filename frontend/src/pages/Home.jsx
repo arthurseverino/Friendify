@@ -14,9 +14,9 @@ const Home = ({ isLoading }) => {
     if (!isLoading) {
       const fetchUserAndPosts = async () => {
         try {
-          const response = await fetch(`/api/users/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await fetch(`/api/users/${userId}`
+          , {headers: { Authorization: `Bearer ${token}` },}
+          );
           if (!response.ok) {
             setError('Failed to fetch user');
             console.error('Response not ok. Failed to fetch user');
@@ -25,9 +25,9 @@ const Home = ({ isLoading }) => {
           const data = await response.json();
           setUser(data);
 
-          const postsResponse = await fetch(`/api/users/${userId}/posts`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const postsResponse = await fetch(`/api/users/${userId}/posts`
+          , {headers: { Authorization: `Bearer ${token}` },}
+          );
           if (!postsResponse.ok) {
             setError('Failed to fetch posts');
             console.error('Failed to fetch posts');
