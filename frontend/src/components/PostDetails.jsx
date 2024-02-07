@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 
 // You can use a state for the entire post and update it when the like button is clicked or a comment is added.
-const PostDetails = ({ post: initialPost }) => {
+const PostDetails = ({ post: initialPost, userId, token }) => {
   const [post, setPost] = useState(initialPost);
   const [comment, setComment] = useState('');
+  const [postDate, setPostDate] = useState('');
 
-  const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
+  useEffect(() => {
+    const formattedDate = format(new Date(post.createdAt), 'MM/dd/yyyy');
+    setPostDate(formattedDate);
+  }, [post.createdAt]);
 
   async function handleLike() {
     try {
@@ -62,26 +66,21 @@ const PostDetails = ({ post: initialPost }) => {
     <div className="post-details">
       <p>
         Author:{' '}
-        <Link to={`/api/users/${post.author._id}`}>
-          {post.author?.username}
-        </Link>
+        <Link to={`/api/users/${post.author._id}`}>{post.author.username}</Link>
       </p>
+      <p>{postDate}</p>
       <p>{post.body}</p>
       <p>{post.likes ? post.likes.length : 0} likes</p>
-
-      <div>
-        <button onClick={handleLike}>Like</button>
-        <form onSubmit={handleComment}>
-          <input
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            required
-          />
-          <button type="submit">Comment</button>
-        </form>
-      </div>
-
+      <button onClick={handleLike}>Like</button>
+      <form onSubmit={handleComment}>
+        <input
+          type="text"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          required
+        />
+        <button type="submit">Comment</button>
+      </form>
       {post.comments.map((comment) => (
         <div key={comment._id}>
           <p>

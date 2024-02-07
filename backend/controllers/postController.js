@@ -3,7 +3,6 @@ const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/userModel');
 
-
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
   const currentUser = await User.findById(req.user._id);
@@ -12,7 +11,10 @@ const getPosts = asyncHandler(async (req, res) => {
 
   const posts = await Post.find({
     author: { $in: followingIds },
-  }).sort('-createdAt').populate('author', 'username');
+  })
+    .sort('-createdAt')
+    .populate('author', 'username')
+    .populate('comments.author', 'username');
 
   res.status(200).json(posts);
 });
@@ -20,7 +22,10 @@ const getPosts = asyncHandler(async (req, res) => {
 //show all posts in the database
 const getAllPosts = asyncHandler(async (req, res) => {
   //populate('author', 'username') replaces the author field, which is an ID, with the corresponding user document from the User collection, and selects only the username field.
-  const posts = await Post.find({}).sort('-createdAt').populate('author', 'username');
+  const posts = await Post.find({})
+    .sort('-createdAt')
+    .populate('author', 'username')
+    .populate('comments.author', 'username');
 
   res.status(200).json(posts);
 });
@@ -35,7 +40,10 @@ const createPost = asyncHandler(async (req, res, next) => {
     comments,
     author,
   });
-  res.status(200).json(newPost);
+
+  const populatedPost = await newPost.populate('author', 'username');
+
+  res.status(200).json(populatedPost);
 });
 
 // In this code, likePost finds the post with the provided ID and adds the user's ID to the likes array if it's not already there, or removes it if it is. addComment creates a new comment with the provided text and the user's ID as the author, saves it, finds the post with the provided ID, and adds the comment's ID to the comments array.
@@ -53,7 +61,9 @@ const likePost = asyncHandler(async (req, res) => {
     await post.updateOne({ $pull: { likes: req.user._id } });
   }
 
-  const updatedPost = await Post.findById(req.params.postId);
+  const updatedPost = await Post.findById(req.params.postId)
+    .populate('author', 'username')
+    .populate('comments.author', 'username');
   res.status(200).json({ post: updatedPost });
 });
 
@@ -71,10 +81,9 @@ const addComment = asyncHandler(async (req, res) => {
 
   await post.updateOne({ $push: { comments: comment } });
 
-  const updatedPost = await Post.findById(req.params.postId).populate(
-    'comments.author',
-    'username'
-  );
+  const updatedPost = await Post.findById(req.params.postId)
+    .populate('author', 'username')
+    .populate('comments.author', 'username');
   res.status(200).json({ post: updatedPost });
 });
 

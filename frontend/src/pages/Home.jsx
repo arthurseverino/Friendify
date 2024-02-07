@@ -1,50 +1,43 @@
 import { useState, useEffect, useRef } from 'react';
 import PostDetails from '../components/PostDetails';
 
-const Home = ({ userId, token}) => {
+const Home = ({ userId, token }) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const postRef = useRef(null);
 
-  useEffect(
-    () => {
-      // if (!loading) {
-      const fetchUserAndPosts = async () => {
-        try {
-          const response = await fetch(`/api/users/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (!response.ok) {
-            setError('Failed to fetch user');
-            console.error('Response not ok. Failed to fetch user');
-            return;
-          }
-          const data = await response.json();
-          setUser(data);
-
-          const postsResponse = await fetch(`/api/users/${userId}/posts`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (!postsResponse.ok) {
-            setError('Failed to fetch posts');
-            console.error('Failed to fetch posts');
-            return;
-          }
-          const postsData = await postsResponse.json();
-          setPosts(postsData);
-        } catch (err) {
-          console.error('Ultimately Failed in the try/catch');
+  useEffect(() => {
+    const fetchUserAndPosts = async () => {
+      try {
+        const response = await fetch(`/api/users/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!response.ok) {
+          setError('Failed to fetch user');
+          console.error('Response not ok. Failed to fetch user');
+          return;
         }
-      };
-      fetchUserAndPosts();
-      // }
-    },
-    [
-      //loading
-    ]
-  );
+        const data = await response.json();
+        setUser(data);
+
+        const postsResponse = await fetch(`/api/users/${userId}/posts`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!postsResponse.ok) {
+          setError('Failed to fetch posts');
+          console.error('Failed to fetch posts');
+          return;
+        }
+        const postsData = await postsResponse.json();
+        setPosts(postsData);
+      } catch (err) {
+        console.error('Ultimately Failed in the try/catch');
+      }
+    };
+    fetchUserAndPosts();
+  }, []);
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();
@@ -86,7 +79,7 @@ const Home = ({ userId, token}) => {
         {' '}
         + Create Post{' '}
       </button>
-      <h2>Your Feed: </h2>
+      <h2>Your Feed </h2>
 
       <dialog open={isDialogOpen}>
         <button onClick={() => setIsDialogOpen(false)}>Close</button>
@@ -102,7 +95,14 @@ const Home = ({ userId, token}) => {
       </dialog>
 
       {posts
-        ? posts.map((post) => <PostDetails key={post._id} post={post} />)
+        ? posts.map((post) => (
+            <PostDetails
+              userId={userId}
+              token={token}
+              key={post._id}
+              post={post}
+            />
+          ))
         : 'No posts yet! Create a post or follow someone to see it here.'}
     </div>
   );

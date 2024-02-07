@@ -23,7 +23,6 @@ main();
 
 const app = express();
 
-
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_SECRET;
@@ -42,7 +41,6 @@ passport.use(
   })
 );
 
-
 // middleware
 app.use(passport.initialize());
 app.use(express.json());
@@ -52,6 +50,10 @@ app.use(express.urlencoded({ extended: true }));
 // routes
 app.use('/api/users', userRoutes);
 
+// Serve static files from the public directory
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+//I dont even think I need this below tbh, Hashrouter solved the problem
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend')));
 

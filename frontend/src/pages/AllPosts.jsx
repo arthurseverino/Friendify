@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PostDetails from '../components/PostDetails';
 
-function AllPosts() {
+function AllPosts({ userId, token }) {
   const [posts, setPosts] = useState([]);
-  const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -26,7 +24,14 @@ function AllPosts() {
     <div>
       <h1>ALL POSTS </h1>
       {posts
-        ? posts.map((post) => <PostDetails key={post._id} post={post} />)
+        ? posts.map((post) => (
+            <PostDetails
+              userId={userId}
+              token={token}
+              key={post._id}
+              post={post}
+            />
+          ))
         : 'No posts yet! Create a post or follow someone to see it here.'}
     </div>
   );

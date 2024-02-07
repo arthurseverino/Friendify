@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 // pages
@@ -14,9 +14,16 @@ import Navbar from './components/Navbar';
 import SignupForm from './pages/SignupForm';
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userId, setUserId] = useState(localStorage.getItem('userId'));
-
+  const [token, setToken] = useState(
+    localStorage.getItem('token') === 'null'
+      ? null
+      : localStorage.getItem('token')
+  );
+  const [userId, setUserId] = useState(
+    localStorage.getItem('userId') === 'null'
+      ? null
+      : localStorage.getItem('userId')
+  );
   useEffect(() => {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
@@ -25,11 +32,24 @@ function App() {
   return (
     <div className="App">
       <HashRouter>
-        {token && <Navbar userId={userId} />}
+        {token && (
+          <Navbar
+            token={token}
+            setToken={setToken}
+            setUserId={setUserId}
+            userId={userId}
+          />
+        )}
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/api/users" element={<Users />} />
-          <Route path="/api/users/:id" element={<Profile />} />
+          <Route
+            path="/api/users"
+            element={<Users currentUserId={userId} token={token} />}
+          />
+          <Route
+            path="/api/users/:id"
+            element={<Profile userId={userId} token={token} />}
+          />
           <Route path="/api/users/signup" element={<SignupForm />} />
           <Route
             path="/api/users/login"
@@ -41,7 +61,7 @@ function App() {
           />
           <Route
             path="/api/users/:userId/posts/allPosts"
-            element={<AllPosts />}
+            element={<AllPosts userId={userId} token={token} />}
           />
         </Routes>
       </HashRouter>

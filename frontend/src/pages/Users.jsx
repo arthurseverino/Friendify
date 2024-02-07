@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Users = () => {
+const Users = ({token, currentUserId}) => {
   const [users, setUsers] = useState([]);
-  const token = localStorage.getItem('token');
-  const currentUserId = localStorage.getItem('userId');
 
   useEffect(() => {
     // Fetch all users and set them in state

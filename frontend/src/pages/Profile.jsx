@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import PostDetails from '../components/PostDetails';
 
-function Profile() {
+function Profile({ token, userId }) {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [profilePicture, setProfilePicture] = useState(null);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchUserAndPosts = async () => {
@@ -16,6 +16,7 @@ function Profile() {
       });
       const userData = await userResponse.json();
       setUser(userData);
+      setProfilePicture(userData.profilePicture);
 
       const postsResponse = await fetch(`/api/users/${id}/posts`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -36,9 +37,21 @@ function Profile() {
 
   return (
     <div className="profile">
+      <img
+        className="profilePicture"
+        src = {profilePicture} 
+        alt = "Profile Picture" 
+      />
       <h1> {user.username}&apos;s PROFILE </h1>
       {posts.length > 0 ? (
-        posts.map((post) => <PostDetails key={post._id} post={post} />)
+        posts.map((post) => (
+          <PostDetails
+            userId={userId}
+            token={token}
+            key={post._id}
+            post={post}
+          />
+        ))
       ) : (
         <p>No posts yet!</p>
       )}

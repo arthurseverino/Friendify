@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+require('dotenv').config();
 const userSchema = new Schema({
   username: {
     type: String,
@@ -8,6 +9,10 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  profilePicture: {
+    type: String,
+    default: `http://localhost:${process.env.PORT}/public/profilePic.jpg`,
   },
   following: [
     {
