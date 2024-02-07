@@ -81,20 +81,22 @@ dialog {
   min-width: 30vw;
 }
 
-.post-details{
+.post-details {
   border: 2px solid blue;
 }
 
-.profilePicture{
+.profilePicture {
   height: 50px;
   width: 50px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.modal{
-  border: 1px solid red;
+.postImage {
+  width: 50%; /* or any other size you want */
+  max-height: 500px;
 }
 
-
-
+.modal {
+  border: 1px solid red;
+}

@@ -6,6 +6,9 @@ const postSchema = new Schema(
     body: {
       type: String,
     },
+    image: {
+      type: String,
+    },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 const {
   getPosts,
   createPost,
@@ -24,7 +26,12 @@ router.get(
 );
 
 // POST(Create) a new post
-router.post('/', passport.authenticate('jwt', { session: false }), createPost);
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  upload.single('image'),
+  createPost
+);
 
 // POST(Like) a post
 router.post(

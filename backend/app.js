@@ -53,6 +53,9 @@ app.use('/api/users', userRoutes);
 // Serve static files from the public directory
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 //I dont even think I need this below tbh, Hashrouter solved the problem
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend')));

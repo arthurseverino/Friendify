@@ -2,6 +2,7 @@ const Post = require('../models/postModel');
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/userModel');
+const multer = require('multer');
 
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
@@ -32,12 +33,13 @@ const getAllPosts = asyncHandler(async (req, res) => {
 
 // create a new post
 const createPost = asyncHandler(async (req, res, next) => {
-  const { body, likes, comments, author } = req.body;
-  // store new post in db
+  const { body, author } = req.body;
+  const image = req.file ? req.file.path : null;
   const newPost = await Post.create({
     body,
-    likes,
-    comments,
+    image,
+    likes: [],
+    comments: [],
     author,
   });
 

@@ -76,6 +76,13 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
       </p>
       <p>{postDate}</p>
       <p>{post.body}</p>
+      {post.image ? (
+        <img
+          className="postImage"
+          src={`http://localhost:3000/${post.image}`}
+          alt="Post Image"
+        />
+      ) : null}
       <p>{post.likes ? post.likes.length : 0} likes</p>
       <button onClick={handleLike}>Like</button>
       <form onSubmit={handleComment}>
@@ -87,21 +94,24 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
         />
         <button type="submit">Comment</button>
       </form>
-      {post.comments.map((comment) => (
-        <div key={comment._id}>
-          <p>
-            <Link to={`/api/users/${comment.author._id}`}>
-              <img
-                className="profilePicture"
-                src={comment.author.profilePicture}
-                alt="Profile Picture"
-              />
-              {comment.author.username}
-            </Link>
-            : {comment.text}
-          </p>
-        </div>
-      ))}
+      {post.comments.map(
+        (comment) =>
+          comment.author && (
+            <div key={comment._id}>
+              <p>
+                <Link to={`/api/users/${comment.author._id}`}>
+                  <img
+                    className="profilePicture"
+                    src={comment.author.profilePicture}
+                    alt="Profile Picture"
+                  />
+                  {comment.author.username}
+                </Link>
+                : {comment.text}
+              </p>
+            </div>
+          )
+      )}
     </div>
   );
 };

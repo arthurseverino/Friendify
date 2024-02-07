@@ -6,6 +6,7 @@ const Home = ({ userId, token, profilePicture }) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
+  const [postImage, setPostImage] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const postRef = useRef(null);
 
@@ -43,28 +44,29 @@ const Home = ({ userId, token, profilePicture }) => {
   const handleSubmitPost = async (e) => {
     e.preventDefault();
 
-    const newPost = {
-      body: postRef.current.value,
-      likes: [],
-      comments: [],
-      author: userId,
-    };
+    const formData = new FormData();
+    formData.append('body', postRef.current.value);
+    formData.append('author', userId);
+    if (postImage) {
+      formData.append('image', postImage);
+    }
 
     const response = await fetch(`/api/users/${userId}/posts`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(newPost),
+      body: formData,
     });
+
     if (response.ok) {
       const data = await response.json();
       console.log('New post created', data);
       // Add the new post to the posts array
       setPosts((prevPosts) => [data, ...prevPosts]);
-      // Clear the textarea and close the dialog
+      // Clear the textarea, the image input and close the dialog
       postRef.current.value = '';
+      setPostImage(null);
       setIsDialogOpen(false);
     }
   };
@@ -95,6 +97,10 @@ const Home = ({ userId, token, profilePicture }) => {
             ref={postRef}
             placeholder={`What's on your mind, ${user ? user.username : ''}?`}
             required
+          />
+          <input
+            type="file"
+            onChange={(e) => setPostImage(e.target.files[0])}
           />
           <button type="submit">Post</button>
         </form>
