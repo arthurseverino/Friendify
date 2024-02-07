@@ -1,19 +1,21 @@
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ logout, userId }) => {
+const Navbar = ({userId}) => {
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = '/';
+  };
+
   return (
     <header className="Navbar">
-      <Link to={userId ? `/api/users/${userId}/posts` : '/'}>
+      <Link to={`/api/users/${userId}/posts`}>
         <h1>Odinbook</h1>
       </Link>
-      {userId && (
-        <>
-          <Link to={`/api/users/${userId}`}>Profile</Link>
-          <Link to="/api/users">Users</Link>
-          <Link to={`/api/users/${userId}/posts/allPosts`}>All Posts</Link>
-          <button onClick={logout}>Logout</button>
-        </>
-      )}
+      <Link to={`/api/users/${userId}`}>Profile</Link>
+      <Link to="/api/users">Users</Link>
+      <Link to={`/api/users/${userId}/posts/allPosts`}>All Posts</Link>
+      <button onClick={handleLogout}>Logout</button>
     </header>
   );
 };

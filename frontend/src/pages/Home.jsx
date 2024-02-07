@@ -1,22 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import PostDetails from '../components/PostDetails';
 
-const Home = ({ isLoading }) => {
+const Home = ({ userId, token}) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const postRef = useRef(null);
-  const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    if (!isLoading) {
+  useEffect(
+    () => {
+      // if (!loading) {
       const fetchUserAndPosts = async () => {
         try {
-          const response = await fetch(`/api/users/${userId}`
-          , {headers: { Authorization: `Bearer ${token}` },}
-          );
+          const response = await fetch(`/api/users/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           if (!response.ok) {
             setError('Failed to fetch user');
             console.error('Response not ok. Failed to fetch user');
@@ -25,9 +24,9 @@ const Home = ({ isLoading }) => {
           const data = await response.json();
           setUser(data);
 
-          const postsResponse = await fetch(`/api/users/${userId}/posts`
-          , {headers: { Authorization: `Bearer ${token}` },}
-          );
+          const postsResponse = await fetch(`/api/users/${userId}/posts`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           if (!postsResponse.ok) {
             setError('Failed to fetch posts');
             console.error('Failed to fetch posts');
@@ -40,8 +39,12 @@ const Home = ({ isLoading }) => {
         }
       };
       fetchUserAndPosts();
-    }
-  }, [isLoading]);
+      // }
+    },
+    [
+      //loading
+    ]
+  );
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();

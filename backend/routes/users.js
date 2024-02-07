@@ -14,14 +14,10 @@ const {
 
 // GET all users, a list of all users
 // shows all users and buttons for following other users
-router.get('/', 
-passport.authenticate('jwt', { session: false }), 
-getUsers);
+router.get('/', passport.authenticate('jwt', { session: false }), getUsers);
 
 // GET a single user, AKA profile page
-router.get('/:id', 
-passport.authenticate('jwt', { session: false }), 
-getUser);
+router.get('/:id', passport.authenticate('jwt', { session: false }), getUser);
 
 // UPDATE a user, you can update a user from its profile page
 router.patch(

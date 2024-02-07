@@ -1,10 +1,4 @@
-import {
-  HashRouter,
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-} from 'react-router-dom';
+import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 // pages
@@ -19,60 +13,31 @@ import Index from './pages/Index';
 import Navbar from './components/Navbar';
 import SignupForm from './pages/SignupForm';
 
-function Redirector({ isLoading }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const userLoggedInId = localStorage.getItem('userId');
-
-  useEffect(() => {
-    if (!isLoading && userLoggedInId && location.pathname === '/') {
-      navigate(`/api/users/${userLoggedInId}/posts`);
-    }
-  }, [navigate, userLoggedInId, isLoading, location]);
-
-  return null;
-}
-
 function App() {
-  const [currentUserId, setCurrentUserId] = useState(null);
-  const [token, setToken] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
-  // if user is in LocalStorage, then the user is logged in so set them to the Current User
-  // redirect them to their posts page but I get unauthorized
   useEffect(() => {
-    const userLoggedInId = localStorage.getItem('userId');
-    if (userLoggedInId) {
-      setCurrentUserId(userLoggedInId);
-      setToken(localStorage.getItem('token'));
-    }
-    setIsLoading(false);
-  }, []);
-
-  const logout = () => {
-    localStorage.clear();
-    window.location.href = '/';
-  };
-
-  // Render a loading message while the app is in loading state
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+    localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
+  }, [token, userId]);
 
   return (
     <div className="App">
       <HashRouter>
-        <Navbar logout={logout} userId={currentUserId} key={currentUserId} />
-        <Redirector isLoading={isLoading} />
+        {token && <Navbar userId={userId} />}
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/api/users" element={<Users />} />
           <Route path="/api/users/:id" element={<Profile />} />
           <Route path="/api/users/signup" element={<SignupForm />} />
-          <Route path="/api/users/login" element={<LoginForm />} />
+          <Route
+            path="/api/users/login"
+            element={<LoginForm setToken={setToken} setUserId={setUserId} />}
+          />
           <Route
             path={`/api/users/:userId/posts`}
-            element={<Home isLoading={isLoading} />}
+            element={<Home userId={userId} token={token} />}
           />
           <Route
             path="/api/users/:userId/posts/allPosts"

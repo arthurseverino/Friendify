@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const LoginForm = () => {
+const LoginForm = ({ setToken, setUserId }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -21,8 +21,8 @@ const LoginForm = () => {
         setUsername('');
         setPassword('');
         setError(null);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data.user._id);
+        setToken(data.token);
+        setUserId(data.user._id);
         navigate(`/api/users/${data.user._id}/posts`);
       } else {
         setError(
