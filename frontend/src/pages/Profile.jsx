@@ -70,9 +70,12 @@ function Profile({ token, userId, setProfilePicture }) {
         alt="Profile Picture"
       />
 
-      <button onClick={() => setIsModalOpen(true)}>
-        Update Profile Picture
-      </button>
+      {id === userId && (
+        <button onClick={() => setIsModalOpen(true)}>
+          Update Profile Picture
+        </button>
+      )}
+
       {isModalOpen && (
         <div className="modal">
           <button onClick={() => setIsModalOpen(false)}>Close</button>
