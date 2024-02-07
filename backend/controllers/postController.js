@@ -13,8 +13,8 @@ const getPosts = asyncHandler(async (req, res) => {
     author: { $in: followingIds },
   })
     .sort('-createdAt')
-    .populate('author', 'username')
-    .populate('comments.author', 'username');
+    .populate('author', 'username profilePicture')
+    .populate('comments.author', 'username profilePicture');
 
   res.status(200).json(posts);
 });
@@ -24,8 +24,8 @@ const getAllPosts = asyncHandler(async (req, res) => {
   //populate('author', 'username') replaces the author field, which is an ID, with the corresponding user document from the User collection, and selects only the username field.
   const posts = await Post.find({})
     .sort('-createdAt')
-    .populate('author', 'username')
-    .populate('comments.author', 'username');
+    .populate('author', 'username profilePicture')
+    .populate('comments.author', 'username profilePicture');
 
   res.status(200).json(posts);
 });
@@ -41,7 +41,10 @@ const createPost = asyncHandler(async (req, res, next) => {
     author,
   });
 
-  const populatedPost = await newPost.populate('author', 'username');
+  const populatedPost = await newPost.populate(
+    'author',
+    'username profilePicture'
+  );
 
   res.status(200).json(populatedPost);
 });
@@ -62,8 +65,8 @@ const likePost = asyncHandler(async (req, res) => {
   }
 
   const updatedPost = await Post.findById(req.params.postId)
-    .populate('author', 'username')
-    .populate('comments.author', 'username');
+    .populate('author', 'username profilePicture')
+    .populate('comments.author', 'username profilePicture');
   res.status(200).json({ post: updatedPost });
 });
 
@@ -82,8 +85,8 @@ const addComment = asyncHandler(async (req, res) => {
   await post.updateOne({ $push: { comments: comment } });
 
   const updatedPost = await Post.findById(req.params.postId)
-    .populate('author', 'username')
-    .populate('comments.author', 'username');
+    .populate('author', 'username profilePicture')
+    .populate('comments.author', 'username profilePicture');
   res.status(200).json({ post: updatedPost });
 });
 

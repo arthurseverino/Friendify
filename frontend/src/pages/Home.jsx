@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import PostDetails from '../components/PostDetails';
+import { Link } from 'react-router-dom';
 
-const Home = ({ userId, token }) => {
+const Home = ({ userId, token, profilePicture }) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
@@ -70,7 +71,12 @@ const Home = ({ userId, token }) => {
 
   return (
     <div className="home">
-      <h1>{user ? `Hi there, ${user.username}` : 'Loading...'}</h1>
+      <img
+        className="profilePicture"
+        src={profilePicture}
+        alt="Profile Picture"
+      />
+      <h1>{user ? `Welcome, ${user.username}` : 'Loading...'}</h1>
       <button
         className="createPostButton"
         onClick={() => {

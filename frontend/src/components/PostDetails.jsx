@@ -65,8 +65,14 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
   return (
     <div className="post-details">
       <p>
-        Author:{' '}
-        <Link to={`/api/users/${post.author._id}`}>{post.author.username}</Link>
+        <Link to={`/api/users/${post.author._id}`}>
+          <img
+            className="profilePicture"
+            src={post.author.profilePicture}
+            alt="Profile Picture"
+          />
+          {post.author.username}
+        </Link>
       </p>
       <p>{postDate}</p>
       <p>{post.body}</p>
@@ -85,6 +91,11 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
         <div key={comment._id}>
           <p>
             <Link to={`/api/users/${comment.author._id}`}>
+              <img
+                className="profilePicture"
+                src={comment.author.profilePicture}
+                alt="Profile Picture"
+              />
               {comment.author.username}
             </Link>
             : {comment.text}

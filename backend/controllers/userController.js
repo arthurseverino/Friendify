@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator');
 const Post = require('../models/postModel');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const multer = require('multer');
 
 // shows all users
 const getUsers = asyncHandler(async (req, res) => {
@@ -106,7 +107,7 @@ const loginUser = [
   }),
 ];
 
-// update a user, you can update your name and profile pic but thats it
+// update a user, you can update your profile pic but thats it
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -114,12 +115,19 @@ const updateUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: 'No such user' });
   }
 
+  if (req.file) {
+    const baseUrl = req.protocol + '://' + req.get('host');
+    req.body.profilePicture = `${baseUrl}/public/${req.file.filename}`;
+    console.log('req.body.profilePicture:', req.body.profilePicture);
+  }
+
   const user = await User.findOneAndUpdate(
     { _id: id },
     // req.body contains all the previous fields in the model
     {
       ...req.body,
-    }
+    },
+    { new: true } // This option returns the updated document
   );
 
   if (!user) {

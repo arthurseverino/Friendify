@@ -22,7 +22,7 @@ function AllPosts({ userId, token }) {
 
   return (
     <div>
-      <h1>ALL POSTS </h1>
+      <h1>All Posts </h1>
       {posts
         ? posts.map((post) => (
             <PostDetails

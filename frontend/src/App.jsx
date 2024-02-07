@@ -14,6 +14,11 @@ import Navbar from './components/Navbar';
 import SignupForm from './pages/SignupForm';
 
 function App() {
+  const [profilePicture, setProfilePicture] = useState(
+    localStorage.getItem('profilePicture') ||
+      import.meta.env.VITE_DEFAULT_PROFILE_PICTURE
+  );
+
   const [token, setToken] = useState(
     localStorage.getItem('token') === 'null'
       ? null
@@ -27,7 +32,8 @@ function App() {
   useEffect(() => {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
-  }, [token, userId]);
+    localStorage.setItem('profilePicture', profilePicture);
+  }, [token, userId, profilePicture]);
 
   return (
     <div className="App">
@@ -38,6 +44,7 @@ function App() {
             setToken={setToken}
             setUserId={setUserId}
             userId={userId}
+            profilePicture={profilePicture}
           />
         )}
         <Routes>
@@ -48,7 +55,13 @@ function App() {
           />
           <Route
             path="/api/users/:id"
-            element={<Profile userId={userId} token={token} />}
+            element={
+              <Profile
+                userId={userId}
+                token={token}
+                setProfilePicture={setProfilePicture}
+              />
+            }
           />
           <Route path="/api/users/signup" element={<SignupForm />} />
           <Route
@@ -57,11 +70,23 @@ function App() {
           />
           <Route
             path={`/api/users/:userId/posts`}
-            element={<Home userId={userId} token={token} />}
+            element={
+              <Home
+                userId={userId}
+                token={token}
+                profilePicture={profilePicture}
+              />
+            }
           />
           <Route
             path="/api/users/:userId/posts/allPosts"
-            element={<AllPosts userId={userId} token={token} />}
+            element={
+              <AllPosts
+                userId={userId}
+                token={token}
+                profilePicture={profilePicture}
+              />
+            }
           />
         </Routes>
       </HashRouter>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Users = ({token, currentUserId}) => {
+const Users = ({ token, currentUserId }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -43,10 +43,17 @@ const Users = ({token, currentUserId}) => {
 
   return (
     <div className="users">
-      <h1> ALL USERS </h1>
+      <h1> All Users </h1>
       {users.map((user) => (
         <div key={user._id}>
-          <Link to={`/api/users/${user._id}`}>{user.username}</Link>
+          <Link to={`/api/users/${user._id}`}>
+            <img
+              className="profilePicture"
+              src={user.profilePicture}
+              alt="Profile Picture"
+            />
+            {user.username}
+          </Link>
           {renderButton(user)}
         </div>
       ))}

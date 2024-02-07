@@ -92,5 +92,9 @@ dialog {
   object-fit: cover;
 }
 
+.modal{
+  border: 1px solid red;
+}
+
 
 

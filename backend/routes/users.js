@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
 const postRoutes = require('./posts');
+const multer = require('multer');
+const upload = multer({ dest: 'public/' });
 const router = express.Router();
 const {
   getUsers,
@@ -23,6 +25,7 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), getUser);
 router.patch(
   '/:id',
   passport.authenticate('jwt', { session: false }),
+  upload.single('profilePicture'),
   updateUser
 );
 
