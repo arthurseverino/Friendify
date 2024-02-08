@@ -181,13 +181,13 @@ const Home = ({ userId, token, profilePicture }) => {
         ) : (
           <div>
             <p>No posts from you or your friends yet... </p>
-            Follow someone or create one to see it here...
-            <p> Check out: </p>
+            Follow a friend or create a post to see it here!
+            <p>  </p>
             <Link to={`/api/users/${userId}/posts/allPosts`}>
-              <button>All Posts</button>
+              <button className = "all-posts-button">All Posts</button>
             </Link>
             <Link to="/api/users">
-              <button>All Users</button>
+              <button className = "all-users-button">All Users</button>
             </Link>
           </div>
         )}

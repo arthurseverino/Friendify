@@ -39,7 +39,7 @@ const SignupForm = () => {
 
   return (
     <div className="signup-container">
-      <h2 className="signup-title">Sign Up for free</h2>
+      <h2 className="signup-title">Sign up for free</h2>
       <p className="signup-login-link">
         Or <Link to="/api/users/login">Sign in to your existing account</Link>
       </p>

@@ -51,7 +51,9 @@ const Navbar = ({
           </svg>
           <span className="tooltip">Friends</span>
         </Link>
-        <Link to={`/api/users/${userId}/posts/allPosts`} className="tooltip-container">
+        <Link
+          to={`/api/users/${userId}/posts/allPosts`}
+          className="tooltip-container">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 580 512"
@@ -64,19 +66,20 @@ const Navbar = ({
         </Link>
       </div>
       <div className="navbar-right">
-        <Link to={`/api/users/${userId}`}>
+        <Link to={`/api/users/${userId}`} className="tooltip-container">
           <img
             className="profilePicture"
             src={profilePicture}
             alt="Profile Picture"
           />
+          <span className="tooltip">Profile</span>
         </Link>
-        <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleLogout} className="logout-button">
+          Sign out
+        </button>
       </div>
     </nav>
   );
 };
-
-
 
 export default Navbar;

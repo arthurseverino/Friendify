@@ -44,7 +44,7 @@ const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
 
   return (
     <div className="login-container">
-      <h2 className="login-title">Sign In</h2>
+      <h2 className="login-title">Sign in to your account</h2>
       <p className="login-signup-link">
         Or <Link to="/api/users/signup">Sign up for a new account </Link>
       </p>

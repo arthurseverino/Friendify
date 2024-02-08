@@ -6,6 +6,8 @@
   box-sizing: border-box;
 }
 
+/* Navbar Tooltip Start */
+
 .tooltip-container {
   position: relative;
   display: inline-block;
@@ -33,42 +35,65 @@
   visibility: visible;
   opacity: 1;
 }
+/* Navbar Tooltip End */
 
-.react{
-  fill: #61DAFB;
+/* Footer Start */
+
+.github {
+  transition: transform 0.5s; /* Adjust time as needed */
+  margin-right: -15px;
 }
 
-.node{
-  fill: #F0DB4F;
+.github:hover {
+  transform: rotate(360deg);
 }
 
+.react {
+  fill: #61dafb;
+}
+
+.node {
+  fill: #f0db4f;
+}
+
+.mongo {
+  margin-left: -13px;
+}
 
 .footer {
+  flex-shrink: 0;
+  height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 3px solid white;
+  border: 3px solid white; /* GET RID OF THIS EVENTUALLY */
+  background-color: #4d4d4d;
   margin-top: auto;
+  gap: 20px;
+  font-size: 1rem;
 }
 
-html{
+/* Footer End */
+
+html {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
   height: 100vh;
-  width:100vw;
   font-size: 18px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Index Page Start */
 .landing {
+  height: calc(100vh - 10vh);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #71b7e6, #9b59b6);
-  color: white;
   font-family: 'Arial', sans-serif;
+  flex-grow: 1;
 }
 
 .text-section {
@@ -79,6 +104,7 @@ html{
 .title {
   font-size: 2.5em;
   margin-bottom: 10px;
+  color: turquoise;
 }
 
 .subtitle {
@@ -91,15 +117,27 @@ html{
   align-items: center;
 }
 
+.signup-link {
+  background-color: #007bff;
+}
+
+.login-link {
+  background-color: #28a745;
+}
+
+.guest-link {
+  background-color: #565656;
+}
+
 .link-section a,
 .link-section button {
   display: inline-block;
   margin: 10px 0;
   padding: 10px 20px;
   color: white;
-  background-color: #34495e;
+  /* background-color: #34495e; */
   border: none;
-  border-radius: 4px;
+  border-radius: 0.5rem;
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
@@ -129,7 +167,11 @@ html{
 /* Sign up Start */
 
 .signup-container {
-  width: 360px;
+  height: calc(100vh - 10vh);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   margin: 0 auto;
   padding: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -138,13 +180,24 @@ html{
 
 .signup-title {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   font-size: 2em;
+}
+
+.signup-login-link {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1em;
 }
 
 .signup-form {
   display: flex;
   flex-direction: column;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: lavender;
+  color: black;
 }
 
 .signup-form label {
@@ -156,23 +209,17 @@ html{
   margin-bottom: 30px;
   padding: 15px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 15px;
   font-size: 1.2em;
 }
 
 .signup-form button {
   padding: 15px;
-  background-color: #0a66c2;
+  background-color: #28a745;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 15px;
   cursor: pointer;
-  font-size: 1.2em;
-}
-
-.signup-login-link {
-  text-align: center;
-  margin-top: 30px;
   font-size: 1.2em;
 }
 
@@ -181,21 +228,39 @@ html{
 /* Login Page Start */
 
 .login-container {
-  width: 360px;
+  height: calc(100vh - 10vh);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   margin: 0 auto;
   padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
   background: linear-gradient(135deg, #71b7e6, #9b59b6);
 }
 
 .login-title {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+.login-signup-link {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1em;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 20px;
+  background-color: lavender;
+  color: black;
+  width: 340px;
+  height: 340px;
 }
 
 .login-form label {
@@ -206,7 +271,7 @@ html{
   margin-bottom: 20px;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 15px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -217,17 +282,12 @@ html{
 
 .login-form button {
   padding: 10px;
-  background-color: #007bff;
+  background-color: #28a745;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 15px;
   cursor: pointer;
   width: 100%;
-}
-
-.login-signup-link {
-  text-align: center;
-  margin-top: 20px;
 }
 
 /* Login Page End  */
@@ -235,17 +295,21 @@ html{
 /* Home Page Start */
 
 .home {
+  height: calc(100vh - 10vh);
   display: flex;
-  flex-direction: column;
+
   align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #121212;
-  height: 100vh;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
 }
 
 .home-header {
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: space-between;
   width: 100%;
   max-width: 600px;
@@ -268,9 +332,31 @@ html{
   cursor: pointer;
 }
 
+.all-posts-button,
+.all-users-button,
+.update-profile-picture-button {
+  background-color: #007bff; /* Blue background */
+  color: #ffffff; /* White text */
+  padding: 10px 20px; /* Padding around the text */
+  margin: 10px; /* Space around the button */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 1em; /* Text size */
+  transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.all-posts-button:hover,
+.all-users-button:hover,
+.update-profile-picture-button:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
+}
+
 .home-content {
   width: 100%;
   max-width: 600px;
+  border: 1px solid black;
+  padding: 20px;
 }
 
 .create-post-dialog {
@@ -597,6 +683,23 @@ html{
   background-color: #007bff;
   color: white;
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: #ffffff; /* White text */
+  padding: 10px 20px; /* Padding around the text */
+  margin-left: 20px;
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 1em; /* Text size */
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c82333; /* Darker red when hovered */
 }
 
 .navbar-left {
@@ -613,14 +716,6 @@ html{
   color: white;
   margin-left: 20px;
   text-decoration: none;
-}
-
-.navbar button {
-  margin-left: 20px;
-  background-color: transparent;
-  color: white;
-  border: none;
-  cursor: pointer;
 }
 
 .profilePicture {

@@ -66,7 +66,7 @@ function Profile({ token, userId, setProfilePicture }) {
         />
         <h1> {id === userId ? 'My Profile' : `${user.username}'s Profile`} </h1>
         {id === userId && (
-          <button
+          <button className = "update-profile-picture-button"
             onClick={() => {
               if (user.username === 'Visitor') {
                 alert(`You can't edit the visitor's profile picture`);
@@ -108,10 +108,10 @@ function Profile({ token, userId, setProfilePicture }) {
             </p>
             <p> Check out: </p>
             <Link to={`/api/users/${userId}/posts/allPosts`}>
-              <button>All Posts</button>
+              <button className = "all-posts-button">All Posts</button>
             </Link>
             <Link to="/api/users">
-              <button>All Users</button>
+              <button className = "all-users-button">All Users</button>
             </Link>
           </div>
         )}
