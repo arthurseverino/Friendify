@@ -108,7 +108,11 @@ function Profile({ token, userId, setProfilePicture }) {
         ))
       ) : (
         <div>
-          <p>No posts from this user yet!</p>
+          <p>
+            {id === userId
+              ? 'You have no posts, create one to see it here!'
+              : 'No posts from this user yet!'}
+          </p>
           <Link to={`/api/users/${userId}/posts/allPosts`}>
             <button>Go to All Posts</button>
           </Link>
