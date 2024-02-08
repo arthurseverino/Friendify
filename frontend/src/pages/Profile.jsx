@@ -66,24 +66,26 @@ function Profile({ token, userId, setProfilePicture }) {
 
   return (
     <div className="profile">
-      <img
-        className="profilePicture"
-        src={user.profilePicture}
-        alt="Profile Picture"
-      />
-
-      {id === userId && (
-        <button
-          onClick={() => {
-            if (user.username === 'Visitor') {
-              alert(`You can't edit the visitor's profile picture`);
-            } else {
-              setIsModalOpen(true);
-            }
-          }}>
-          Update Profile Picture
-        </button>
-      )}
+      <div className="profile-header">
+        <img
+          className="profilePicture"
+          src={user.profilePicture}
+          alt="Profile Picture"
+        />
+        <h1> {id === userId ? 'My Profile' : `${user.username}'s Profile`} </h1>
+        {id === userId && (
+          <button
+            onClick={() => {
+              if (user.username === 'Visitor') {
+                alert(`You can't edit the visitor's profile picture`);
+              } else {
+                setIsModalOpen(true);
+              }
+            }}>
+            Update Profile Picture
+          </button>
+        )}
+      </div>
 
       {isModalOpen && (
         <div className="modal">
@@ -95,32 +97,33 @@ function Profile({ token, userId, setProfilePicture }) {
         </div>
       )}
 
-      <h1> {user.username}&apos;s Profile </h1>
-
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <PostDetails
-            userId={userId}
-            token={token}
-            key={post._id}
-            post={post}
-          />
-        ))
-      ) : (
-        <div>
-          <p>
-            {id === userId
-              ? 'You have no posts, create one to see it here!'
-              : 'No posts from this user yet!'}
-          </p>
-          <Link to={`/api/users/${userId}/posts/allPosts`}>
-            <button>Go to All Posts</button>
-          </Link>
-          <Link to="/api/users">
-            <button>Go to All Users</button>
-          </Link>
-        </div>
-      )}
+      <div className="profile-content">
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <PostDetails
+              userId={userId}
+              token={token}
+              key={post._id}
+              post={post}
+            />
+          ))
+        ) : (
+          <div>
+            <p>
+              {id === userId
+                ? 'You have no posts, create one to see it here!'
+                : 'No posts from this user yet!'}
+            </p>
+            <p> Check out: </p>
+            <Link to={`/api/users/${userId}/posts/allPosts`}>
+              <button>All Posts</button>
+            </Link>
+            <Link to="/api/users">
+              <button>All Users</button>
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

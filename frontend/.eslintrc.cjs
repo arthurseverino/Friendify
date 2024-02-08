@@ -31,7 +31,7 @@ module.exports = {
     'dot-notation': 'warn',
     'no-use-before-define': 'warn',
     eqeqeq: 'warn',
-    'no-nested-ternary': 'warn',
+   // 'no-nested-ternary': 'warn',
     'no-else-return': 'warn',
     'no-new-wrappers': 'warn',
     'no-undef': 'off',

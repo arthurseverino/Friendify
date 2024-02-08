@@ -3,7 +3,7 @@ import PostDetails from '../components/PostDetails';
 
 function AllPosts({ userId, token }) {
   const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1); 
+  const [page, setPage] = useState(1);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,7 +18,7 @@ function AllPosts({ userId, token }) {
       );
       if (!response.ok) {
         console.error('Failed to fetch posts');
-        setIsLoading(false); 
+        setIsLoading(false);
         return;
       }
       const data = await response.json();
@@ -39,23 +39,28 @@ function AllPosts({ userId, token }) {
   }, [page]);
 
   return (
-    <div>
+    <div className="all-posts">
       <h1>All Posts </h1>
-      {posts
-        ? posts.map((post) => (
-            <PostDetails
-              userId={userId}
-              token={token}
-              key={post._id}
-              post={post}
-            />
-          ))
-        : 'No posts yet! Create a post or follow someone to see it here.'}
-      {hasMorePosts && posts.length >= 10 && (
-        <button onClick={() => setPage(page + 1)} disabled={isLoading}>
-          Load More Posts
-        </button> // Modify this line
-      )}
+      <div className="posts-list">
+        {posts
+          ? posts.map((post) => (
+              <PostDetails
+                userId={userId}
+                token={token}
+                key={post._id}
+                post={post}
+              />
+            ))
+          : 'No posts yet! Create a post or follow someone to see it here.'}
+        {hasMorePosts && posts.length >= 10 && (
+          <button
+            className="load-more-posts"
+            onClick={() => setPage(page + 1)}
+            disabled={isLoading}>
+            {isLoading ? <div className="loader"></div> : 'Load More Posts'}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

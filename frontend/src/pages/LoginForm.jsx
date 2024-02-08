@@ -43,32 +43,35 @@ const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
   };
 
   return (
-    <div className="login">
-      <h1>Sign in to your account </h1>
-      <h3>
-        or
-        <Link to="/api/users/signup" className="signupLoginLink">
-          Sign up for a new account
-        </Link>
-      </h3>
-      <form onSubmit={handleLogin} className="loginForm">
+    <div className="login-container">
+      <h2 className="login-title">Sign In</h2>
+      <p className="login-signup-link">
+        Or <Link to="/api/users/signup">Sign up for a new account </Link>
+      </p>
+      <form onSubmit={handleLogin} className="login-form">
         <label htmlFor="username">Username</label>
         <input
           type="text"
-          className="loginInput"
+          id="username"
+          className="login-input"
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          required
         />
+
         <label htmlFor="password">Password</label>
         <input
           type="password"
-          className="loginInput"
+          id="password"
+          className="login-input"
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button type="submit" className="loginButton">
+
+        <button type="submit" className="login-button">
           Sign In
         </button>
         {error && (

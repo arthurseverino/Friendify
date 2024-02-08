@@ -35,14 +35,32 @@ const Index = ({ setToken, setUserId, setProfilePicture }) => {
   };
 
   return (
-    <div>
-      <h2>Odinbook </h2>
-      <h3>Connect with friends and the world around you</h3>
-      <Link to="/api/users/signup">Create New Account </Link>
-      or
-      <Link to="/api/users/login"> Login</Link>
-      or
-      <button onClick={handleGuestLogin}>Continue as Guest</button>
+    <div className="landing">
+      <div className="text-section">
+        <h2 className="title">
+          {Array.from('Friendify').map((char, index) => (
+            <span key={index} style={{ animationDelay: `${index * 0.2}s` }}>
+              {char}
+            </span>
+          ))}
+        </h2>
+        <h3 className="subtitle">
+          Connect with friends and the world around you on Friendify.
+        </h3>
+      </div>
+
+      <div className="link-section">
+        <Link className="signup-link" to="/api/users/signup">
+          Sign up{' '}
+        </Link>
+        <Link className="login-link" to="/api/users/login">
+          {' '}
+          Login
+        </Link>
+        <button className="guest-link" onClick={handleGuestLogin}>
+          Continue as Guest
+        </button>
+      </div>
     </div>
   );
 };

@@ -58,6 +58,21 @@ const Home = ({ userId, token, profilePicture }) => {
     fetchUserAndPosts();
   }, [page]);
 
+  // New useEffect for closing the modal
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isDialogOpen && !event.target.closest('.dialog-content')) {
+        setIsDialogOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDialogOpen]);
+
   const handleSubmitPost = async (e) => {
     e.preventDefault();
 
@@ -90,60 +105,85 @@ const Home = ({ userId, token, profilePicture }) => {
 
   return (
     <div className="home">
-      <img
-        className="profilePicture"
-        src={profilePicture}
-        alt="Profile Picture"
-      />
-      <h1>
-        {isLoading ? (
-          <div className="loader"></div>
-        ) : (
-          `Welcome, ${user ? user.username : ''}`
-        )}
-      </h1>
-      <button
-        className="createPostButton"
-        onClick={() => {
-          setIsDialogOpen(true);
-        }}>
-        {' '}
-        + Create Post{' '}
-      </button>
-      <h2>Your Feed </h2>
-
-      <dialog open={isDialogOpen}>
-        <button onClick={() => setIsDialogOpen(false)}>Close</button>
-
-        <form onSubmit={handleSubmitPost}>
-          <textarea
-            ref={postRef}
-            placeholder={`What's on your mind, ${user ? user.username : ''}?`}
-            required
-          />
-          <input
-            type="file"
-            onChange={(e) => setPostImage(e.target.files[0])}
-          />
-          <button type="submit">Post</button>
-        </form>
-      </dialog>
-
-      {posts
-        ? posts.map((post) => (
-            <PostDetails
-              userId={userId}
-              token={token}
-              key={post._id}
-              post={post}
-            />
-          ))
-        : 'No posts yet! Create a post or follow someone to see it here.'}
-      {hasMorePosts && posts.length >= 10 && (
-        <button onClick={() => setPage(page + 1)} disabled={isLoading}>
-          {isLoading ? <div className="loader"></div> : 'Load More Posts'}
+      <div className="home-header">
+        <img
+          className="profilePicture"
+          src={profilePicture}
+          alt="Profile Picture"
+        />
+        <h1>
+          {isLoading ? (
+            <div className="loader"></div>
+          ) : (
+            `Welcome, ${user ? user.username : ''}`
+          )}
+        </h1>
+        <button
+          className="createPostButton"
+          onClick={() => {
+            setIsDialogOpen(true);
+          }}>
+          {' '}
+          + Create Post{' '}
         </button>
-      )}
+      </div>
+
+      <div className="home-content">
+        <h2>Your Feed </h2>
+
+        {isDialogOpen && (
+          <div
+            className="modal-backdrop"
+            onClick={() => setIsDialogOpen(false)}></div>
+        )}
+
+        <dialog className="create-post-dialog" open={isDialogOpen}>
+          <div className="dialog-content">
+            <button
+              className="close-button"
+              onClick={() => setIsDialogOpen(false)}>
+              Close
+            </button>
+
+            <form onSubmit={handleSubmitPost}>
+              <textarea
+                className="post-textarea"
+                ref={postRef}
+                placeholder={`What's on your mind, ${
+                  user ? user.username : ''
+                }?`}
+                required
+              />
+              <div className="form-footer">
+                <input
+                  type="file"
+                  className="file-input"
+                  onChange={(e) => setPostImage(e.target.files[0])}
+                />
+                <button type="submit" className="post-button">
+                  Post
+                </button>
+              </div>
+            </form>
+          </div>
+        </dialog>
+
+        {posts
+          ? posts.map((post) => (
+              <PostDetails
+                userId={userId}
+                token={token}
+                key={post._id}
+                post={post}
+              />
+            ))
+          : 'No posts yet! Create a post or follow someone to see it here.'}
+        {hasMorePosts && posts.length >= 10 && (
+          <button onClick={() => setPage(page + 1)} disabled={isLoading}>
+            {isLoading ? <div className="loader"></div> : 'Load More Posts'}
+          </button>
+        )}
+      </div>
     </div>
   );
 };

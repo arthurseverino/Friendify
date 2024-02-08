@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 // You can use a state for the entire post and update it when the like button is clicked or a comment is added.
 const PostDetails = ({ post: initialPost, userId, token }) => {
   const [post, setPost] = useState(initialPost);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState({});
   const [postDate, setPostDate] = useState('');
   const [isLoading, setIsLoading] = useState(!initialPost);
 
@@ -40,29 +40,27 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
     }
   }
 
-  async function handleComment(e) {
-    try {
-      e.preventDefault();
+  // Update handleComment to use post._id
+  async function handleComment(e, postId) {
+    e.preventDefault();
 
-      const response = await fetch(
-        `/api/users/${userId}/posts/${post._id}/comments`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ text: comment }),
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setPost(data.post);
-        setComment('');
+    const response = await fetch(
+      `/api/users/${userId}/posts/${postId}/comments`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ text: comment[postId] }),
       }
-    } catch (err) {
-      console.error(err);
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      setPost(data.post);
+      // Reset the comment input for this post
+      setComment((prevComments) => ({ ...prevComments, [postId]: '' }));
     }
   }
 
@@ -75,52 +73,86 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
   }
 
   return (
-    <div className="post-details">
-      <p>
+    <div className="post">
+      <div className="post-header">
         <Link to={`/api/users/${post.author._id}`}>
           <img
             className="profilePicture"
             src={post.author.profilePicture}
             alt="Profile Picture"
           />
-          {post.author.username}
+          <span>{post.author.username}</span>
         </Link>
-      </p>
-      <p>{postDate}</p>
-      <p>{post.body}</p>
-      {post.image ? (
+        <span>{postDate}</span>
+      </div>
+      <p className="post-body">{post.body}</p>
+      {post.image && (
         <img
           className="postImage"
           src={`http://localhost:3000/${post.image}`}
           alt="Post Image"
         />
-      ) : null}
-      <p>{post.likes ? post.likes.length : 0} likes</p>
-      <button onClick={handleLike}>Like</button>
-      <form onSubmit={handleComment}>
+      )}
+      <div className="post-stats">
+        <p>
+          {post.likes &&
+            post.likes.length > 0 &&
+            `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}`}
+        </p>
+        {post.comments && post.comments.length > 0 && (
+          <p>
+            {post.comments.length === 1
+              ? '1 comment'
+              : `${post.comments.length} comments`}
+          </p>
+        )}
+      </div>
+      <hr />
+      <div className="post-actions">
+        <div className="likes">
+          <button
+            className={post.likes.includes(userId) ? 'liked' : ''}
+            onClick={handleLike}>
+            Like
+          </button>
+        </div>
+        <div className="comments">
+          <button type="submit" form={`comment-form-${post._id}`}>
+            Comment
+          </button>
+        </div>
+      </div>
+      <hr />
+      <form
+        id={`comment-form-${post._id}`}
+        className="comment-form"
+        onSubmit={(e) => handleComment(e, post._id)}>
         <input
           type="text"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          value={comment[post._id] || ''}
+          onChange={(e) =>
+            setComment((prevComments) => ({
+              ...prevComments,
+              [post._id]: e.target.value,
+            }))
+          }
+          placeholder="Write a comment..."
           required
         />
-        <button type="submit">Comment</button>
       </form>
       {post.comments.map(
         (comment) =>
           comment.author && (
-            <div key={comment._id}>
-              <p>
-                <Link to={`/api/users/${comment.author._id}`}>
-                  <img
-                    className="profilePicture"
-                    src={comment.author.profilePicture}
-                    alt="Profile Picture"
-                  />
-                  {comment.author.username}
-                </Link>
-                : {comment.text}
-              </p>
+            <div key={comment._id} className="comment">
+              <Link to={`/api/users/${comment.author._id}`}>
+                <img
+                  className="profilePicture"
+                  src={comment.author.profilePicture}
+                  alt="Profile Picture"
+                />
+                <span>{comment.author.username}</span>
+              </Link>
+              <p>{comment.text}</p>
             </div>
           )
       )}

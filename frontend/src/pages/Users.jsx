@@ -56,19 +56,21 @@ const Users = ({ token, currentUserId }) => {
   return (
     <div className="users">
       <h1> All Users </h1>
-      {users.map((user) => (
-        <div key={user._id}>
-          <Link to={`/api/users/${user._id}`}>
-            <img
-              className="profilePicture"
-              src={user.profilePicture}
-              alt="Profile Picture"
-            />
-            {user.username}
-          </Link>
-          {renderButton(user)}
-        </div>
-      ))}
+      <div className="users-list">
+        {users.map((user) => (
+          <div key={user._id} className="user-item">
+            <Link to={`/api/users/${user._id}`}>
+              <img
+                className="profilePicture"
+                src={user.profilePicture}
+                alt="Profile Picture"
+              />
+              <div className="username">{user.username}</div>
+            </Link>
+            {renderButton(user)}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -38,42 +38,43 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="signupPage">
-      <h1>Sign up for free </h1>
-      <h3>
-        <Link to="/api/users/login" className="signupLoginLink">
-          Already have an account?
-        </Link>
-      </h3>
-      <div className="signupFormContainer">
-        <form onSubmit={handleSubmit} className="signupForm">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            className="signupInput"
-            name="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            placeholder="Password"
-            className="signupInput"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button className="signupButton">Sign Up</button>
-          {error && (
-            <ul className="error">
-              {error.split(', ').map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          )}
-        </form>
-      </div>
+    <div className="signup-container">
+      <h2 className="signup-title">Sign Up for free</h2>
+      <p className="signup-login-link">
+        Or <Link to="/api/users/login">Sign in to your existing account</Link>
+      </p>
+      <form onSubmit={handleSubmit} className="signup-form">
+        <label htmlFor="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          className="signup-input"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+  
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          className="signup-input"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+  
+        <button type="submit" className="signup-button">Sign Up</button>
+        {error && (
+          <ul className="error">
+            {error.split(', ').map((err, index) => (
+              <li key={index}>{err}</li>
+            ))}
+          </ul>
+        )}
+      </form>
     </div>
   );
 };
