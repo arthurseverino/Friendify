@@ -9,8 +9,6 @@ const {
   likePost,
   addComment,
   getAllPosts,
-  //deletePost,
-  //updatePost,
 } = require('../controllers/postController');
 
 // Get all your posts and whatever users you are following (Home Page)
@@ -46,19 +44,5 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   addComment
 );
-/*
-// DELETE a post
-router.delete(
-  '/:postId',
-  passport.authenticate('jwt', { session: false }),
-  deletePost
-);
 
-// UPDATE a post
-router.patch(
-  '/:postId',
-  passport.authenticate('jwt', { session: false }),
-  updatePost
-);
-*/
 module.exports = router;

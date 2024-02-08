@@ -19,7 +19,7 @@ const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json(usersWithIsFollowing);
 });
 
-// get a single user, this is their profile page with all their posts
+// get a single user, this is their profile page with all the posts they have created
 // The posts are then included in the response by spreading the user document into a new object and adding a posts property that contains the posts.
 
 const getUser = asyncHandler(async (req, res) => {
@@ -34,7 +34,16 @@ const getUser = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: 'No such user' });
   }
 
-  const posts = await Post.find({ author: id });
+  const posts = await Post.find({ author: id })
+    .sort('-createdAt')
+    .populate('author')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'author',
+        model: 'User',
+      },
+    });
   res.status(200).json({ ...user._doc, posts });
 });
 
@@ -99,9 +108,7 @@ const loginUser = [
     }
 
     // Password and username are correct, create a token or get a token if it already exists
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '45m',
-    });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     //send token and user to the client
     return res.status(200).json({ token, user });
   }),
@@ -118,7 +125,6 @@ const updateUser = asyncHandler(async (req, res) => {
   if (req.file) {
     const baseUrl = req.protocol + '://' + req.get('host');
     req.body.profilePicture = `${baseUrl}/public/${req.file.filename}`;
-    console.log('req.body.profilePicture:', req.body.profilePicture);
   }
 
   const user = await User.findOneAndUpdate(

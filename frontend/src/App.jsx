@@ -15,8 +15,10 @@ import SignupForm from './pages/SignupForm';
 
 function App() {
   const [profilePicture, setProfilePicture] = useState(
-    localStorage.getItem('profilePicture') ||
-      import.meta.env.VITE_DEFAULT_PROFILE_PICTURE
+    localStorage.getItem('profilePicture') === 'null'
+      ? null
+      : localStorage.getItem('profilePicture') ||
+          import.meta.env.VITE_DEFAULT_PROFILE_PICTURE
   );
 
   const [token, setToken] = useState(
@@ -45,10 +47,20 @@ function App() {
             setUserId={setUserId}
             userId={userId}
             profilePicture={profilePicture}
+            setProfilePicture={setProfilePicture}
           />
         )}
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route
+            path="/"
+            element={
+              <Index
+                setProfilePicture={setProfilePicture}
+                setToken={setToken}
+                setUserId={setUserId}
+              />
+            }
+          />
           <Route
             path="/api/users"
             element={<Users currentUserId={userId} token={token} />}
@@ -66,7 +78,13 @@ function App() {
           <Route path="/api/users/signup" element={<SignupForm />} />
           <Route
             path="/api/users/login"
-            element={<LoginForm setToken={setToken} setUserId={setUserId} />}
+            element={
+              <LoginForm
+                setToken={setToken}
+                setUserId={setUserId}
+                setProfilePicture={setProfilePicture}
+              />
+            }
           />
           <Route
             path={`/api/users/:userId/posts`}

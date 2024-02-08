@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import PostDetails from '../components/PostDetails';
-import { Link } from 'react-router-dom';
 
 const Home = ({ userId, token, profilePicture }) => {
   const [user, setUser] = useState(null);
@@ -8,10 +7,14 @@ const Home = ({ userId, token, profilePicture }) => {
   const [error, setError] = useState(null);
   const [postImage, setPostImage] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const postRef = useRef(null);
 
   useEffect(() => {
     const fetchUserAndPosts = async () => {
+      setIsLoading(true); // Add this line
       try {
         const response = await fetch(`/api/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -19,27 +22,41 @@ const Home = ({ userId, token, profilePicture }) => {
         if (!response.ok) {
           setError('Failed to fetch user');
           console.error('Response not ok. Failed to fetch user');
+
           return;
         }
         const data = await response.json();
         setUser(data);
 
-        const postsResponse = await fetch(`/api/users/${userId}/posts`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const postsResponse = await fetch(
+          `/api/users/${userId}/posts?page=${page}&limit=10`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!postsResponse.ok) {
           setError('Failed to fetch posts');
           console.error('Failed to fetch posts');
+          setIsLoading(false); // Add this line
           return;
         }
         const postsData = await postsResponse.json();
-        setPosts(postsData);
+        setPosts((prevPosts) => {
+          const newPosts = postsData.filter(
+            (post) => !prevPosts.find((p) => p._id === post._id)
+          );
+          return [...prevPosts, ...newPosts];
+        });
+        if (postsData.length < 10) {
+          setHasMorePosts(false);
+        }
       } catch (err) {
         console.error('Ultimately Failed in the try/catch');
       }
+      setIsLoading(false); // Add this line
     };
     fetchUserAndPosts();
-  }, []);
+  }, [page]);
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();
@@ -78,7 +95,13 @@ const Home = ({ userId, token, profilePicture }) => {
         src={profilePicture}
         alt="Profile Picture"
       />
-      <h1>{user ? `Welcome, ${user.username}` : 'Loading...'}</h1>
+      <h1>
+        {isLoading ? (
+          <div className="loader"></div>
+        ) : (
+          `Welcome, ${user ? user.username : ''}`
+        )}
+      </h1>
       <button
         className="createPostButton"
         onClick={() => {
@@ -116,6 +139,11 @@ const Home = ({ userId, token, profilePicture }) => {
             />
           ))
         : 'No posts yet! Create a post or follow someone to see it here.'}
+      {hasMorePosts && posts.length >= 10 && (
+        <button onClick={() => setPage(page + 1)} disabled={isLoading}>
+          {isLoading ? <div className="loader"></div> : 'Load More Posts'}
+        </button>
+      )}
     </div>
   );
 };

@@ -7,11 +7,16 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
   const [post, setPost] = useState(initialPost);
   const [comment, setComment] = useState('');
   const [postDate, setPostDate] = useState('');
+  const [isLoading, setIsLoading] = useState(!initialPost);
 
   useEffect(() => {
-    const formattedDate = format(new Date(post.createdAt), 'MM/dd/yyyy');
-    setPostDate(formattedDate);
-  }, [post.createdAt]);
+    if (!initialPost) {
+      // Fetch the post here and update `post` and `isLoading` accordingly
+    } else {
+      const formattedDate = format(new Date(post.createdAt), 'MM/dd/yyyy');
+      setPostDate(formattedDate);
+    }
+  }, [post.createdAt, initialPost]);
 
   async function handleLike() {
     try {
@@ -54,12 +59,19 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
       if (response.ok) {
         const data = await response.json();
         setPost(data.post);
-        // Clear the comment input
         setComment('');
       }
     } catch (err) {
       console.error(err);
     }
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!post.author) {
+    return null;
   }
 
   return (

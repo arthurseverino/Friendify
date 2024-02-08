@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const LoginForm = ({ setToken, setUserId }) => {
+const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -23,6 +23,11 @@ const LoginForm = ({ setToken, setUserId }) => {
         setError(null);
         setToken(data.token);
         setUserId(data.user._id);
+        if (data.user.profilePicture) {
+          setProfilePicture(data.user.profilePicture);
+        } else {
+          setProfilePicture(import.meta.env.VITE_DEFAULT_PROFILE_PICTURE);
+        }
         navigate(`/api/users/${data.user._id}/posts`);
       } else {
         setError(

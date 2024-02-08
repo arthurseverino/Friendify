@@ -30,6 +30,18 @@ const Users = ({ token, currentUserId }) => {
       console.error('Failed to follow user');
       return;
     }
+
+    // Update the following state of the current user and the isFollowing state of the followed user
+    setUsers((users) =>
+      users.map((user) => {
+        if (user._id === currentUserId) {
+          return { ...user, following: [...user.following, userIdToFollow] };
+        } else if (user._id === userIdToFollow) {
+          return { ...user, isFollowing: true };
+        }
+        return user;
+      })
+    );
   };
 
   const renderButton = (user) => {

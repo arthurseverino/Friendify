@@ -98,5 +98,23 @@ dialog {
 }
 
 .modal {
-  border: 1px solid red;
+  border: 1px solid turquoise;
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* make the border thinner */
+  border-radius: 50%;
+  border-top: 8px solid #333; /* make the top border black/grey */
+  width: 60px; /* reduce the width */
+  height: 60px; /* reduce the height */
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

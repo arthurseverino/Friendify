@@ -3,22 +3,40 @@ import PostDetails from '../components/PostDetails';
 
 function AllPosts({ userId, token }) {
   const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1); 
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${userId}/posts/allPosts`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      setIsLoading(true);
+      const response = await fetch(
+        `/api/users/${userId}/posts/allPosts?page=${page}&limit=10`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (!response.ok) {
         console.error('Failed to fetch posts');
+        setIsLoading(false); 
         return;
       }
       const data = await response.json();
-      setPosts(data);
+      setPosts((prevPosts) => {
+        const newPosts = data.filter(
+          (post) => !prevPosts.find((p) => p._id === post._id)
+        );
+        return [...prevPosts, ...newPosts];
+      });
+
+      if (data.length < 10) {
+        setHasMorePosts(false);
+      }
+      setIsLoading(false);
     };
 
     fetchPosts();
-  }, []);
+  }, [page]);
 
   return (
     <div>
@@ -33,6 +51,11 @@ function AllPosts({ userId, token }) {
             />
           ))
         : 'No posts yet! Create a post or follow someone to see it here.'}
+      {hasMorePosts && posts.length >= 10 && (
+        <button onClick={() => setPage(page + 1)} disabled={isLoading}>
+          Load More Posts
+        </button> // Modify this line
+      )}
     </div>
   );
 }

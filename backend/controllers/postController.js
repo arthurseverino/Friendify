@@ -1,11 +1,14 @@
 const Post = require('../models/postModel');
 const asyncHandler = require('express-async-handler');
-const { body, validationResult } = require('express-validator');
 const User = require('../models/userModel');
 const multer = require('multer');
 
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
   const currentUser = await User.findById(req.user._id);
   const followingIds = currentUser.following;
   followingIds.push(req.user._id); // Include the current user's ID
@@ -14,17 +17,23 @@ const getPosts = asyncHandler(async (req, res) => {
     author: { $in: followingIds },
   })
     .sort('-createdAt')
+    .skip(skip)
+    .limit(limit)
     .populate('author', 'username profilePicture')
     .populate('comments.author', 'username profilePicture');
-
   res.status(200).json(posts);
 });
 
 //show all posts in the database
 const getAllPosts = asyncHandler(async (req, res) => {
-  //populate('author', 'username') replaces the author field, which is an ID, with the corresponding user document from the User collection, and selects only the username field.
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
   const posts = await Post.find({})
     .sort('-createdAt')
+    .skip(skip)
+    .limit(limit)
     .populate('author', 'username profilePicture')
     .populate('comments.author', 'username profilePicture');
 
@@ -92,53 +101,11 @@ const addComment = asyncHandler(async (req, res) => {
   res.status(200).json({ post: updatedPost });
 });
 
-/*
-// delete a post
-const deletePost = asyncHandler(async (req, res) => {
-  const { id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'No such post' });
-  }
-
-  const post = await Post.findOneAndDelete({ _id: id });
-
-  if (!post) {
-    return res.status(400).json({ error: 'That post no longer exists.' });
-  }
-
-  res.status(200).json(post);
-});
-
-// update a post
-const updatePost = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'No such post' });
-  }
-
-  const post = await Post.findOneAndUpdate(
-    { _id: id },
-    // req.body contains all the previous fields in the model
-    {
-      ...req.body,
-    }
-  );
-
-  if (!post) {
-    return res.status(400).json({ error: 'No such post' });
-  }
-
-  res.status(200).json(post);
-});
-*/
 module.exports = {
   getPosts,
   createPost,
   likePost,
   addComment,
   getAllPosts,
-  //deletePost,
-  //updatePost,
 };
