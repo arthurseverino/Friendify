@@ -17,14 +17,6 @@ function Profile({ token, userId, setProfilePicture }) {
     const userData = await userResponse.json();
     setUser(userData);
     setPosts(userData.posts);
-
-    /* setPosts((prevPosts) => {
-      const newPosts = userData.posts.filter(
-        (newPost) => !prevPosts.some((prevPost) => prevPost._id === newPost._id)
-      );
-      return [...prevPosts, ...newPosts];
-    });*/
-
     setLoading(false);
   };
 

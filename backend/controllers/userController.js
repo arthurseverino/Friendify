@@ -59,7 +59,7 @@ const createUser = [
     .custom(async (username) => {
       const existingUser = await User.findOne({ username });
       if (existingUser) {
-        throw new Error('Username already in use');
+        throw new Error('Username already taken');
       }
     }),
   check('password')

@@ -7,11 +7,12 @@ import Users from './pages/Users';
 import Profile from './pages/Profile';
 import AllPosts from './pages/AllPosts';
 import LoginForm from './pages/LoginForm';
+import SignupForm from './pages/SignupForm';
 import Index from './pages/Index';
 
 // components
 import Navbar from './components/Navbar';
-import SignupForm from './pages/SignupForm';
+import Footer from './components/Footer';
 
 function App() {
   const [profilePicture, setProfilePicture] = useState(
@@ -108,6 +109,7 @@ function App() {
           />
         </Routes>
       </HashRouter>
+      <Footer />
     </div>
   );
 }

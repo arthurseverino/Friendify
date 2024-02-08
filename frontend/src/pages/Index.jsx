@@ -58,7 +58,7 @@ const Index = ({ setToken, setUserId, setProfilePicture }) => {
           Login
         </Link>
         <button className="guest-link" onClick={handleGuestLogin}>
-          Continue as Guest
+          Continue as Visitor
         </button>
       </div>
     </div>

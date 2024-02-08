@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import PostDetails from '../components/PostDetails';
+import { Link } from 'react-router-dom';
 
 const Home = ({ userId, token, profilePicture }) => {
   const [user, setUser] = useState(null);
@@ -168,16 +169,28 @@ const Home = ({ userId, token, profilePicture }) => {
           </div>
         </dialog>
 
-        {posts
-          ? posts.map((post) => (
-              <PostDetails
-                userId={userId}
-                token={token}
-                key={post._id}
-                post={post}
-              />
-            ))
-          : 'No posts yet! Create a post or follow someone to see it here.'}
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <PostDetails
+              userId={userId}
+              token={token}
+              key={post._id}
+              post={post}
+            />
+          ))
+        ) : (
+          <div>
+            <p>No posts from you or your friends yet... </p>
+            Follow someone or create one to see it here...
+            <p> Check out: </p>
+            <Link to={`/api/users/${userId}/posts/allPosts`}>
+              <button>All Posts</button>
+            </Link>
+            <Link to="/api/users">
+              <button>All Users</button>
+            </Link>
+          </div>
+        )}
         {hasMorePosts && posts.length >= 10 && (
           <button onClick={() => setPage(page + 1)} disabled={isLoading}>
             {isLoading ? <div className="loader"></div> : 'Load More Posts'}
