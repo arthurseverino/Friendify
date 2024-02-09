@@ -40,7 +40,7 @@ function AllPosts({ userId, token }) {
 
   return (
     <div className="all-posts">
-      <h1>All Posts </h1>
+      <h1 className = "allPostsText">All Posts </h1>
       <div className="posts-list">
         {posts
           ? posts.map((post) => (

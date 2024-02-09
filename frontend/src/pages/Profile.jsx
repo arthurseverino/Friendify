@@ -60,7 +60,7 @@ function Profile({ token, userId, setProfilePicture }) {
     <div className="profile">
       <div className="profile-header">
         <img
-          className="profilePicture"
+          className="profilePictureProfile"
           src={user.profilePicture}
           alt="Profile Picture"
         />

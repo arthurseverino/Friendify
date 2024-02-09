@@ -39,5 +39,6 @@ module.exports = {
     'react/prop-types': 'off',
     'react/jsx-no-target-blank': 'off',
     'react-hooks/exhaustive-deps': 'off',
+    //'no-console': 'error',
   },
 };

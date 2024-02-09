@@ -116,7 +116,7 @@ const Home = ({ userId, token, profilePicture }) => {
 
       <div className="home-header">
         <img
-          className="profilePicture"
+          className="profilePictureHome"
           src={profilePicture}
           alt="Profile Picture"
         />

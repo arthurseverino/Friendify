@@ -61,7 +61,7 @@ const Users = ({ token, currentUserId }) => {
           <div key={user._id} className="user-item">
             <Link to={`/api/users/${user._id}`}className = "users-link">
               <img
-                className="profilePicture"
+                className="profilePictureUsers"
                 src={user.profilePicture}
                 alt="Profile Picture"
               />

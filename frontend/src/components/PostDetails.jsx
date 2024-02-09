@@ -77,7 +77,7 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
       <div className="post-header">
         <Link to={`/api/users/${post.author._id}`}>
           <img
-            className="profilePicture"
+            className="profilePicturePost"
             src={post.author.profilePicture}
             alt="Profile Picture"
           />
