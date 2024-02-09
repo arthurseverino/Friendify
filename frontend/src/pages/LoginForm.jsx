@@ -82,6 +82,7 @@ const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
           </ul>
         )}
       </form>
+      <Link to = "/"> Back to Home </Link>
     </div>
   );
 };

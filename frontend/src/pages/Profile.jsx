@@ -50,6 +50,12 @@ function Profile({ token, userId, setProfilePicture }) {
     const data = await response.json();
     setProfilePicture(data.profilePicture);
     setIsModalOpen(false);
+
+    // Update the user state with the new profile picture
+    setUser((prevUser) => ({
+      ...prevUser,
+      profilePicture: data.profilePicture,
+    }));
   };
 
   return isLoading ? (
@@ -83,13 +89,36 @@ function Profile({ token, userId, setProfilePicture }) {
         </div>
 
         {isModalOpen && (
-          <div className="modalProfile">
-            <button onClick={() => setIsModalOpen(false)}>Close</button>
-            <form onSubmit={handleProfilePictureSubmit}>
-              <input type="file" name="profilePicture" accept="image/*" />
-              <button type="submit">Update</button>
-            </form>
-          </div>
+          <>
+            <div
+              className="modal-backdrop-profile"
+              onClick={() => setIsModalOpen(false)}></div>
+            <div className="modalProfile">
+              <div className="modal-header">
+                <h4 className="upload-new-profile-picture">
+                  Upload New Profile Picture
+                </h4>
+                <button
+                  className="close-profile-picture"
+                  onClick={() => setIsModalOpen(false)}>
+                  X
+                </button>
+              </div>
+              <form
+                className="below-header-profile"
+                onSubmit={handleProfilePictureSubmit}>
+                <input
+                  className="file-input-profile"
+                  type="file"
+                  name="profilePicture"
+                  accept="image/*"
+                />
+                <button type="submit" className="post-button-profile">
+                  Update
+                </button>
+              </form>
+            </div>
+          </>
         )}
 
         <div className="profile-content">

@@ -15,26 +15,50 @@ html {
   flex-direction: column;
 }
 
-/* Have to be more specific here it cant be every link 
+
 
 a:visited {
-  color: white;
   text-decoration: none;
 }
 
-*/
+
 
 /* Navbar Start */
 
 .navbar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
+  height: 10vh;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
   background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.friendify-text {
+  margin-bottom: 10px;
+}
+
+/* All the links on the left side */
+.navbar a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+.profilePictureNavbar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: contain;
 }
 
 .logout-button {
@@ -53,64 +77,22 @@ a:visited {
   background-color: #c82333; /* Darker red when hovered */
 }
 
-.navbar-left {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-}
-
-.navbar a {
-  color: white;
-  margin-left: 20px;
-  text-decoration: none;
-}
-
-.profilePictureNavbar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
-}
-
 /* Navbar End  */
 
-/* Navbar Tooltip Start */
-
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip-container .tooltip {
-  visibility: hidden;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
-  top: 100%; /* Position the tooltip directly below the link */
-  left: 50%;
-  transform: translateX(-50%); /* Center the tooltip */
-  width: 50px; /* Increase the width of the tooltip */
-  font-size: 12px; /* Increase the font size */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip-container:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-/* Navbar Tooltip End */
-
 /* Footer Start */
+
+.footer {
+  flex-shrink: 0;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  margin-top: auto;
+  gap: 15px;
+  font-size: 0.83rem;
+  box-shadow: 0 -10px 10px -10px rgba(0, 0, 0, 0.7);
+}
 
 .github {
   transition: transform 0.5s; /* Adjust time as needed */
@@ -133,18 +115,6 @@ a:visited {
   margin-left: -13px;
 }
 
-.footer {
-  flex-shrink: 0;
-  height: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #4d4d4d;
-  margin-top: auto;
-  gap: 20px;
-  font-size: 1rem;
-}
-
 /* Footer End */
 
 /* Index Page Start */
@@ -154,14 +124,8 @@ a:visited {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #4158d0;
-  background-image: linear-gradient(
-    43deg,
-    #4158d0 0%,
-    #c850c0 46%,
-    #ffcc70 100%
-  );
-
+  background-color: #0093e9;
+  background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
 }
 
 .text-section {
@@ -206,7 +170,9 @@ a:visited {
   }
 }
 
-.signup-link, .login-link, .guest-link {
+.signup-link,
+.login-link,
+.guest-link {
   opacity: 0;
 }
 
@@ -221,7 +187,7 @@ a:visited {
   background-color: #28a745;
   width: 150px;
   text-align: center;
-  animation: 2s ease-out 2s 1 fadeIn forwards
+  animation: 2s ease-out 2s 1 fadeIn forwards;
 }
 
 .guest-link {
@@ -266,166 +232,6 @@ a:visited {
 }
 /* Index Page End */
 
-/* Sign up Start */
-
-.signup-container {
-  height: calc(100vh - 10vh);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin: 0 auto;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
-}
-
-.signup-title {
-  text-align: center;
-  margin-bottom: 10px;
-  font-size: 2em;
-}
-
-.signup-login-link {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 1em;
-}
-
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  border: 1px solid black;
-  border-radius: 10px;
-  background-color: lavender;
-  color: black;
-}
-
-.signup-form label {
-  margin-bottom: 10px;
-  font-size: 1.2em;
-}
-
-.signup-form input {
-  margin-bottom: 30px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  font-size: 1.2em;
-}
-
-.signup-form button {
-  padding: 15px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 1.2em;
-}
-
-/* Sign up End */
-
-/* Login Page Start */
-
-.login-container {
-  height: calc(100vh - 10vh);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin: 0 auto;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
-}
-
-.login-title {
-  text-align: center;
-  margin-bottom: 10px;
-  font-size: 2em;
-}
-
-.login-signup-link {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 1em;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  border: 1px solid black;
-  border-radius: 20px;
-  background-color: lavender;
-  color: black;
-  width: 340px;
-  height: 340px;
-}
-
-.login-form label {
-  margin-bottom: 5px;
-}
-
-.login-form input {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.guest-link {
-  cursor: pointer;
-}
-
-.login-form button {
-  padding: 10px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  width: 100%;
-}
-
-/* Login Page End  */
-
-/* All Posts Start */
-
-.all-posts {
-  min-height: calc(100vh - 10vh);
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin: 0 auto;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
-}
-
-.posts-list {
-  max-width: 900px;
-  border: 5px solid black;
-  padding: 20px;
-}
-
-.load-more-posts {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 20px;
-}
-
-/* All Posts End  */
-
 /* Home Page Start */
 
 .home {
@@ -456,16 +262,16 @@ a:visited {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
   margin-right: 10px;
 }
 
 .createPostButton {
   display: inline-block;
   text-align: left;
-  width: calc(100% - 60px);
+  width: 900px;
   padding: 10px 15px; /* Padding around the text */
-  border: 1px solid #ccc; /* Border like an input field */
+  border: 1px solid black; /* Border like an input field */
   border-radius: 20px; /* Rounded corners */
   background-color: #f8f8f8; /* Light grey background */
   color: #333; /* Dark grey text */
@@ -483,15 +289,15 @@ a:visited {
 .all-users-button,
 .update-profile-picture-button,
 .load-more-posts-button {
-  background-color: #007bff; /* Blue background */
-  color: #ffffff; /* White text */
-  padding: 10px 20px; /* Padding around the text */
-  margin: 10px; /* Space around the button */
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px 20px;
+  margin: 10px;
   border: none;
-  border-radius: 5px; /* Rounded corners */
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 1em; /* Text size */
-  transition: background-color 0.3s ease; /* Transition for hover effect */
+  font-size: 1em;
+  transition: background-color 0.3s ease;
 }
 
 .all-posts-button:hover,
@@ -503,7 +309,6 @@ a:visited {
 .home-content {
   width: 100%;
   max-width: 800px;
-  border: 5px solid black;
   padding: 20px;
   /*
   display:flex;
@@ -532,6 +337,11 @@ a:visited {
   flex-direction: column;
 }
 
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .close-button {
   align-self: flex-end;
   background: none;
@@ -544,7 +354,7 @@ a:visited {
 .post-textarea {
   margin-top: 20px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 8px;
   resize: none;
   font-size: 0.75rem; /* Adjust this value as needed */
@@ -560,7 +370,7 @@ a:visited {
 .file-input {
   width: 70%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 16px;
   color: #333;
   cursor: pointer;
@@ -602,10 +412,10 @@ a:visited {
 
 /* Home Page End  */
 
-/* Post Details Start */
+/* post details Start */
 
 .post {
-  border: 3px solid #ccc;
+  border: 3px solid black;
   border-radius: 5px;
   margin-bottom: 20px;
   padding: 20px;
@@ -626,7 +436,7 @@ a:visited {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  object-fit: cover; /* The object-fit: cover; line will make the image cover the entire width and height of its container while maintaining its aspect ratio. */
+  object-fit: contain;
   margin-right: 10px;
 }
 
@@ -660,11 +470,38 @@ a:visited {
   flex-direction: column;
   align-items: flex-start;
   margin-top: 10px;
-  border: 1px solid #ccc;
-
-  border-radius: 5px;
+  border: 1px solid black;
+  border-radius: 20px;
   padding: 10px;
 }
+
+.comment-input-container {
+  display: flex;
+  align-items: center;
+  margin-top: -20px;
+  margin-bottom: 17px;
+}
+
+.post-comment-button-above {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-left: 5px;
+}
+
+.post-comment-button-above svg {
+  position: relative;
+  top: -2px; /* Adjust this value to move the SVG up or down */
+}
+
+.post-comment-button-below{
+  margin-top: 19px;
+  margin-left: 5px;
+  align-self: center;
+  cursor: pointer;
+}
+
 .comment a {
   display: flex;
   align-items: center;
@@ -680,6 +517,7 @@ a:visited {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: contain;
 }
 
 .comment-author {
@@ -690,6 +528,10 @@ a:visited {
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
+}
+
+.comment-form {
+  border-radius: 20px;
 }
 
 .likes-comments {
@@ -708,8 +550,23 @@ a:visited {
 }
 
 .likes-comments .liked {
-  color: blue;
-  background-color: #d0d0ff;
+  color: turquoise;
+}
+
+.post-like-button,
+.liked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.post-like-button svg,
+.liked svg {
+  position: relative;
+  top: -2px; /* Adjust this value to move the SVG up or down */
 }
 
 .post-stats {
@@ -725,7 +582,7 @@ a:visited {
 
 .post-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   margin-top: 20px 0;
 }
@@ -741,8 +598,9 @@ a:visited {
 .comments button {
   margin-left: 10px;
   padding: 5px 10px;
+  width: 250px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: #f0f0f0;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -754,8 +612,7 @@ a:visited {
 }
 
 .likes .liked {
-  color: blue;
-  background-color: #d0d0ff;
+  color: #007bff;
 }
 
 .comment-form {
@@ -766,7 +623,7 @@ a:visited {
   width: 100%;
   padding: 10px;
   margin-top: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 4px;
 }
 
@@ -803,7 +660,7 @@ a:visited {
   margin-bottom: 20px;
   padding: 10px;
   border: 1px solid black;
-  border-radius: 4px;
+  border-radius: 20px;
 }
 
 .users-link {
@@ -833,9 +690,41 @@ a:visited {
   height: 50px;
   border-radius: 50%;
   margin-right: 10px;
+  object-fit: contain;
 }
 
 /* Users Page End  */
+
+/* All Posts Start */
+
+.all-posts {
+  min-height: calc(100vh - 10vh);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.posts-list {
+  max-width: 900px;
+  padding: 20px;
+}
+
+.load-more-posts {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* All Posts End  */
 
 /* Profile Page Start */
 .profile {
@@ -852,7 +741,8 @@ a:visited {
 .profile-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
   max-width: 600px;
   margin-bottom: 20px;
@@ -862,16 +752,252 @@ a:visited {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .profile-content {
-  max-width: 800px;
-  border: 5px solid black;
+  width: 800px;
   padding: 20px;
 }
 
+.modalProfile {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 500px;
+  height: 175px;
+  width: 100%;
+  border: none;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid black;
+  z-index: 2;
+}
+
+.modal-backdrop-profile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+}
+
+.upload-new-profile-picture {
+  color: black;
+}
+
+.below-header-profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.close-profile-picture {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #333; /* Dark grey color */
+}
+
+.file-input-profile {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 16px;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+.post-button-profile {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
 /* Profile Page End  */
+
+/* Navbar Tooltip Start */
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-container .tooltip {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: 100%; /* Position the tooltip directly below the link */
+  left: 50%;
+  transform: translateX(-50%); /* Center the tooltip */
+  width: 50px; /* Increase the width of the tooltip */
+  font-size: 12px; /* Increase the font size */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Navbar Tooltip End */
+
+/* Sign up Start */
+
+.signup-container {
+  height: calc(100vh - 10vh);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.signup-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+.signup-login-link {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1em;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: lavender;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.signup-form label {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.signup-form input {
+  margin-bottom: 30px;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 15px;
+  font-size: 1.2em;
+}
+
+.signup-form button {
+  padding: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+/* Sign up End */
+
+/* Login Page Start */
+
+.login-container {
+  height: calc(100vh - 10vh);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+.login-signup-link {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1em;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 15px;
+  background-color: lavender;
+  color: black;
+  width:335px;
+  height:345px;
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  margin-bottom: 5px;
+}
+
+.login-form input {
+  margin-bottom: 30px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 15px;
+  box-sizing: border-box;
+  width: 294px;
+  height: 56px;
+  font-size: 1.2em;
+}
+
+.login-form button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 294px;
+  height: 54px;
+  font-size:1.2em;
+}
+
+/* Login Page End  */
+
+.guest-link {
+  cursor: pointer;
+}
 
 /* Loading Spinner */
 .loader {
@@ -881,12 +1007,6 @@ a:visited {
   width: 2rem;
   height: 2rem;
   animation: spin 2s linear infinite;
-  /*
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  */
 }
 
 @keyframes spin {

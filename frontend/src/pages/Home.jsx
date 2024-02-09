@@ -94,7 +94,6 @@ const Home = ({ userId, token, profilePicture }) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log('New post created', data);
       // Add the new post to the posts array
       setPosts((prevPosts) => [data, ...prevPosts]);
       // Clear the textarea, the image input and close the dialog
@@ -140,13 +139,14 @@ const Home = ({ userId, token, profilePicture }) => {
 
         <dialog className="create-post-dialog" open={isDialogOpen}>
           <div className="dialog-content">
-            <button
-              className="close-button"
-              onClick={() => setIsDialogOpen(false)}>
-              X
-            </button>
-
-            <h3 className="createAPost">Create a Post</h3>
+            <div className="dialog-header">
+              <h3 className="createAPost">Create a Post</h3>
+              <button
+                className="close-button"
+                onClick={() => setIsDialogOpen(false)}>
+                X
+              </button>
+            </div>
 
             <form onSubmit={handleSubmitPost}>
               <textarea
