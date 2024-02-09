@@ -2,7 +2,7 @@ Live:
 
 ## Screenshots
 
-![Screenshot of the Home Page](https://github.com/arthurseverino/Friendify/blob/main/src/images/Friendify-Screenshot.png)
+![Screenshot of the Home Page](https://github.com/arthurseverino/Friendify/raw/main/src/images/Friendify-Screenshot.png)
 
 # Friendify
 
