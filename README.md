@@ -1,5 +1,9 @@
 Live:
 
+## Screenshots
+
+![Screenshot of the Home Page](src/images/Friendify-Screenshot.png)
+
 # Friendify
 
 Friendify is a full-stack social media website created with the MERN stack. It's designed to help people stay connected with their friends, share updates, and discover new content.
@@ -58,4 +62,3 @@ The website includes the following pages:
 - /posts: Displays a list of all posts from all users.
 - /profile: Displays the user's profile page and a feed of the user's posts.
 
-## Screenshots
