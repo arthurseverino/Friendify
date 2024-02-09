@@ -6,18 +6,18 @@ function Profile({ token, userId, setProfilePicture }) {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchUserAndPosts = async () => {
-    setLoading(true);
+    setIsLoading(true);
     const userResponse = await fetch(`/api/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const userData = await userResponse.json();
     setUser(userData);
     setPosts(userData.posts);
-    setLoading(false);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -52,71 +52,75 @@ function Profile({ token, userId, setProfilePicture }) {
     setIsModalOpen(false);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="profile">
-      <div className="profile-header">
-        <img
-          className="profilePictureProfile"
-          src={user.profilePicture}
-          alt="Profile Picture"
-        />
-        <h1> {id === userId ? 'My Profile' : `${user.username}'s Profile`} </h1>
-        {id === userId && (
-          <button className = "update-profile-picture-button"
-            onClick={() => {
-              if (user.username === 'Visitor') {
-                alert(`You can't edit the visitor's profile picture`);
-              } else {
-                setIsModalOpen(true);
-              }
-            }}>
-            Update Profile Picture
-          </button>
-        )}
-      </div>
-
-      {isModalOpen && (
-        <div className="modal">
-          <button onClick={() => setIsModalOpen(false)}>Close</button>
-          <form onSubmit={handleProfilePictureSubmit}>
-            <input type="file" name="profilePicture" accept="image/*" />
-            <button type="submit">Update</button>
-          </form>
+  return isLoading ? (
+    <div className="loader"></div>
+  ) : (
+    user && (
+      <div className="profile">
+        <div className="profile-header">
+          <img
+            className="profilePictureProfile"
+            src={user.profilePicture}
+            alt="Profile Picture"
+          />
+          <h1>
+            {' '}
+            {id === userId ? 'My Profile' : `${user.username}'s Profile`}{' '}
+          </h1>
+          {id === userId && (
+            <button
+              className="update-profile-picture-button"
+              onClick={() => {
+                if (user.username === 'Visitor') {
+                  alert(`You can't edit the visitor's profile picture`);
+                } else {
+                  setIsModalOpen(true);
+                }
+              }}>
+              Update Profile Picture
+            </button>
+          )}
         </div>
-      )}
 
-      <div className="profile-content">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <PostDetails
-              userId={userId}
-              token={token}
-              key={post._id}
-              post={post}
-            />
-          ))
-        ) : (
-          <div>
-            <p>
-              {id === userId
-                ? 'You have no posts, create one to see it here!'
-                : 'No posts from this user yet!'}
-            </p>
-            <p> Check out: </p>
-            <Link to={`/api/users/${userId}/posts/allPosts`}>
-              <button className = "all-posts-button">All Posts</button>
-            </Link>
-            <Link to="/api/users">
-              <button className = "all-users-button">All Users</button>
-            </Link>
+        {isModalOpen && (
+          <div className="modalProfile">
+            <button onClick={() => setIsModalOpen(false)}>Close</button>
+            <form onSubmit={handleProfilePictureSubmit}>
+              <input type="file" name="profilePicture" accept="image/*" />
+              <button type="submit">Update</button>
+            </form>
           </div>
         )}
+
+        <div className="profile-content">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <PostDetails
+                userId={userId}
+                token={token}
+                key={post._id}
+                post={post}
+              />
+            ))
+          ) : (
+            <div>
+              <p>
+                {id === userId
+                  ? 'You have no posts, create one to see it here!'
+                  : 'No posts from this user yet!'}
+              </p>
+              <p> Check out: </p>
+              <Link to={`/api/users/${userId}/posts/allPosts`}>
+                <button className="all-posts-button">All Posts</button>
+              </Link>
+              <Link to="/api/users">
+                <button className="all-users-button">All Users</button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    )
   );
 }
 

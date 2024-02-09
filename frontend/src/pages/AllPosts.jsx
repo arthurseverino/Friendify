@@ -40,18 +40,22 @@ function AllPosts({ userId, token }) {
 
   return (
     <div className="all-posts">
-      <h1 className = "allPostsText">All Posts </h1>
+      <h1 className="allPostsText">All Posts </h1>
       <div className="posts-list">
-        {posts
-          ? posts.map((post) => (
-              <PostDetails
-                userId={userId}
-                token={token}
-                key={post._id}
-                post={post}
-              />
-            ))
-          : 'No posts yet! Create a post or follow someone to see it here.'}
+        {isLoading ? (
+          <div className="loader"></div>
+        ) : posts.length > 0 ? (
+          posts.map((post) => (
+            <PostDetails
+              userId={userId}
+              token={token}
+              key={post._id}
+              post={post}
+            />
+          ))
+        ) : (
+          'No posts yet! Create a post or follow someone to see it here.'
+        )}
         {hasMorePosts && posts.length >= 10 && (
           <button
             className="load-more-posts"

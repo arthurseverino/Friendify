@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 
 const Users = ({ token, currentUserId }) => {
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     // Fetch all users and set them in state
     const fetchUsers = async () => {
       const response = await fetch('/api/users', {
@@ -12,11 +14,13 @@ const Users = ({ token, currentUserId }) => {
       });
       if (!response.ok) {
         console.error('Failed to fetch users');
+        setIsLoading(false); // Add this line
         return;
       }
       const data = await response.json();
       setUsers(data);
     };
+    setIsLoading(false); // Add this line
     fetchUsers();
   }, []);
 
@@ -57,19 +61,23 @@ const Users = ({ token, currentUserId }) => {
     <div className="users">
       <h1 className = "users-text"> All Users </h1>
       <div className="users-list">
-        {users.map((user) => (
-          <div key={user._id} className="user-item">
-            <Link to={`/api/users/${user._id}`}className = "users-link">
-              <img
-                className="profilePictureUsers"
-                src={user.profilePicture}
-                alt="Profile Picture"
-              />
-              <div className="username">{user.username}</div>
-            </Link>
-            {renderButton(user)}
-          </div>
-        ))}
+        {isLoading ? (
+          <div className="loader"></div>
+        ) : (
+          users.map((user) => (
+            <div key={user._id} className="user-item">
+              <Link to={`/api/users/${user._id}`}className = "users-link">
+                <img
+                  className="profilePictureUsers"
+                  src={user.profilePicture}
+                  alt="Profile Picture"
+                />
+                <div className="username">{user.username}</div>
+              </Link>
+              {renderButton(user)}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

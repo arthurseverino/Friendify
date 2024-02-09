@@ -64,10 +64,6 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
     }
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (!post.author) {
     return null;
   }
@@ -117,7 +113,10 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
           </button>
         </div>
         <div className="comments">
-          <button type="submit" form={`comment-form-${post._id}`}>
+          <button
+            className="post-comment-button"
+            type="submit"
+            form={`comment-form-${post._id}`}>
             Comment
           </button>
         </div>
@@ -150,9 +149,11 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
                   src={comment.author.profilePicture}
                   alt="Profile Picture"
                 />
-                <span className = 'comment-author'>{comment.author.username}</span>
+                <span className="comment-author">
+                  {comment.author.username}
+                </span>
               </Link>
-              <p className = "comment-text">{comment.text}</p>
+              <p className="comment-text">{comment.text}</p>
             </div>
           )
       )}

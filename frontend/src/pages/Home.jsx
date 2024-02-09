@@ -15,7 +15,7 @@ const Home = ({ userId, token, profilePicture }) => {
 
   useEffect(() => {
     const fetchUserAndPosts = async () => {
-      setIsLoading(true); // Add this line
+      setIsLoading(true);
       try {
         const response = await fetch(`/api/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -146,12 +146,12 @@ const Home = ({ userId, token, profilePicture }) => {
               X
             </button>
 
-            <h3>Create a Post</h3>
+            <h3 className="createAPost">Create a Post</h3>
 
             <form onSubmit={handleSubmitPost}>
               <textarea
-              cols = "55"
-              rows = "10"
+                cols="55"
+                rows="5"
                 className="post-textarea"
                 ref={postRef}
                 placeholder={`What's on your mind, ${
@@ -160,7 +160,7 @@ const Home = ({ userId, token, profilePicture }) => {
                 required
               />
 
-              <h4 className="upload-photo"> Upload photo </h4>
+              <h4 className="upload-photo"> Upload photo (optional) </h4>
               <div className="form-footer">
                 <input
                   type="file"
@@ -175,7 +175,9 @@ const Home = ({ userId, token, profilePicture }) => {
           </div>
         </dialog>
 
-        {posts.length > 0 ? (
+        {isLoading ? (
+          <div className="loader"></div>
+        ) : posts.length > 0 ? (
           posts.map((post) => (
             <PostDetails
               userId={userId}

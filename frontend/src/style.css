@@ -79,7 +79,6 @@ a:visited {
 
 /* Navbar End  */
 
-
 /* Navbar Tooltip Start */
 
 .tooltip-container {
@@ -155,8 +154,14 @@ a:visited {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
-  flex-grow: 1;
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
+
 }
 
 .text-section {
@@ -172,6 +177,18 @@ a:visited {
 
 .subtitle {
   font-size: 1.2em;
+  animation: 3s ease-out 0s 1 slideInFromLeft;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .link-section {
@@ -180,16 +197,38 @@ a:visited {
   align-items: center;
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.signup-link, .login-link, .guest-link {
+  opacity: 0;
+}
+
 .signup-link {
   background-color: #007bff;
+  width: 150px;
+  text-align: center;
+  animation: 2s ease-out 1s 1 fadeIn forwards;
 }
 
 .login-link {
   background-color: #28a745;
+  width: 150px;
+  text-align: center;
+  animation: 2s ease-out 2s 1 fadeIn forwards
 }
 
 .guest-link {
-  background-color: #565656;
+  background-color: #6c757d;
+  width: 160px;
+  height: 44px;
+  animation: 2s ease-out 3s 1 fadeIn forwards;
 }
 
 .link-section a,
@@ -355,7 +394,6 @@ a:visited {
 
 /* Login Page End  */
 
-
 /* All Posts Start */
 
 .all-posts {
@@ -370,8 +408,7 @@ a:visited {
 }
 
 .posts-list {
-  width: 100%;
-  max-width: 700px;
+  max-width: 900px;
   border: 5px solid black;
   padding: 20px;
 }
@@ -389,7 +426,6 @@ a:visited {
 
 /* All Posts End  */
 
-
 /* Home Page Start */
 
 .home {
@@ -400,13 +436,14 @@ a:visited {
   margin: 0 auto;
   padding: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  background-color: #8ec5fc;
+  background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
 }
 
 .home-header {
   display: flex;
   flex-direction: row;
-  width:40.5%;
+  width: 40.5%;
   align-items: center; /* Center the items vertically */
   padding: 10px 0;
 }
@@ -420,28 +457,8 @@ a:visited {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  margin-right: 10px;
 }
-
-/* Post Details shit */ 
-
-.profilePicture-comment{
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-
-}
-
-.comment-author{
-  margin-left: 9px;
-}
-
-.comment-text{
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-all;
-}
-
-/* Post Details shit */ 
 
 .createPostButton {
   display: inline-block;
@@ -454,6 +471,12 @@ a:visited {
   color: #333; /* Dark grey text */
   cursor: pointer;
   font-size: 1em; /* Text size */
+  margin-left: 10px;
+  transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.createPostButton:hover {
+  background-color: #e8e8e8; /* Darker grey when hovered */
 }
 
 .all-posts-button,
@@ -479,7 +502,7 @@ a:visited {
 
 .home-content {
   width: 100%;
-  max-width: 700px;
+  max-width: 800px;
   border: 5px solid black;
   padding: 20px;
   /*
@@ -524,6 +547,7 @@ a:visited {
   border: 1px solid #ccc;
   border-radius: 8px;
   resize: none;
+  font-size: 0.75rem; /* Adjust this value as needed */
 }
 
 .form-footer {
@@ -652,6 +676,22 @@ a:visited {
   margin-left: 50px;
 }
 
+.profilePicture-comment {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.comment-author {
+  margin-left: 9px;
+}
+
+.comment-text {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
 .likes-comments {
   display: flex;
   align-items: center;
@@ -752,7 +792,7 @@ a:visited {
   max-width: 600px;
 }
 
-.users-text{
+.users-text {
   margin-bottom: 20px;
 }
 
@@ -766,12 +806,12 @@ a:visited {
   border-radius: 4px;
 }
 
-.users-link{
+.users-link {
   text-decoration: none;
-  display:flex;
+  display: flex;
 }
 
-.users-follow{
+.users-follow {
   background-color: #007bff; /* Blue background */
   color: #ffffff; /* White text */
   padding: 10px 20px; /* Padding around the text */
@@ -798,12 +838,15 @@ a:visited {
 /* Users Page End  */
 
 /* Profile Page Start */
-
 .profile {
+  min-height: calc(100vh - 10vh);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
   padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Do i need this? Mess around with it */
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
 }
 
 .profile-header {
@@ -816,20 +859,21 @@ a:visited {
 }
 
 .profilePictureProfile {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .profile-content {
-  width: 100%;
-  max-width: 600px;
+  max-width: 800px;
+  border: 5px solid black;
+  padding: 20px;
 }
 
 /* Profile Page End  */
 
-
+/* Loading Spinner */
 .loader {
   border: 0.5rem solid #f3f3f3;
   border-radius: 50%;
@@ -837,6 +881,12 @@ a:visited {
   width: 2rem;
   height: 2rem;
   animation: spin 2s linear infinite;
+  /*
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  */
 }
 
 @keyframes spin {
