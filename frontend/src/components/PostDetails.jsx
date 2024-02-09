@@ -81,7 +81,7 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
             src={post.author.profilePicture}
             alt="Profile Picture"
           />
-          <span>{post.author.username}</span>
+          <span className="post-username">{post.author.username}</span>
         </Link>
         <span>{postDate}</span>
       </div>
@@ -146,13 +146,13 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
             <div key={comment._id} className="comment">
               <Link to={`/api/users/${comment.author._id}`}>
                 <img
-                  className="profilePicture"
+                  className="profilePicture-comment"
                   src={comment.author.profilePicture}
                   alt="Profile Picture"
                 />
-                <span>{comment.author.username}</span>
+                <span className = 'comment-author'>{comment.author.username}</span>
               </Link>
-              <p>{comment.text}</p>
+              <p className = "comment-text">{comment.text}</p>
             </div>
           )
       )}

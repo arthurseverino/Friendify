@@ -48,18 +48,18 @@ const Users = ({ token, currentUserId }) => {
     if (user._id === currentUserId) {
       return <p>(Current User)</p>;
     } else if (user.isFollowing) {
-      return <button disabled>Following</button>;
+      return <button className = "users-follow" disabled>Following</button>;
     }
-    return <button onClick={() => handleFollow(user._id)}>Follow</button>;
+    return <button className = "users-follow" onClick={() => handleFollow(user._id)}>Follow</button>;
   };
 
   return (
     <div className="users">
-      <h1> All Users </h1>
+      <h1 className = "users-text"> All Users </h1>
       <div className="users-list">
         {users.map((user) => (
           <div key={user._id} className="user-item">
-            <Link to={`/api/users/${user._id}`}>
+            <Link to={`/api/users/${user._id}`}className = "users-link">
               <img
                 className="profilePicture"
                 src={user.profilePicture}

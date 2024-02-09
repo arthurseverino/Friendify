@@ -106,31 +106,31 @@ const Home = ({ userId, token, profilePicture }) => {
 
   return (
     <div className="home">
+      <h1>
+        {isLoading ? (
+          <div className="loader"></div>
+        ) : (
+          `Welcome, ${user ? user.username : ''}`
+        )}
+      </h1>
+
       <div className="home-header">
         <img
           className="profilePicture"
           src={profilePicture}
           alt="Profile Picture"
         />
-        <h1>
-          {isLoading ? (
-            <div className="loader"></div>
-          ) : (
-            `Welcome, ${user ? user.username : ''}`
-          )}
-        </h1>
         <button
           className="createPostButton"
           onClick={() => {
             setIsDialogOpen(true);
           }}>
-          {' '}
-          + Create Post{' '}
+          {`What's on your mind?`}
         </button>
       </div>
 
       <div className="home-content">
-        <h2>Your Feed </h2>
+        <h2 className="your-feed">Your Feed </h2>
 
         {isDialogOpen && (
           <div
@@ -143,11 +143,15 @@ const Home = ({ userId, token, profilePicture }) => {
             <button
               className="close-button"
               onClick={() => setIsDialogOpen(false)}>
-              Close
+              X
             </button>
+
+            <h3>Create a Post</h3>
 
             <form onSubmit={handleSubmitPost}>
               <textarea
+              cols = "55"
+              rows = "10"
                 className="post-textarea"
                 ref={postRef}
                 placeholder={`What's on your mind, ${
@@ -155,6 +159,8 @@ const Home = ({ userId, token, profilePicture }) => {
                 }?`}
                 required
               />
+
+              <h4 className="upload-photo"> Upload photo </h4>
               <div className="form-footer">
                 <input
                   type="file"
@@ -182,21 +188,24 @@ const Home = ({ userId, token, profilePicture }) => {
           <div>
             <p>No posts from you or your friends yet... </p>
             Follow a friend or create a post to see it here!
-            <p>  </p>
+            <p> </p>
             <Link to={`/api/users/${userId}/posts/allPosts`}>
-              <button className = "all-posts-button">All Posts</button>
+              <button className="all-posts-button">All Posts</button>
             </Link>
             <Link to="/api/users">
-              <button className = "all-users-button">All Users</button>
+              <button className="all-users-button">All Users</button>
             </Link>
           </div>
         )}
-        {hasMorePosts && posts.length >= 10 && (
-          <button onClick={() => setPage(page + 1)} disabled={isLoading}>
-            {isLoading ? <div className="loader"></div> : 'Load More Posts'}
-          </button>
-        )}
       </div>
+      {hasMorePosts && posts.length >= 10 && (
+        <button
+          className="load-more-posts-button"
+          onClick={() => setPage(page + 1)}
+          disabled={isLoading}>
+          {isLoading ? <div className="loader"></div> : 'Load More Posts'}
+        </button>
+      )}
     </div>
   );
 };
