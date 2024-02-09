@@ -13,6 +13,8 @@ const Home = ({ userId, token, profilePicture }) => {
   const [isLoading, setIsLoading] = useState(false);
   const postRef = useRef(null);
 
+  const scrollPosition = useRef(window.pageYOffset);
+
   useEffect(() => {
     const fetchUserAndPosts = async () => {
       setIsLoading(true);
@@ -103,6 +105,10 @@ const Home = ({ userId, token, profilePicture }) => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, scrollPosition.current);
+  }, [posts]);
+
   return (
     <div className="home">
       <h1>
@@ -175,9 +181,7 @@ const Home = ({ userId, token, profilePicture }) => {
           </div>
         </dialog>
 
-        {isLoading ? (
-          <div className="loader"></div>
-        ) : posts.length > 0 ? (
+        {posts.length > 0 ? (
           posts.map((post) => (
             <PostDetails
               userId={userId}
@@ -203,7 +207,10 @@ const Home = ({ userId, token, profilePicture }) => {
       {hasMorePosts && posts.length >= 10 && (
         <button
           className="load-more-posts-button"
-          onClick={() => setPage(page + 1)}
+          onClick={() => {
+            scrollPosition.current = window.pageYOffset;
+            setPage(page + 1);
+          }}
           disabled={isLoading}>
           {isLoading ? <div className="loader"></div> : 'Load More Posts'}
         </button>

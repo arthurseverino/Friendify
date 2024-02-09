@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
 import PostDetails from '../components/PostDetails';
 
 function AllPosts({ userId, token }) {
@@ -6,6 +6,8 @@ function AllPosts({ userId, token }) {
   const [page, setPage] = useState(1);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const scrollPosition = useRef(window.pageYOffset);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -38,28 +40,31 @@ function AllPosts({ userId, token }) {
     fetchPosts();
   }, [page]);
 
+  useLayoutEffect(() => {
+    window.scrollTo(0, scrollPosition.current);
+  }, [posts]);
+
   return (
     <div className="all-posts">
       <h1 className="allPostsText">All Posts </h1>
       <div className="posts-list">
-        {isLoading ? (
-          <div className="loader"></div>
-        ) : posts.length > 0 ? (
-          posts.map((post) => (
-            <PostDetails
-              userId={userId}
-              token={token}
-              key={post._id}
-              post={post}
-            />
-          ))
-        ) : (
-          'No posts yet! Create a post or follow someone to see it here.'
-        )}
+        {posts.length > 0
+          ? posts.map((post) => (
+              <PostDetails
+                userId={userId}
+                token={token}
+                key={post._id}
+                post={post}
+              />
+            ))
+          : 'No posts yet! Create a post or follow someone to see it here.'}
         {hasMorePosts && posts.length >= 10 && (
           <button
             className="load-more-posts"
-            onClick={() => setPage(page + 1)}
+            onClick={() => {
+              scrollPosition.current = window.pageYOffset;
+              setPage(page + 1);
+            }}
             disabled={isLoading}>
             {isLoading ? <div className="loader"></div> : 'Load More Posts'}
           </button>
