@@ -6,16 +6,19 @@ const Index = ({ setToken, setUserId, setProfilePicture }) => {
 
   //this makes a post request to api/users/login which gives the user a token
   const handleGuestLogin = async () => {
-    const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: 'Visitor',
-        password: 'visitor',
-      }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_APP_API_URL}/api/users/login`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'Visitor',
+          password: 'visitor',
+        }),
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -25,7 +28,9 @@ const Index = ({ setToken, setUserId, setProfilePicture }) => {
       if (data.user.profilePicture) {
         setProfilePicture(data.user.profilePicture);
       } else {
-        setProfilePicture(import.meta.env.VITE_APP_PROFILE_PICTURE_URL);
+        setProfilePicture(
+          `${import.meta.env.VITE_APP_API_URL}/public/profilePic.jpg`
+        );
       }
       navigate(`/api/users/${data.user._id}/posts`);
     } else {
