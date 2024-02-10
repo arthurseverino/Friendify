@@ -4,13 +4,10 @@
   "description": "Live:",
   "main": "app.js",
   "scripts": {
-    "start": "npm start --prefix backend",
+    "start": "cd backend && npm install && npm start",
     "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.2"
-  }
+  "license": "ISC"
 }
