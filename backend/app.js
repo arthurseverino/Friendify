@@ -40,7 +40,7 @@ passport.use(
     }
   })
 );
-// test
+
 // middleware
 app.use(passport.initialize());
 app.use(express.json());
