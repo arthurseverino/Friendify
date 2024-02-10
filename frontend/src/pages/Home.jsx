@@ -19,7 +19,7 @@ const Home = ({ userId, token, profilePicture }) => {
     const fetchUserAndPosts = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/users/${userId}`, {
+        const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!response.ok) {
@@ -32,7 +32,7 @@ const Home = ({ userId, token, profilePicture }) => {
         setUser(data);
 
         const postsResponse = await fetch(
-          `/api/users/${userId}/posts?page=${page}&limit=10`,
+          `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts?page=${page}&limit=10`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -86,7 +86,7 @@ const Home = ({ userId, token, profilePicture }) => {
       formData.append('image', postImage);
     }
 
-    const response = await fetch(`/api/users/${userId}/posts`, {
+    const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

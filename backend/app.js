@@ -25,7 +25,7 @@ const app = express();
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.JWT_SECRET;
+opts.secretOrKey = 'dogs';
 passport.use(
   // The payload typically contains the ID of the user
   new JwtStrategy(opts, async (jwt_payload, done) => {
@@ -56,12 +56,11 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-//I dont even think I need this below tbh, Hashrouter solved the problem
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });

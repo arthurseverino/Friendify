@@ -6,7 +6,7 @@ const Index = ({ setToken, setUserId, setProfilePicture }) => {
 
   //this makes a post resquest to api/users/login which gives the user a token
   const handleGuestLogin = async () => {
-    const response = await fetch('/api/users/login', {
+    const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ const Index = ({ setToken, setUserId, setProfilePicture }) => {
       if (data.user.profilePicture) {
         setProfilePicture(data.user.profilePicture);
       } else {
-        setProfilePicture(import.meta.env.VITE_DEFAULT_PROFILE_PICTURE);
+        setProfilePicture(import.meta.env.VITE_APP_PROFILE_PICTURE_URL);
       }
       navigate(`/api/users/${data.user._id}/posts`);
     } else {

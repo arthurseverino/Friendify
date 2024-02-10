@@ -10,7 +10,7 @@ const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/users/login', {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -26,7 +26,7 @@ const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
         if (data.user.profilePicture) {
           setProfilePicture(data.user.profilePicture);
         } else {
-          setProfilePicture(import.meta.env.VITE_DEFAULT_PROFILE_PICTURE);
+          setProfilePicture(import.meta.env.VITE_APP_PROFILE_PICTURE_URL);
         }
         navigate(`/api/users/${data.user._id}/posts`);
       } else {

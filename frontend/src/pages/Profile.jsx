@@ -11,7 +11,7 @@ function Profile({ token, userId, setProfilePicture }) {
 
   const fetchUserAndPosts = async () => {
     setIsLoading(true);
-    const userResponse = await fetch(`/api/users/${id}`, {
+    const userResponse = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const userData = await userResponse.json();
@@ -41,7 +41,7 @@ function Profile({ token, userId, setProfilePicture }) {
     const formData = new FormData();
     formData.append('profilePicture', file);
 
-    const response = await fetch(`/api/users/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${id}`, {
       method: 'PATCH',
       headers: { Authorization: `Bearer ${token}` },
       body: formData,

@@ -9,7 +9,7 @@ const Users = ({ token, currentUserId }) => {
     setIsLoading(true);
     // Fetch all users and set them in state
     const fetchUsers = async () => {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {

@@ -13,7 +13,7 @@ function AllPosts({ userId, token }) {
     const fetchPosts = async () => {
       setIsLoading(true);
       const response = await fetch(
-        `/api/users/${userId}/posts/allPosts?page=${page}&limit=10`,
+        `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts/allPosts?page=${page}&limit=10`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

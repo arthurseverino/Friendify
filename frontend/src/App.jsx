@@ -19,7 +19,7 @@ function App() {
     localStorage.getItem('profilePicture') === 'null'
       ? null
       : localStorage.getItem('profilePicture') ||
-          import.meta.env.VITE_DEFAULT_PROFILE_PICTURE
+          import.meta.env.VITE_APP_PROFILE_PICTURE_URL
   );
 
   const [token, setToken] = useState(
