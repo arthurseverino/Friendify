@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const Index = ({ setToken, setUserId, setProfilePicture }) => {
   const navigate = useNavigate();
 
-  //this makes a post resquest to api/users/login which gives the user a token
+  //this makes a post request to api/users/login which gives the user a token
   const handleGuestLogin = async () => {
     const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/login`, {
       method: 'POST',
