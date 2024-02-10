@@ -1,0 +1,11 @@
+{
+  "name": "social-network",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm start --prefix backend",
+    "heroku-postbuild": "npm install --prefix frontend && npm run build --prefix frontend"
+  },
+  "engines": {
+    "node": "14.x"
+  }
+}
