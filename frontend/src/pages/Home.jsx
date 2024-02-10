@@ -11,6 +11,7 @@ const Home = ({ userId, token, profilePicture }) => {
   const [page, setPage] = useState(1);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
   const postRef = useRef(null);
 
   const scrollPosition = useRef(window.pageYOffset);
@@ -19,9 +20,12 @@ const Home = ({ userId, token, profilePicture }) => {
     const fetchUserAndPosts = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!response.ok) {
           setError('Failed to fetch user');
           console.error('Response not ok. Failed to fetch user');
@@ -32,7 +36,9 @@ const Home = ({ userId, token, profilePicture }) => {
         setUser(data);
 
         const postsResponse = await fetch(
-          `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts?page=${page}&limit=10`,
+          `${
+            import.meta.env.VITE_APP_API_URL
+          }/api/users/${userId}/posts?page=${page}&limit=10`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -86,13 +92,16 @@ const Home = ({ userId, token, profilePicture }) => {
       formData.append('image', postImage);
     }
 
-    const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -106,8 +115,11 @@ const Home = ({ userId, token, profilePicture }) => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, scrollPosition.current);
-  }, [posts]);
+    if (isLoadMoreClicked) {
+      window.scrollTo(0, scrollPosition.current);
+      setIsLoadMoreClicked(false); // Reset isLoadMoreClicked to false
+    }
+  }, [posts, isLoadMoreClicked]);
 
   return (
     <div className="home">
@@ -210,6 +222,7 @@ const Home = ({ userId, token, profilePicture }) => {
           onClick={() => {
             scrollPosition.current = window.pageYOffset;
             setPage(page + 1);
+            setIsLoadMoreClicked(true); // Set isLoadMoreClicked to true
           }}
           disabled={isLoading}>
           {isLoading ? <div className="loader"></div> : 'Load More Posts'}

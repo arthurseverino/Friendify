@@ -25,7 +25,7 @@ const app = express();
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'dogs';
+opts.secretOrKey = process.env.JWT_SECRET;
 passport.use(
   // The payload typically contains the ID of the user
   new JwtStrategy(opts, async (jwt_payload, done) => {
@@ -55,7 +55,6 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend/dist')));

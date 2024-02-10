@@ -9,7 +9,9 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
   async function handleLike() {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts/${post._id}/like`,
+        `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts/${
+          post._id
+        }/like`,
         {
           method: 'POST',
           headers: {
@@ -33,7 +35,9 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
     e.preventDefault();
 
     const response = await fetch(
-      `${import.meta.env.VITE_APP_API_URL}/api/users/${userId}/posts/${postId}/comments`,
+      `${
+        import.meta.env.VITE_APP_API_URL
+      }/api/users/${userId}/posts/${postId}/comments`,
       {
         method: 'POST',
         headers: {
