@@ -15,7 +15,7 @@ const userSchema = new Schema({
     default:
       process.env.NODE_ENV === 'production'
         ? `https://friendify-afc27231acd7.herokuapp.com/public/profilePic.jpg`
-        : `http://localhost:3000/public/profilePic.jpg`,
+        : `http://localhost:3005/public/profilePic.jpg`,
   },
   following: [
     {
