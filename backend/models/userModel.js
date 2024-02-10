@@ -12,7 +12,10 @@ const userSchema = new Schema({
   },
   profilePicture: {
     type: String,
-    default: `http://localhost:${process.env.PORT}/public/profilePic.jpg`,
+    default:
+      process.env.NODE_ENV === 'production'
+        ? `https://friendify-afc27231acd7.herokuapp.com/public/profilePic.jpg`
+        : `http://localhost:3000/public/profilePic.jpg`,
   },
   following: [
     {
