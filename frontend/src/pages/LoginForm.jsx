@@ -26,7 +26,9 @@ const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
         if (data.user.profilePicture) {
           setProfilePicture(data.user.profilePicture);
         } else {
-          setProfilePicture(import.meta.env.VITE_APP_PROFILE_PICTURE_URL);
+          setProfilePicture(
+            `${import.meta.env.VITE_APP_API_URL}/public/profilePic.jpg`
+          );
         }
         navigate(`/api/users/${data.user._id}/posts`);
       } else {
