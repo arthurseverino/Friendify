@@ -1014,7 +1014,7 @@ a:visited {
 }
 
 /* Dont go crazy over this, it's a lot of specfic use cases */
-
+/* I think 600px is perfect for all phones, this what TOP said */ 
 @media (max-width: 500px) {
   .navbar a {
     margin-left: 15px; /* Reduce the left margin */
