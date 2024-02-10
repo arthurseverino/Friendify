@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "check": "npx eslint-config-prettier ./app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "heroku-postbuild": "cd ../frontend && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
