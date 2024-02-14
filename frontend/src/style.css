@@ -116,7 +116,7 @@ a:visited {
   font-size: 0.83rem;
   box-shadow: 0 -10px 10px -10px rgba(0, 0, 0, 0.7);
   color: black;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Footer End */
@@ -1109,6 +1109,7 @@ a:visited {
 
 /* Dont go crazy over this, I think 600px is perfect for all phones, this what TOP said */
 @media (max-width: 600px) {
+
   .navbar a {
     margin-left: 15px; /* Reduce the left margin */
   }
@@ -1143,11 +1144,7 @@ a:visited {
     width: 100%;
   }
   /* Does not work for iPhone Pro Max 14 which is 430 width, I think it's because of length */
-  .landing,
-  .login-container,
-  .signup-container {
-    height: 81vh;
-  }
+
   /* the vh is not constant on these pages so its a little weird */
   .users {
     min-height: 71vh;
