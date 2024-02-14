@@ -1,4 +1,4 @@
-Live:
+Live: https://friendify-afc27231acd7.herokuapp.com
 
 ## Screenshots
 
@@ -12,7 +12,7 @@ Friendify is a full-stack social media website created with the MERN stack. It's
 
 Friendify includes the following features:
 
-- User authetication
+- JWT authentication with Passport.js.
 - CRUD operations for posts and comments
 - Real-time feed of posts from friends
 - Ability to like posts and comments
@@ -20,19 +20,6 @@ Friendify includes the following features:
 - Responsive design
 
 ... and much more!
-
-- The API is written with a test-driven design.
-- Includes JWT authentication with Passport.js.
-
-## Getting Started
-
-To get started with Friendify, follow these steps:
-
-1. Clone the repository to your local machine.
-2. Run `npm install` to install the project dependencies.
-3. Rename .env.example file to .env and fill in the necessary environment variables.
-4. Run `npm run dev` to start the development server.
-5. Open http://localhost:3000 in your web browser to view the website.
 
 ## Dependencies
 
@@ -61,4 +48,3 @@ The website includes the following pages:
 - /friends: Displays a list of users including suggestions for users to follow.
 - /posts: Displays a list of all posts from all users.
 - /profile: Displays the user's profile page and a feed of the user's posts.
-

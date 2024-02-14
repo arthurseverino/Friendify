@@ -186,6 +186,7 @@ const Home = ({ userId, token, profilePicture }) => {
                   onChange={(e) => setPostImage(e.target.files[0])}
                   accept="image/jpeg, image/png, image/gif, image/jpg"
                 />
+
                 <button type="submit" className="post-button">
                   Post
                 </button>

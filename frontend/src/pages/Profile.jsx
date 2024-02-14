@@ -84,7 +84,7 @@ function Profile({ token, userId, setProfilePicture }) {
               className="update-profile-picture-button"
               onClick={() => {
                 if (user.username === 'Visitor') {
-                  alert(`You can't edit the visitor's profile picture`);
+                  alert(`Sorry, you can't edit the visitor account's profile picture!`);
                 } else {
                   setIsModalOpen(true);
                 }
