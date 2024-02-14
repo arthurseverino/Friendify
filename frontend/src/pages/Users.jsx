@@ -50,7 +50,7 @@ const Users = ({ token, currentUserId }) => {
 
   const renderButton = (user) => {
     if (user._id === currentUserId) {
-      return <p>(Current User)</p>;
+      return <p className= "current-user">(Current User)</p>;
     } else if (user.isFollowing) {
       return <button className = "users-follow" disabled>Following</button>;
     }

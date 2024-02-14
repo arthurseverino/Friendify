@@ -1,11 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const SignupForm = () => {
+const SignupForm = ({ token, userId }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      navigate(`/api/users/${userId}/posts`);
+    }
+  }, [token, userId, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

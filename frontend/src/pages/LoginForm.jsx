@@ -1,20 +1,35 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
+const LoginForm = ({
+  setToken,
+  setUserId,
+  setProfilePicture,
+  token,
+  userId,
+}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (token) {
+      navigate(`/api/users/${userId}/posts`);
+    }
+  }, [token, userId, navigate]);
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_API_URL}/api/users/login`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         // The response was successful
@@ -84,7 +99,7 @@ const LoginForm = ({ setToken, setUserId, setProfilePicture }) => {
           </ul>
         )}
       </form>
-      <Link to = "/"> Back to Home </Link>
+      <Link to="/"> Back to Home </Link>
     </div>
   );
 };

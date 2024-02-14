@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect} from 'react';
 
 // first page the user sees, should be beautiful :)
 const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {

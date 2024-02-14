@@ -28,7 +28,9 @@ const Navbar = ({
         <Link to={`/api/users/${userId}/posts`}>
           <h1 className='friendify-text'>Friendify</h1>
         </Link>
-        <Link to={`/api/users/${userId}/posts`} className="tooltip-container">
+      </div>
+      <div className="navbar-right">
+      <Link to={`/api/users/${userId}/posts`} className="tooltip-container">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 576 512"
@@ -64,8 +66,6 @@ const Navbar = ({
           </svg>
           <span className="tooltip">Posts</span>
         </Link>
-      </div>
-      <div className="navbar-right">
         <Link to={`/api/users/${userId}`} className="tooltip-container">
           <img
             className="profilePictureNavbar"

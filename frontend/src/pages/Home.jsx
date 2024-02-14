@@ -123,7 +123,7 @@ const Home = ({ userId, token, profilePicture }) => {
 
   return (
     <div className="home">
-      <h1>
+      <h1 className="welcome-text">
         {isLoading ? (
           <div className="loader"></div>
         ) : (
@@ -184,6 +184,7 @@ const Home = ({ userId, token, profilePicture }) => {
                   type="file"
                   className="file-input"
                   onChange={(e) => setPostImage(e.target.files[0])}
+                  accept="image/jpeg, image/png, image/gif, image/jpg"
                 />
                 <button type="submit" className="post-button">
                   Post
@@ -204,8 +205,10 @@ const Home = ({ userId, token, profilePicture }) => {
           ))
         ) : (
           <div>
-            <p>No posts from you or your friends yet... </p>
-            Follow a friend or create a post to see it here!
+            <p className="no-posts1">
+              No posts from you or your friends yet...{' '}
+            </p>
+            <p className="no-posts2">Check out:</p>
             <p> </p>
             <Link to={`/api/users/${userId}/posts/allPosts`}>
               <button className="all-posts-button">All Posts</button>

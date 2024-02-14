@@ -33,12 +33,10 @@ function App() {
       : localStorage.getItem('userId')
   );
 
-
   useEffect(() => {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
     localStorage.setItem('profilePicture', profilePicture);
-
   }, [token, userId, profilePicture]);
 
   return (
@@ -81,7 +79,10 @@ function App() {
               />
             }
           />
-          <Route path="/api/users/signup" element={<SignupForm />} />
+          <Route
+            path="/api/users/signup"
+            element={<SignupForm userId={userId} token={token} />}
+          />
           <Route
             path="/api/users/login"
             element={
@@ -89,6 +90,8 @@ function App() {
                 setToken={setToken}
                 setUserId={setUserId}
                 setProfilePicture={setProfilePicture}
+                userId={userId}
+                token={token}
               />
             }
           />

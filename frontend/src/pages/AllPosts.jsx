@@ -57,7 +57,7 @@ function AllPosts({ userId, token }) {
                 post={post}
               />
             ))
-          : 'No posts yet! Create a post or follow someone to see it here.'}
+          : <div className="loader"></div>}
         {hasMorePosts && posts.length >= 10 && (
           <button
             className="load-more-posts"

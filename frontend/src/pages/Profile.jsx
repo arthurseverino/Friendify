@@ -11,9 +11,12 @@ function Profile({ token, userId, setProfilePicture }) {
 
   const fetchUserAndPosts = async () => {
     setIsLoading(true);
-    const userResponse = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const userResponse = await fetch(
+      `${import.meta.env.VITE_APP_API_URL}/api/users/${id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     const userData = await userResponse.json();
     setUser(userData);
     setPosts(userData.posts);
@@ -41,11 +44,14 @@ function Profile({ token, userId, setProfilePicture }) {
     const formData = new FormData();
     formData.append('profilePicture', file);
 
-    const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/users/${id}`, {
-      method: 'PATCH',
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_APP_API_URL}/api/users/${id}`,
+      {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      }
+    );
 
     const data = await response.json();
     setProfilePicture(data.profilePicture);
@@ -69,7 +75,7 @@ function Profile({ token, userId, setProfilePicture }) {
             src={user.profilePicture}
             alt="Profile Picture"
           />
-          <h1>
+          <h1 className="my-profile">
             {' '}
             {id === userId ? 'My Profile' : `${user.username}'s Profile`}{' '}
           </h1>
@@ -111,7 +117,7 @@ function Profile({ token, userId, setProfilePicture }) {
                   className="file-input-profile"
                   type="file"
                   name="profilePicture"
-                  accept="image/*"
+                  accept="image/jpeg, image/png, image/gif, image/jpg"
                 />
                 <button type="submit" className="post-button-profile">
                   Update
@@ -133,12 +139,12 @@ function Profile({ token, userId, setProfilePicture }) {
             ))
           ) : (
             <div>
-              <p>
+              <p className="no-posts1">
                 {id === userId
                   ? 'You have no posts, create one to see it here!'
                   : 'No posts from this user yet!'}
               </p>
-              <p> Check out: </p>
+              <p className="no-posts2"> Check out: </p>
               <Link to={`/api/users/${userId}/posts/allPosts`}>
                 <button className="all-posts-button">All Posts</button>
               </Link>
