@@ -44,6 +44,10 @@ a:visited {
   text-decoration: none;
 }
 
+.navbar a:hover {
+  filter: brightness(90%);
+}
+
 .profilePictureNavbar {
   width: 40px;
   height: 40px;
@@ -61,7 +65,7 @@ a:visited {
 .logout-button {
   background-color: #dc3545;
   color: #ffffff;
-  padding: 10px 20px;
+  padding: 10px 15px;
   margin-left: 20px;
   margin-right: 20px;
   border: none;
@@ -183,11 +187,19 @@ a:visited {
   animation: 2s ease-out 1s 1 fadeIn forwards;
 }
 
+.signup-link:hover {
+  background-color: #218838; /* Darker green when hovered */
+}
+
 .login-link {
   background-color: #007bff;
   width: 200px;
   text-align: center;
   animation: 2s ease-out 2s 1 fadeIn forwards;
+}
+
+.login-link:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
 }
 
 .guest-link {
@@ -198,22 +210,20 @@ a:visited {
   animation: 2s ease-out 3s 1 fadeIn forwards;
 }
 
+.guest-link:hover {
+  background-color: #00acee; /* Darker blue when hovered */
+}
+
 .link-section a,
 .link-section button {
   display: inline-block;
   margin: 10px 0;
   padding: 10px 20px;
   color: white;
-  /* background-color: #34495e; */
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 15px;
   text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.link-section a:hover,
-.link-section button:hover {
-  background-color: #2c3e50;
+  transition: background-color 0.5s ease;
 }
 
 .title span {
@@ -252,7 +262,6 @@ a:visited {
 
 .your-feed {
   color: black;
-
 }
 
 .no-posts1,
@@ -286,7 +295,7 @@ a:visited {
   width: 600px;
   padding: 10px 15px;
   border: 1px solid black;
-  border-radius: 20px;
+  border-radius: 15px;
   background-color: #f8f8f8;
   color: #333;
   cursor: pointer;
@@ -312,10 +321,14 @@ a:visited {
   font-size: 1em;
   transition: background-color 0.3s ease;
 }
-.all-users-button{
-  margin-left: 10px;
+
+.load-more-posts-button:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
 }
 
+.all-users-button {
+  margin-left: 10px;
+}
 
 .all-posts-button:hover,
 .all-users-button:hover,
@@ -338,7 +351,7 @@ a:visited {
   width: 100%;
   border: none;
   background-color: #f8f8f8;
-  border-radius: 8px;
+  border-radius: 15px;
   padding: 20px;
   z-index: 1000;
 }
@@ -359,13 +372,15 @@ a:visited {
   border: none;
   font-size: 1.3rem;
   cursor: pointer;
-  color: #333; /* Dark grey color */
+  color: black; /* Dark grey color */
+  font-weight: 600;
+
 }
 
 .post-textarea {
   margin-top: 20px;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 15px;
   resize: none;
   font-size: 0.75rem;
 }
@@ -404,6 +419,7 @@ a:visited {
   border-radius: 16px;
   cursor: pointer;
   font-size: 1em;
+  transition: background-color 0.3s ease;
 }
 
 .post-button:hover {
@@ -426,7 +442,7 @@ a:visited {
 
 .post {
   border: 2px solid black;
-  border-radius: 40px;
+  border-radius: 20px;
   margin-top: 20px;
   padding: 20px;
 }
@@ -455,7 +471,7 @@ a:visited {
   position: relative;
   font-weight: 600;
   top: -10px;
-  color:black;
+  color: black;
 }
 
 .post-body {
@@ -472,6 +488,7 @@ a:visited {
   height: 100%;
   margin-bottom: 20px;
   object-fit: contain;
+  border-radius: 20px;
 }
 
 .post-footer {
@@ -484,8 +501,7 @@ a:visited {
   flex-direction: column;
   align-items: flex-start;
   margin-top: 10px;
-
-  border-radius: 20px;
+  border-radius: 15px;
   padding: 10px;
 }
 
@@ -502,6 +518,7 @@ a:visited {
   justify-content: center;
   gap: 5px;
   margin-left: 5px;
+  font-weight: 700;
 }
 
 .post-comment-button-above svg {
@@ -514,6 +531,11 @@ a:visited {
   margin-left: 5px;
   align-self: center;
   cursor: pointer;
+  border-radius: 5px;
+}
+
+.post-comment-button-below:hover {
+  filter: brightness(90%);
 }
 
 .comment a {
@@ -523,7 +545,6 @@ a:visited {
 }
 
 .comment p {
-  margin-top: 10px;
   margin-left: 50px;
 }
 
@@ -537,7 +558,7 @@ a:visited {
 .comment-author {
   margin-left: 9px;
   font-weight: 600;
-  color:black;
+  color: black;
 }
 
 .comment-text {
@@ -549,6 +570,7 @@ a:visited {
 
 .comment-form {
   border-radius: 20px;
+  margin-top: 20px;
 }
 
 .likes-comments {
@@ -578,6 +600,7 @@ a:visited {
   gap: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
+  font-weight: 700;
 }
 
 .post-like-button svg,
@@ -593,21 +616,12 @@ a:visited {
   margin-top: 20px;
   margin-bottom: 5px;
   color: black;
-  font-weight: 450;
+  font-weight: 500;
 }
 
 .post-stats p {
   margin-right: 20px;
 }
-
-/* Uneccessary? 
-.likes,
-.comments {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-*/
 
 .post-actions {
   display: flex;
@@ -622,7 +636,7 @@ a:visited {
   padding: 5px 10px;
   width: 250px;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   background-color: #f0f0f0;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -630,15 +644,11 @@ a:visited {
 
 .likes button:hover,
 .comments button:hover {
-  background-color: #e0e0f0;
+  background-color: #d0d0e0;
 }
 
 .likes .liked {
   color: #007bff;
-}
-
-.comment-form {
-  margin-top: 20px;
 }
 
 .comment-form input {
@@ -646,7 +656,7 @@ a:visited {
   padding: 10px;
   margin-top: 20px;
   border: 1px solid black;
-  border-radius: 4px;
+  border-radius: 15px;
 }
 
 /* Post Details End  */
@@ -682,7 +692,7 @@ a:visited {
   margin-bottom: 20px;
   padding: 10px;
   border: 2px solid black;
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
 .users-link {
@@ -702,6 +712,10 @@ a:visited {
   transition: background-color 0.55s ease; /* Transition for hover effect */
 }
 
+.users-follow:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
+}
+
 .users-follow:disabled {
   background-color: #0000cd;
   color: white;
@@ -717,7 +731,7 @@ a:visited {
 .username {
   font-weight: 600;
   color: black;
-  margin-top:12px;
+  margin-top: 12px;
 }
 
 .current-user {
@@ -747,8 +761,8 @@ a:visited {
   background: linear-gradient(135deg, #71b7e6, #9b59b6);
 }
 
-.allPostsText{
-  color:black;
+.allPostsText {
+  color: black;
 }
 
 .posts-list {
@@ -765,6 +779,11 @@ a:visited {
   cursor: pointer;
   width: 100%;
   margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.load-more-posts:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
 }
 
 /* All Posts End  */
@@ -802,7 +821,8 @@ a:visited {
 }
 
 .profile-content {
-  max-width: 900px;
+  width:100%;
+  max-width: 800px;
   padding: 20px;
 }
 
@@ -816,7 +836,7 @@ a:visited {
   width: 100%;
   border: none;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 15px;
   padding: 20px;
   border: 1px solid black;
   z-index: 2;
@@ -837,6 +857,7 @@ a:visited {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid black;
+  padding-bottom: 10px;
 }
 
 .upload-new-profile-picture {
@@ -855,7 +876,8 @@ a:visited {
   border: none;
   font-size: 1.3rem;
   cursor: pointer;
-  color: #333; /* Dark grey color */
+  color: black; /* Dark grey color */
+  font-weight: 700;
 }
 
 .file-input-profile {
@@ -866,6 +888,7 @@ a:visited {
   color: #333;
   cursor: pointer;
   font-size: 0.8em;
+  transition: background-color 0.3s ease;
 }
 
 .file-input-profile:hover {
@@ -879,7 +902,12 @@ a:visited {
   border: none;
   border-radius: 16px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1em; 
+  transition: background-color 0.3s ease;
+}
+
+.post-button-profile:hover {
+  filter: brightness(90%);
 }
 
 /* Profile Page End  */
@@ -897,7 +925,7 @@ a:visited {
   color: #fff;
   text-align: center;
   padding: 5px;
-  border-radius: 6px;
+  border-radius: 10px;
   position: absolute;
   z-index: 1;
   top: 100%; /* Position the tooltip directly below the link */
@@ -947,7 +975,7 @@ a:visited {
   flex-direction: column;
   padding: 20px;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 15px;
   background-color: lavender;
   color: black;
   margin-bottom: 20px;
@@ -974,6 +1002,11 @@ a:visited {
   border-radius: 15px;
   cursor: pointer;
   font-size: 1.2em;
+  transition: background-color 0.5s ease;
+}
+
+.signup-form button:hover {
+  background-color: #218838; /* Darker green when hovered */
 }
 
 /* Sign up End */
@@ -1042,6 +1075,11 @@ a:visited {
   width: 294px;
   height: 54px;
   font-size: 1.2em;
+  transition: background-color 0.5s ease;
+}
+
+.login-form button:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
 }
 
 /* Login Page End  */
@@ -1081,9 +1119,9 @@ a:visited {
   }
 
   .logout-button {
-    padding: 5px 5px; /* Reduce the padding */
-    margin-left: 10px; /* Reduce the left margin */
-    font-size: 0.75em; /* Reduce the font size */
+    padding: 5px 5px; 
+    margin-left: 10px; 
+    font-size: 0.75em; 
   }
 
   .modalProfile {
