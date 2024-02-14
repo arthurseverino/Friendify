@@ -1107,6 +1107,10 @@ a:visited {
 }
 
 @media (max-width: 600px) {
+  .footer {
+    font-size: 12px;
+  }
+
   .navbar a {
     margin-left: 15px; /* Reduce the left margin */
   }
