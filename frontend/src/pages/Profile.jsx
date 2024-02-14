@@ -33,8 +33,8 @@ function Profile({ token, userId, setProfilePicture }) {
       alert('No file selected!');
       return;
     }
-    if (file.size > 2000000) {
-      // 2MB
+    if (file.size > 10000000) {
+      // 10MB
       alert('File is too big!');
       return;
     }

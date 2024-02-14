@@ -1013,9 +1013,13 @@ a:visited {
   }
 }
 
-/* Dont go crazy over this, it's a lot of specfic use cases */
-/* I think 600px is perfect for all phones, this what TOP said */ 
-@media (max-width: 500px) {
+/* Styles for iPhone 12, 12 Pro, 13, 13 Pro, and 14 series 
+@media (min-width: 390px) {
+   Your styles here 
+} */ 
+
+/* Dont go crazy over this, I think 600px is perfect for all phones, this what TOP said */ 
+@media (max-width: 600px) {
   .navbar a {
     margin-left: 15px; /* Reduce the left margin */
   }

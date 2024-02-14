@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 // pages
@@ -32,11 +32,18 @@ function App() {
       ? null
       : localStorage.getItem('userId')
   );
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
     localStorage.setItem('profilePicture', profilePicture);
-  }, [token, userId, profilePicture]);
+
+    if (token) {
+      navigate(`/api/users/${userId}/posts`);
+    }
+  }, [token, userId, profilePicture], navigate);
 
   return (
     <div className="App">
