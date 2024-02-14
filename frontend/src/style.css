@@ -1108,7 +1108,7 @@ a:visited {
 
 @media (max-width: 600px) {
   .footer {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .navbar a {
@@ -1116,7 +1116,7 @@ a:visited {
   }
 
   .profilePictureNavbar {
-    width: 30px; /* Reduce the size of the profile picture */
+    width: 30px; 
     height: 30px;
   }
 
