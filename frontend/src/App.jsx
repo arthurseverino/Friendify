@@ -19,7 +19,7 @@ function App() {
     localStorage.getItem('profilePicture') === 'null'
       ? null
       : localStorage.getItem('profilePicture') ||
-      `${import.meta.env.VITE_APP_API_URL}/public/profilePic.jpg`
+          `${import.meta.env.VITE_APP_API_URL}/public/profilePic.jpg`
   );
 
   const [token, setToken] = useState(
@@ -43,7 +43,7 @@ function App() {
     if (token) {
       navigate(`/api/users/${userId}/posts`);
     }
-  }, [token, userId, profilePicture], navigate);
+  }, [token, userId, profilePicture, navigate]);
 
   return (
     <div className="App">
