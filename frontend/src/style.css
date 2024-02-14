@@ -113,10 +113,10 @@ a:visited {
   background: linear-gradient(135deg, #71b7e6, #9b59b6);
   margin-top: auto;
   gap: 15px;
-  font-size: 0.83rem;
+  font-size: 15px;
   box-shadow: 0 -10px 10px -10px rgba(0, 0, 0, 0.7);
   color: black;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* Footer End */
@@ -1143,10 +1143,5 @@ a:visited {
     width: 120px;
     width: 100%;
   }
-  /* Does not work for iPhone Pro Max 14 which is 430 width, I think it's because of length */
 
-  /* the vh is not constant on these pages so its a little weird */
-  .users {
-    min-height: 71vh;
-  }
 }
