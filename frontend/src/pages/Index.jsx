@@ -1,8 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // first page the user sees, should be beautiful :)
-const Index = ({ setToken, setUserId, setProfilePicture }) => {
+const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      navigate(`/api/users/${userId}/posts`);
+    }
+  }, [token, userId, navigate]);
 
   //this makes a post request to api/users/login which gives the user a token
   const handleGuestLogin = async () => {
