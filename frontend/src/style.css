@@ -1106,10 +1106,10 @@ a:visited {
   font-weight: 500;
 }
 
-/* iPhone Screenshots are too big on desktop so we add this */ 
+/* iPhone Screenshots are too big height-wise on desktop so we add this */ 
 @media (min-width: 601px) {
   .postImage {
-    width: 100%;
+    width: auto;
     height: 100%;
   }
 }
