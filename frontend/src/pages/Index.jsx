@@ -47,7 +47,7 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
       <div className="text-section">
         <h2 className="title">
           {Array.from('Friendify').map((char, index) => (
-            <span key={index} style={{ animationDelay: `${index * 0.35}s` }}>
+            <span key={index} style={{ animationDelay: `${index * 0.3}s` }}>
               {char}
             </span>
           ))}
