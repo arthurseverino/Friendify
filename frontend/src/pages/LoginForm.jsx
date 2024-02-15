@@ -32,7 +32,6 @@ const LoginForm = ({
       );
       const data = await response.json();
       if (response.ok) {
-        // The response was successful
         setUsername('');
         setPassword('');
         setError(null);

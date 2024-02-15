@@ -13,6 +13,7 @@ const Home = ({ userId, token, profilePicture }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
   const postRef = useRef(null);
+  const fileInputRef = useRef();
 
   const scrollPosition = useRef(window.pageYOffset);
 
@@ -46,7 +47,7 @@ const Home = ({ userId, token, profilePicture }) => {
         if (!postsResponse.ok) {
           setError('Failed to fetch posts');
           console.error('Failed to fetch posts');
-          setIsLoading(false); // Add this line
+          setIsLoading(false); 
           return;
         }
         const postsData = await postsResponse.json();
@@ -62,12 +63,12 @@ const Home = ({ userId, token, profilePicture }) => {
       } catch (err) {
         console.error('Ultimately Failed in the try/catch');
       }
-      setIsLoading(false); // Add this line
+      setIsLoading(false); 
     };
     fetchUserAndPosts();
   }, [page]);
 
-  // New useEffect for closing the modal
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isDialogOpen && !event.target.closest('.dialog-content')) {
@@ -112,12 +113,15 @@ const Home = ({ userId, token, profilePicture }) => {
       setPostImage(null);
       setIsDialogOpen(false);
     }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   useEffect(() => {
     if (isLoadMoreClicked) {
       window.scrollTo(0, scrollPosition.current);
-      setIsLoadMoreClicked(false); // Reset isLoadMoreClicked to false
+      setIsLoadMoreClicked(false); 
     }
   }, [posts, isLoadMoreClicked]);
 
@@ -183,6 +187,7 @@ const Home = ({ userId, token, profilePicture }) => {
                 <input
                   type="file"
                   className="file-input"
+                  ref={fileInputRef}
                   onChange={(e) => setPostImage(e.target.files[0])}
                   accept="image/jpeg, image/png, image/gif, image/jpg"
                 />
@@ -226,7 +231,7 @@ const Home = ({ userId, token, profilePicture }) => {
           onClick={() => {
             scrollPosition.current = window.pageYOffset;
             setPage(page + 1);
-            setIsLoadMoreClicked(true); // Set isLoadMoreClicked to true
+            setIsLoadMoreClicked(true); 
           }}
           disabled={isLoading}>
           {isLoading ? <div className="loader"></div> : 'Load More Posts'}

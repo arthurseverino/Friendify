@@ -32,7 +32,6 @@ const postSchema = new Schema(
   { timestamps: true }
 );
 
-//maybe i should use this url to make code cleaner
 postSchema.virtual('url').get(function () {
   return '/posts/' + this._id;
 });

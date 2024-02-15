@@ -60,7 +60,7 @@ const createPost = asyncHandler(async (req, res, next) => {
   res.status(200).json(populatedPost);
 });
 
-// In this code, likePost finds the post with the provided ID and adds the user's ID to the likes array if it's not already there, or removes it if it is. addComment creates a new comment with the provided text and the user's ID as the author, saves it, finds the post with the provided ID, and adds the comment's ID to the comments array.
+// In this code, likePost finds the post with the provided ID and adds the user's ID to the likes array if it's not already there, or removes it if it is.
 
 const likePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
@@ -80,6 +80,8 @@ const likePost = asyncHandler(async (req, res) => {
     .populate('comments.author', 'username profilePicture');
   res.status(200).json({ post: updatedPost });
 });
+
+// addComment creates a new comment with the provided text and the user's ID as the author, saves it, finds the post with the provided ID, and adds the comment's ID to the comments array.
 
 const addComment = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);

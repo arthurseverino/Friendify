@@ -31,16 +31,16 @@ function Profile({ token, userId, setProfilePicture }) {
     event.preventDefault();
     const file = event.target.profilePicture.files[0];
 
-    // Check if a file was selected
     if (!file) {
       alert('No file selected!');
       return;
     }
-    if (file.size > 10000000) {
-      // 10MB
+    // 50MB
+    if (file.size > 50000000) {
       alert('File is too big!');
       return;
     }
+
     const formData = new FormData();
     formData.append('profilePicture', file);
 
@@ -84,7 +84,9 @@ function Profile({ token, userId, setProfilePicture }) {
               className="update-profile-picture-button"
               onClick={() => {
                 if (user.username === 'Visitor') {
-                  alert(`Sorry, you can't edit the visitor account's profile picture!`);
+                  alert(
+                    `Sorry, you can't edit the visitor account's profile picture!`
+                  );
                 } else {
                   setIsModalOpen(true);
                 }

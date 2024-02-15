@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect} from 'react';
 
-// first page the user sees, should be beautiful :)
 const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
   const navigate = useNavigate();
 
@@ -11,7 +10,6 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
     }
   }, [token, userId, navigate]);
 
-  //this makes a post request to api/users/login which gives the user a token
   const handleGuestLogin = async () => {
     const response = await fetch(
       `${import.meta.env.VITE_APP_API_URL}/api/users/login`,
@@ -29,7 +27,6 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
 
     if (response.ok) {
       const data = await response.json();
-      // Save the token and user data in your application state
       setToken(data.token);
       setUserId(data.user._id);
       if (data.user.profilePicture) {
@@ -41,7 +38,6 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
       }
       navigate(`/api/users/${data.user._id}/posts`);
     } else {
-      // Handle error
       console.error('Failed to log in as guest');
     }
   };
@@ -51,7 +47,7 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
       <div className="text-section">
         <h2 className="title">
           {Array.from('Friendify').map((char, index) => (
-            <span key={index} style={{ animationDelay: `${index * 0.3}s` }}>
+            <span key={index} style={{ animationDelay: `${index * 0.35}s` }}>
               {char}
             </span>
           ))}

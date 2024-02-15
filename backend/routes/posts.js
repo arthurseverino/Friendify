@@ -12,11 +12,9 @@ const {
 } = require('../controllers/postController');
 
 // Get all your posts and whatever users you are following (Home Page)
-// the full route here is /api/users/:userId/posts
 router.get('/', getPosts);
 
-// GET all posts in the database
-// the full route here is /api/users/:userId/posts/allPosts
+// Get all posts in the database
 router.get(
   '/allPosts',
   passport.authenticate('jwt', { session: false }),

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-// You can use a state for the entire post and update it when the like button is clicked or a comment is added.
 const PostDetails = ({ post: initialPost, userId, token }) => {
   const [post, setPost] = useState(initialPost);
   const [comment, setComment] = useState({});

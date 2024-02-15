@@ -43,6 +43,5 @@ module.exports = {
     'import/extensions': 'warn',
     'no-undef': 'off',
     'no-unused-vars': 'off',
-    // 'no-console': 'error',
   },
 };

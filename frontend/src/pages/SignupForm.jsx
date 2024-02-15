@@ -29,7 +29,6 @@ const SignupForm = ({ token, userId }) => {
         setUsername('');
         setPassword('');
         setError(null);
-        console.log('User created successfully: ', data.username);
         navigate('/api/users/login');
       } else {
         setError(

@@ -14,8 +14,7 @@ const {
   followUser,
 } = require('../controllers/userController');
 
-// GET all users, a list of all users
-// shows all users and buttons for following other users
+// GET all users
 router.get('/', passport.authenticate('jwt', { session: false }), getUsers);
 
 // GET a single user, AKA profile page

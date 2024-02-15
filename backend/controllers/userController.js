@@ -49,9 +49,8 @@ const getUser = asyncHandler(async (req, res) => {
 
 // create a new user
 const createUser = [
-  // validation and sanitization middleware
   check('username')
-    .trim() // remove leading and trailing whitespace
+    .trim() 
     .notEmpty()
     .withMessage('Username is required')
     .isLength({ min: 3 })
@@ -86,9 +85,8 @@ const createUser = [
 
 // login a user
 const loginUser = [
-  // validation and sanitization middleware
   check('username')
-    .trim() // remove leading and trailing whitespace
+    .trim() 
     .notEmpty()
     .withMessage('Username is required'),
   check('password').notEmpty().withMessage('Password is required'),
