@@ -1,14 +1,10 @@
 Live: https://friendify-afc27231acd7.herokuapp.com
 
-## Screenshots
-
-![Screenshot of the Landing Page](./frontend/src/images/Landing-page.png)
-![Screenshot of the Home Page](./frontend/src/images/Home-page.png)
-![Screenshot of the Profile Page](./frontend/src/images/Profile-Page.png)
-
 # Friendify
 
 Friendify is a full-stack social media website created with the MERN stack. It's designed to help people stay connected with their friends, share updates, and discover new content.
+
+![Screenshot of the Landing Page](./frontend/src/images/Landing-page.png)
 
 ## Features
 
