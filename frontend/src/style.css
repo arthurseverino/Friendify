@@ -1109,15 +1109,15 @@ a:visited {
 
 @media (max-width: 600px) {
   .footer {
-    font-size: 12px;
+    font-size: 15px;
   }
 
   .mongo,
   .react,
   .node,
   .github {
-    width: 18px;
-    height: 18px;
+    width: 25px;
+    height: 25px;
   }
 
   .navbar a {
