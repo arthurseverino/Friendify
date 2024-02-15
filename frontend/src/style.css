@@ -423,7 +423,7 @@ a:visited {
 /* post details Start */
 
 .post {
-  border: 2px solid black;
+  box-shadow: black 0px 0px 10px 0px;
   border-radius: 20px;
   margin-top: 20px;
   padding: 20px;
@@ -460,7 +460,6 @@ a:visited {
   margin-bottom: 20px;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  word-break: break-all;
   color: black;
   font-weight: 400;
 }
@@ -673,7 +672,7 @@ a:visited {
   justify-content: space-between;
   margin-bottom: 20px;
   padding: 10px;
-  border: 2px solid black;
+  box-shadow: black 0px 0px 10px 0px;
   border-radius: 15px;
 }
 
