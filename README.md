@@ -2,7 +2,9 @@ Live: https://friendify-afc27231acd7.herokuapp.com
 
 ## Screenshots
 
-![Screenshot of the Home Page](./frontend/src/images/Landing-page.png)
+![Screenshot of the Landing Page](./frontend/src/images/Landing-page.png)
+![Screenshot of the Home Page](./frontend/src/images/Home-page.png)
+![Screenshot of the Profile Page](./frontend/src/images/Profile-Page.png)
 
 # Friendify
 
