@@ -277,7 +277,7 @@ a:visited {
   display: flex;
   width: 600px;
   padding: 10px 15px;
-  border: 1px solid black;
+  border: 2px solid black;
   border-radius: 15px;
   background-color: #f8f8f8;
   color: #333;
@@ -365,6 +365,8 @@ a:visited {
   border-radius: 15px;
   resize: none;
   font-size: 0.75rem;
+  border: 2px solid black;
+
 }
 
 .form-footer {
@@ -377,8 +379,8 @@ a:visited {
 .file-input {
   width: 80%;
   padding: 10px;
-  border: 1px solid black;
   border-radius: 16px;
+  border: 2px solid black;
   color: #333;
   cursor: pointer;
   font-size: 0.8em;
@@ -955,7 +957,7 @@ a:visited {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  border: 1px solid black;
+  box-shadow: black 0px 0px 10px 0px;
   border-radius: 15px;
   background-color: lavender;
   color: black;
@@ -1022,7 +1024,7 @@ a:visited {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  border: 1px solid black;
+  box-shadow: black 0px 0px 10px 0px;
   border-radius: 15px;
   background-color: lavender;
   color: black;
