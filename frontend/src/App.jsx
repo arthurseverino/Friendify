@@ -15,6 +15,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   const [profilePicture, setProfilePicture] = useState(
     localStorage.getItem('profilePicture') === 'null'
       ? null
@@ -37,7 +39,33 @@ function App() {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
     localStorage.setItem('profilePicture', profilePicture);
+    // Define an async function inside the effect
+    const wakeUpServer = async () => {
+      try {
+        const response = await fetch('/');
+
+        if (response.ok) {
+          setIsLoading(false);
+        } else {
+          throw new Error('Server responded with an error');
+        }
+      } catch (error) {
+        setError(error.message); // Set the error state variable
+      }
+    };
+
+    // Call the async function
+    wakeUpServer();
   }, [token, userId, profilePicture]);
+
+  if (isLoading) {
+    return (
+      <div>
+        <p>Waking up the server, please wait a few seconds...</p>
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
