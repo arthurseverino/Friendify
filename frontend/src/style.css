@@ -1106,13 +1106,6 @@ a:visited {
   font-weight: 500;
 }
 
-/* iPhone Screenshots are too big height-wise on desktop so we add this */ 
-@media (min-width: 601px) {
-  .postImage {
-    object-fit: cover;
-  }
-}
-
 @media (max-width: 600px) {
   .footer {
     font-size: 15px;

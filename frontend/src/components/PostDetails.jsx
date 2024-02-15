@@ -152,7 +152,6 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 576 512"
-              fill="none"
               width="23.5"
               height="23.5">
               <path
