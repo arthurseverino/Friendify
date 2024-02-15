@@ -472,7 +472,6 @@ a:visited {
   /*
   height: 100%;*/
   height: auto;
-  max-height: 800px;
   margin-bottom: 20px;
   object-fit: contain;
   border-radius: 20px;
