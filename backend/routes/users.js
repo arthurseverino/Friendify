@@ -3,7 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const postRoutes = require('./posts');
 const multer = require('multer');
-const upload = multer({ dest: 'public/' });
+const upload = multer();
 const router = express.Router();
 const {
   getUsers,

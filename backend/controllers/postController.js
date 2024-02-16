@@ -1,7 +1,18 @@
 const Post = require('../models/postModel');
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
-const multer = require('multer');
+const AWS = require('aws-sdk');
+
+// Configure AWS with your Bucketeer credentials.
+const { BUCKETEER_AWS_ACCESS_KEY_ID, BUCKETEER_AWS_SECRET_ACCESS_KEY, BUCKETEER_BUCKET_NAME } = process.env;
+
+AWS.config.update({
+  accessKeyId: BUCKETEER_AWS_ACCESS_KEY_ID,
+  secretAccessKey: BUCKETEER_AWS_SECRET_ACCESS_KEY,
+  region: 'us-east-1' // Bucketeer is always in this region
+});
+
+const s3 = new AWS.S3();
 
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
@@ -43,10 +54,33 @@ const getAllPosts = asyncHandler(async (req, res) => {
 // create a new post
 const createPost = asyncHandler(async (req, res, next) => {
   const { body, author } = req.body;
-  const image = req.file ? req.file.path : null;
+  const image = req.file ? req.file.buffer : null;
+
+  let location = null;
+
+  if (image) {
+    // Setting up S3 upload parameters
+    const params = {
+      Bucket: BUCKETEER_BUCKET_NAME,
+      Key: req.file.originalname, // File name you want to save as in S3
+      Body: image,
+      ACL: 'public-read',
+    };
+
+    // Uploading files to the bucket
+    try {
+      const { Location } = await s3.upload(params).promise();
+      console.log(`File uploaded successfully. ${Location}`);
+      location = Location;
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Error uploading file' });
+    }
+  }
+
   const newPost = await Post.create({
     body,
-    image,
+    image: location, // Save the S3 file URL in the database
     likes: [],
     comments: [],
     author,

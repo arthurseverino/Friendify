@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-require('dotenv').config();
+
 const userSchema = new Schema({
   username: {
     type: String,
@@ -29,10 +29,6 @@ const userSchema = new Schema({
       ref: 'User',
     },
   ],
-});
-
-userSchema.virtual('name').get(function () {
-  return this.first_name + ' ' + this.last_name;
 });
 
 module.exports = mongoose.model('User', userSchema);

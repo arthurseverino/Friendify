@@ -47,7 +47,7 @@ const Home = ({ userId, token, profilePicture }) => {
         if (!postsResponse.ok) {
           setError('Failed to fetch posts');
           console.error('Failed to fetch posts');
-          setIsLoading(false); 
+          setIsLoading(false);
           return;
         }
         const postsData = await postsResponse.json();
@@ -63,11 +63,10 @@ const Home = ({ userId, token, profilePicture }) => {
       } catch (err) {
         console.error('Ultimately Failed in the try/catch');
       }
-      setIsLoading(false); 
+      setIsLoading(false);
     };
     fetchUserAndPosts();
   }, [page]);
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -90,6 +89,11 @@ const Home = ({ userId, token, profilePicture }) => {
     formData.append('body', postRef.current.value);
     formData.append('author', userId);
     if (postImage) {
+      // 30MB
+      if (postImage.size > 30000000) {
+        alert('File is too big!');
+        return;
+      }
       formData.append('image', postImage);
     }
 
@@ -121,7 +125,7 @@ const Home = ({ userId, token, profilePicture }) => {
   useEffect(() => {
     if (isLoadMoreClicked) {
       window.scrollTo(0, scrollPosition.current);
-      setIsLoadMoreClicked(false); 
+      setIsLoadMoreClicked(false);
     }
   }, [posts, isLoadMoreClicked]);
 
@@ -231,7 +235,7 @@ const Home = ({ userId, token, profilePicture }) => {
           onClick={() => {
             scrollPosition.current = window.pageYOffset;
             setPage(page + 1);
-            setIsLoadMoreClicked(true); 
+            setIsLoadMoreClicked(true);
           }}
           disabled={isLoading}>
           {isLoading ? <div className="loader"></div> : 'Load More Posts'}

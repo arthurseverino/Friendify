@@ -5,7 +5,66 @@ const { check, validationResult } = require('express-validator');
 const Post = require('../models/postModel');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-const multer = require('multer');
+const AWS = require('aws-sdk');
+
+// Configure AWS with your Bucketeer credentials.
+const { BUCKETEER_AWS_ACCESS_KEY_ID, BUCKETEER_AWS_SECRET_ACCESS_KEY, BUCKETEER_BUCKET_NAME } = process.env;
+
+AWS.config.update({
+  accessKeyId: BUCKETEER_AWS_ACCESS_KEY_ID,
+  secretAccessKey: BUCKETEER_AWS_SECRET_ACCESS_KEY,
+  region: 'us-east-1' // Bucketeer is always in this region
+});
+
+const s3 = new AWS.S3();
+
+// you can update a user's profile picture and that's it 
+const updateUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'No such user' });
+  }
+
+  let location = null;
+
+  if (req.file) {
+    // Setting up S3 upload parameters
+    const params = {
+      Bucket: BUCKETEER_BUCKET_NAME,
+      Key: req.file.originalname, // File name you want to save as in S3
+      Body: req.file.buffer,
+      ACL: 'public-read',
+    };
+    
+    // Uploading files to the bucket
+    try {
+      const { Location } = await s3.upload(params).promise();
+      console.log(`File uploaded successfully. ${Location}`);
+      location = Location;
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Error uploading file' });
+    }
+  }
+
+  const user = await User.findOneAndUpdate(
+    { _id: id },
+    // req.body contains all the previous fields in the model
+    {
+      ...req.body,
+      profilePicture: location || req.body.profilePicture,
+    },
+    { new: true } // This option returns the updated document
+  );
+
+  if (!user) {
+    return res.status(400).json({ error: 'No such user' });
+  }
+
+  res.status(200).json(user);
+});
+
 
 // shows all users
 const getUsers = asyncHandler(async (req, res) => {
@@ -112,34 +171,6 @@ const loginUser = [
   }),
 ];
 
-// update a user, you can update your profile pic but thats it
-const updateUser = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'No such user' });
-  }
-
-  if (req.file) {
-    const baseUrl = req.protocol + '://' + req.get('host');
-    req.body.profilePicture = `${baseUrl}/public/${req.file.filename}`;
-  }
-
-  const user = await User.findOneAndUpdate(
-    { _id: id },
-    // req.body contains all the previous fields in the model
-    {
-      ...req.body,
-    },
-    { new: true } // This option returns the updated document
-  );
-
-  if (!user) {
-    return res.status(400).json({ error: 'No such user' });
-  }
-
-  res.status(200).json(user);
-});
 
 // In this code, the /:id/follow route receives the ID of the user to follow as a URL parameter. It finds the user with this ID and the current user in the database. If the current user is not already following the user, it adds the current user's ID to the user's followers array and the user's ID to the current user's following array. If the current user is already following the user, it sends a 403 Forbidden response.
 
