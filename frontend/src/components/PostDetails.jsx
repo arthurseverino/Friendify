@@ -73,11 +73,7 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
       </div>
       <p className="post-body">{post.body}</p>
       {post.image && (
-        <img
-          className="postImage"
-          src={post.image}
-          alt="Post Image"
-        />
+        <img className="postImage" src={post.image} alt="Post Image" />
       )}
       <div className="post-stats">
         <p>

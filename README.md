@@ -12,6 +12,7 @@ Friendify includes the following features:
 
 - JWT authentication with Passport.js.
 - CRUD operations for posts and comments
+- AWS cloud storage for user images
 - Real-time feed of posts from friends
 - Ability to like posts and comments
 - Log into the website as a visitor.
@@ -24,25 +25,24 @@ Friendify includes the following features:
 The following dependencies are used in this project:
 
 - react: JavaScript library for building user interfaces.
-- react-router-dom: Entry point to the DOM and route handler for React.
-- date-fns: DateTime helper.
-- express: Web framework for Node.js.
-- mongoose: Object modeling tool for MongoDB.
-- dotenv: Loads environment variables from a .env file.
-- express validator: Runs back-end validation for form data.
+- react-router-dom: Routing library for React.
+- aws-sdk: Handles AWS S3 Bucket file storage for user-uploaded images
+- express: Web application framework for Node.js.
+- mongoose: Object Data Modeling library for MongoDB.
+- bcryptjs: Handles Hashing passwords
+- express-validator: Runs back-end validation for form data.
 - passport: Authentication middleware for Node.js.
 - passport-jwt: Passport strategy for authenticating with JWT tokens.
 - jsonwebtoken: JSON Web Token implementation for Node.js.
 - multer: Handles multiform FormData.
 - cors: Handles CORS.
-- bcryptjs: Handles Hashing passwords
 
 ## Pages
 
 The website includes the following pages:
 
 - /: The index page, which displays login and sign-up forms.
-- /home: The homepage which includes a feed of posts from the user and their friends.
+- /home: The home page which includes a feed of posts from the user and their friends.
 - /friends: Displays a list of users including suggestions for users to follow.
 - /posts: Displays a list of all posts from all users.
 - /profile: Displays the user's profile page and a feed of the user's posts.
