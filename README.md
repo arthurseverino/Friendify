@@ -41,8 +41,8 @@ The following dependencies are used in this project:
 
 The website includes the following pages:
 
-- /: The index page, which displays login and sign-up forms.
-- /home: The home page which includes a feed of posts from the user and their friends.
+- /index: Displays login and sign-up forms.
+- /home: The home page includes a feed of posts from the user and their friends.
 - /friends: Displays a list of users including suggestions for users to follow.
 - /posts: Displays a list of all posts from all users.
 - /profile: Displays the user's profile page and a feed of the user's posts.
