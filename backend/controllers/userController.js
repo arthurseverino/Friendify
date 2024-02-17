@@ -8,17 +8,21 @@ const mongoose = require('mongoose');
 const AWS = require('aws-sdk');
 
 // Configure AWS with your Bucketeer credentials.
-const { BUCKETEER_AWS_ACCESS_KEY_ID, BUCKETEER_AWS_SECRET_ACCESS_KEY, BUCKETEER_BUCKET_NAME } = process.env;
+const {
+  BUCKETEER_AWS_ACCESS_KEY_ID,
+  BUCKETEER_AWS_SECRET_ACCESS_KEY,
+  BUCKETEER_BUCKET_NAME,
+} = process.env;
 
 AWS.config.update({
   accessKeyId: BUCKETEER_AWS_ACCESS_KEY_ID,
   secretAccessKey: BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1' // Bucketeer is always in this region
+  region: 'us-east-1', // Bucketeer is always in this region
 });
 
 const s3 = new AWS.S3();
 
-// you can update a user's profile picture and that's it 
+// you can update a user's profile picture and that's it
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -35,7 +39,7 @@ const updateUser = asyncHandler(async (req, res) => {
       Key: req.file.originalname, // File name you want to save as in S3
       Body: req.file.buffer,
     };
-    
+
     // Uploading files to the bucket
     try {
       const { Location } = await s3.upload(params).promise();
@@ -63,7 +67,6 @@ const updateUser = asyncHandler(async (req, res) => {
 
   res.status(200).json(user);
 });
-
 
 // shows all users
 const getUsers = asyncHandler(async (req, res) => {
@@ -108,7 +111,7 @@ const getUser = asyncHandler(async (req, res) => {
 // create a new user
 const createUser = [
   check('username')
-    .trim() 
+    .trim()
     .notEmpty()
     .withMessage('Username is required')
     .isLength({ min: 3 })
@@ -143,10 +146,7 @@ const createUser = [
 
 // login a user
 const loginUser = [
-  check('username')
-    .trim() 
-    .notEmpty()
-    .withMessage('Username is required'),
+  check('username').trim().notEmpty().withMessage('Username is required'),
   check('password').notEmpty().withMessage('Password is required'),
 
   asyncHandler(async (req, res) => {
@@ -169,7 +169,6 @@ const loginUser = [
     return res.status(200).json({ token, user });
   }),
 ];
-
 
 // In this code, the /:id/follow route receives the ID of the user to follow as a URL parameter. It finds the user with this ID and the current user in the database. If the current user is not already following the user, it adds the current user's ID to the user's followers array and the user's ID to the current user's following array. If the current user is already following the user, it sends a 403 Forbidden response.
 

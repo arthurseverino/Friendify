@@ -4,12 +4,16 @@ const User = require('../models/userModel');
 const AWS = require('aws-sdk');
 
 // Configure AWS with your Bucketeer credentials.
-const { BUCKETEER_AWS_ACCESS_KEY_ID, BUCKETEER_AWS_SECRET_ACCESS_KEY, BUCKETEER_BUCKET_NAME } = process.env;
+const {
+  BUCKETEER_AWS_ACCESS_KEY_ID,
+  BUCKETEER_AWS_SECRET_ACCESS_KEY,
+  BUCKETEER_BUCKET_NAME,
+} = process.env;
 
 AWS.config.update({
   accessKeyId: BUCKETEER_AWS_ACCESS_KEY_ID,
   secretAccessKey: BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1' // Bucketeer is always in this region
+  region: 'us-east-1', // Bucketeer is always in this region
 });
 
 const s3 = new AWS.S3();
@@ -135,7 +139,6 @@ const addComment = asyncHandler(async (req, res) => {
     .populate('comments.author', 'username profilePicture');
   res.status(200).json({ post: updatedPost });
 });
-
 
 module.exports = {
   getPosts,
