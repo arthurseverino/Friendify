@@ -75,7 +75,7 @@ const PostDetails = ({ post: initialPost, userId, token }) => {
       {post.image && (
         <img
           className="postImage"
-          src={`${import.meta.env.VITE_APP_API_URL}/${post.image}`}
+          src={post.image}
           alt="Post Image"
         />
       )}
