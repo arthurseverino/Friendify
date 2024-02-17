@@ -38,6 +38,7 @@ const updateUser = asyncHandler(async (req, res) => {
       Bucket: BUCKETEER_BUCKET_NAME,
       Key: req.file.originalname, // File name you want to save as in S3
       Body: req.file.buffer,
+      ACL: 'public-read',
     };
 
     // Uploading files to the bucket
