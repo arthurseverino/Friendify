@@ -751,6 +751,7 @@ a:visited {
 .posts-list {
   max-width: 800px;
   padding: 20px;
+  width:100%;
 }
 
 .load-more-posts {
