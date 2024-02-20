@@ -7,7 +7,8 @@
     "check": "npx eslint-config-prettier ./app.js",
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "heroku-postbuild": "cd ../frontend && npm install && npm run build"
+    "heroku-postbuild": "cd ../frontend && npm install && npm run build",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,9 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react": "^7.33.2",
-    "nodemon": "^3.0.3"
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^6.3.4"
   },
   "dependencies": {
     "aws-sdk": "^2.1560.0",
