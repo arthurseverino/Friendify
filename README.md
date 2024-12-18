@@ -44,7 +44,7 @@ The following dependencies are used in this project:
 - mongoose: Object Data Modeling library for MongoDB.
 - supertest: HTTP testings.
 - jest: Jest test frameworks.
-- bcryptjs: Handles Hashing passwords
+- bcryptjs: Handles hashing passwords
 - express-validator: Runs back-end validation for form data.
 - passport-jwt: Passport strategy for authenticating with JWT tokens.
 - jsonwebtoken: JSON Web Token implementation for Node.js.
