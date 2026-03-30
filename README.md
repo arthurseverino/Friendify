@@ -4,7 +4,7 @@ https://friendify-afc27231acd7.herokuapp.com
 
 # Friendify
 
-Friendify is a full-stack social media website created with the MERN stack. It's designed to help people stay connected with their friends, share updates, and discover new content.
+Friendify is a full-stack social media website built with React, Express, and PostgreSQL (via Prisma). It is designed to help people stay connected with friends, share updates, and discover new content.
 
 
 ## Getting Started
@@ -12,10 +12,18 @@ Friendify is a full-stack social media website created with the MERN stack. It's
 To get started with the website, follow these steps:
 
 1. Clone the repository to your local machine.
-2. Run <code>npm install</code> to install the project dependencies.
-3. Create a .env.local file and fill in the necessary environment variables (e.g., `MONGODB_URI`, `JWT_SECRET`).
-4. Run <code>npm run dev</code> to start the development server.
-5. Open http://localhost:3000 in your web browser to view the website.
+2. Install dependencies:
+   - `cd backend && npm install`
+   - `cd ../frontend && npm install`
+3. Create backend env variables in `backend/.env`:
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - Bucketeer/AWS vars if you want image uploads
+4. Run Prisma migration:
+   - `cd backend && npm run prisma:migrate:dev`
+5. Start apps:
+   - Backend: `cd backend && npm run dev`
+   - Frontend: `cd frontend && npm run dev`
 
 
 ## Features
@@ -27,7 +35,6 @@ Friendify includes the following features:
 - AWS cloud storage for user images
 - Real-time feed of posts from friends
 - Ability to like posts and comments
-- Log into the website as a visitor.
 - Responsive design
 
 ... and much more!
@@ -41,7 +48,8 @@ The following dependencies are used in this project:
 - react-router-dom: Routing library for React.
 - aws-sdk: Handles AWS S3 Bucket file storage for user-uploaded images
 - express: Web application framework for Node.js.
-- mongoose: Object Data Modeling library for MongoDB.
+- prisma + @prisma/client: ORM and query client for PostgreSQL.
+- pg: PostgreSQL driver.
 - supertest: HTTP testings.
 - jest: Jest test frameworks.
 - bcryptjs: Handles Hashing passwords
@@ -55,10 +63,10 @@ The following dependencies are used in this project:
 
 The website includes the following pages:
 
-- /index: Displays login and sign-up forms.
-- /home: The home page includes a feed of posts from the user and their friends.
-- /profile: Displays the user's profile page and a feed of the user's posts.
-- /friends: Displays a list of users including suggestions for users to follow.
+- `/`: Displays login and sign-up forms.
+- `/api/users/:userId/posts`: Home feed for followed users + self.
+- `/api/users/:id`: Profile page and user posts.
+- `/api/users`: User discovery and follow actions.
 
 ## Screenshots 
 

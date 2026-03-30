@@ -1,42 +1,73 @@
-const Post = require('../models/postModel');
 const asyncHandler = require('express-async-handler');
-const User = require('../models/userModel');
-const AWS = require('aws-sdk');
+const prisma = require('../config/prisma');
+const { uploadBufferToS3 } = require('../services/s3Service');
+const { serializePost } = require('../utils/serializers');
 
-// Configure AWS with your Bucketeer credentials.
-const {
-  BUCKETEER_AWS_ACCESS_KEY_ID,
-  BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  BUCKETEER_BUCKET_NAME,
-} = process.env;
+const getAuthenticatedUserId = (req) => req.user?.id || req.user?._id?.toString() || null;
 
-AWS.config.update({
-  accessKeyId: BUCKETEER_AWS_ACCESS_KEY_ID,
-  secretAccessKey: BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1', // Bucketeer is always in this region
-});
+const findUserByAnyId = (id) =>
+  prisma.user.findFirst({
+    where: {
+      OR: [{ id }, { legacyMongoId: id }],
+    },
+    include: { following: true },
+  });
 
-const s3 = new AWS.S3();
+const fetchPostWithRelations = (postId) =>
+  prisma.post.findUnique({
+    where: { id: postId },
+    include: {
+      author: true,
+      comments: {
+        include: {
+          author: true,
+        },
+        orderBy: { createdAt: 'asc' },
+      },
+      likes: true,
+    },
+  });
 
 // get all posts on timeline for one user
 const getPosts = asyncHandler(async (req, res) => {
+  const currentUserId = getAuthenticatedUserId(req);
+  if (!currentUserId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
-  const currentUser = await User.findById(req.user._id);
-  const followingIds = currentUser.following;
-  followingIds.push(req.user._id); // Include the current user's ID
+  const currentUser = await findUserByAnyId(currentUserId);
+  if (!currentUser) {
+    return res.status(404).json({ error: 'User not found' });
+  }
 
-  const posts = await Post.find({
-    author: { $in: followingIds },
-  })
-    .sort('-createdAt')
-    .skip(skip)
-    .limit(limit)
-    .populate('author', 'username profilePicture')
-    .populate('comments.author', 'username profilePicture');
-  res.status(200).json(posts);
+  const followingIds = [...currentUser.following.map((f) => f.followingId), currentUser.id];
+
+  const posts = await prisma.post.findMany({
+    where: {
+      authorId: {
+        in: followingIds,
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+    skip,
+    take: limit,
+    include: {
+      author: true,
+      comments: {
+        include: {
+          author: true,
+        },
+        orderBy: { createdAt: 'asc' },
+      },
+      likes: true,
+    },
+  });
+
+  res.status(200).json(posts.map(serializePost));
 });
 
 //show all posts in the database
@@ -45,99 +76,163 @@ const getAllPosts = asyncHandler(async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
-  const posts = await Post.find({})
-    .sort('-createdAt')
-    .skip(skip)
-    .limit(limit)
-    .populate('author', 'username profilePicture')
-    .populate('comments.author', 'username profilePicture');
+  const posts = await prisma.post.findMany({
+    orderBy: { createdAt: 'desc' },
+    skip,
+    take: limit,
+    include: {
+      author: true,
+      comments: {
+        include: {
+          author: true,
+        },
+        orderBy: { createdAt: 'asc' },
+      },
+      likes: true,
+    },
+  });
 
-  res.status(200).json(posts);
+  res.status(200).json(posts.map(serializePost));
 });
 
 // create a new post
 const createPost = asyncHandler(async (req, res, next) => {
-  const { body, author } = req.body;
+  const currentUserId = getAuthenticatedUserId(req);
+  if (!currentUserId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const currentUser = await findUserByAnyId(currentUserId);
+  if (!currentUser) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  const { body } = req.body;
   const image = req.file ? req.file.buffer : null;
 
   let location = null;
 
   if (image) {
-    // Setting up S3 upload parameters
-    const params = {
-      Bucket: BUCKETEER_BUCKET_NAME,
-      Key: req.file.originalname, // File name you want to save as in S3
-      Body: image,
-    };
-
-    // Uploading files to the bucket
     try {
-      const { Location } = await s3.upload(params).promise();
-      console.log(`File uploaded successfully. ${Location}`);
-      location = Location;
+      location = await uploadBufferToS3(image, req.file.originalname);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Error uploading file' });
     }
   }
 
-  const newPost = await Post.create({
-    body,
-    image: location, // Save the S3 file URL in the database
-    likes: [],
-    comments: [],
-    author,
+  const newPost = await prisma.post.create({
+    data: {
+      body,
+      image: location,
+      authorId: currentUser.id,
+    },
+    include: {
+      author: true,
+      comments: {
+        include: {
+          author: true,
+        },
+      },
+      likes: true,
+    },
   });
 
-  const populatedPost = await newPost.populate(
-    'author',
-    'username profilePicture'
-  );
-
-  res.status(200).json(populatedPost);
+  res.status(200).json(serializePost(newPost));
 });
 
 // In this code, likePost finds the post with the provided ID and adds the user's ID to the likes array if it's not already there, or removes it if it is.
 
 const likePost = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.postId);
+  const currentUserId = getAuthenticatedUserId(req);
+  if (!currentUserId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const currentUser = await findUserByAnyId(currentUserId);
+  if (!currentUser) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  const post = await prisma.post.findFirst({
+    where: {
+      OR: [{ id: req.params.postId }, { legacyMongoId: req.params.postId }],
+    },
+  });
 
   if (!post) {
     return res.status(404).json({ message: 'Post not found' });
   }
 
-  if (!post.likes.includes(req.user._id)) {
-    await post.updateOne({ $push: { likes: req.user._id } });
+  const existingLike = await prisma.postLike.findUnique({
+    where: {
+      postId_userId: {
+        postId: post.id,
+        userId: currentUser.id,
+      },
+    },
+  });
+
+  if (!existingLike) {
+    await prisma.postLike.create({
+      data: {
+        postId: post.id,
+        userId: currentUser.id,
+      },
+    });
   } else {
-    await post.updateOne({ $pull: { likes: req.user._id } });
+    await prisma.postLike.delete({
+      where: {
+        postId_userId: {
+          postId: post.id,
+          userId: currentUser.id,
+        },
+      },
+    });
   }
 
-  const updatedPost = await Post.findById(req.params.postId)
-    .populate('author', 'username profilePicture')
-    .populate('comments.author', 'username profilePicture');
-  res.status(200).json({ post: updatedPost });
+  const updatedPost = await fetchPostWithRelations(post.id);
+  res.status(200).json({ post: serializePost(updatedPost) });
 });
 
 // addComment creates a new comment with the provided text and the user's ID as the author, saves it, finds the post with the provided ID, and adds the comment's ID to the comments array.
 
 const addComment = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.postId);
+  const currentUserId = getAuthenticatedUserId(req);
+  if (!currentUserId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const currentUser = await findUserByAnyId(currentUserId);
+  if (!currentUser) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  const post = await prisma.post.findFirst({
+    where: {
+      OR: [{ id: req.params.postId }, { legacyMongoId: req.params.postId }],
+    },
+  });
 
   if (!post) {
     return res.status(404).json({ message: 'Post not found' });
   }
 
-  const comment = {
-    text: req.body.text,
-    author: req.user._id,
-  };
+  const text = req.body.text?.trim();
+  if (!text) {
+    return res.status(400).json({ error: 'Comment text is required' });
+  }
 
-  await post.updateOne({ $push: { comments: comment } });
+  await prisma.comment.create({
+    data: {
+      text,
+      postId: post.id,
+      authorId: currentUser.id,
+    },
+  });
 
-  const updatedPost = await Post.findById(req.params.postId)
-    .populate('author', 'username profilePicture')
-    .populate('comments.author', 'username profilePicture');
-  res.status(200).json({ post: updatedPost });
+  const updatedPost = await fetchPostWithRelations(post.id);
+  res.status(200).json({ post: serializePost(updatedPost) });
 });
 
 module.exports = {

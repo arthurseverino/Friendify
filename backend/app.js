@@ -1,45 +1,19 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const userRoutes = require('./routes/users');
 const cors = require('cors');
-const User = require('./models/userModel');
 const path = require('path');
-const passport = require('passport');
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
+const prisma = require('./config/prisma');
+const { passport, initializePassport } = require('./config/passport');
 
-const mongoDB = process.env.MONGO_URL;
-mongoose.set('strictQuery', false);
-
-async function main() {
-  try {
-    await mongoose.connect(mongoDB);
-  } catch (err) {
-    console.log(err);
-  }
-}
-main();
+const connectToDatabase = async () => {
+  await prisma.$connect();
+  console.log('Connected to PostgreSQL');
+};
 
 const app = express();
 
-const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.JWT_SECRET;
-passport.use(
-  // The payload typically contains the ID of the user
-  new JwtStrategy(opts, async (jwt_payload, done) => {
-    try {
-      const user = await User.findById(jwt_payload.id);
-      if (user) {
-        return done(null, user);
-      }
-      return done(null, false);
-    } catch (err) {
-      return done(err, false);
-    }
-  })
-);
+initializePassport();
 
 // middleware
 app.use(passport.initialize());
@@ -75,4 +49,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server started on port: ${PORT}`));
+connectToDatabase()
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server started on port: ${PORT}`));
+  })
+  .catch((err) => {
+    console.error('Database connection failed:', err);
+    process.exit(1);
+  });

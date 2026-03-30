@@ -1,10 +1,11 @@
 {
   "name": "social-network",
   "version": "1.0.0",
-  "description": "Live:",
+  "description": "Friendify full-stack social app",
   "main": "app.js",
   "scripts": {
-    "start": "cd backend && npm install && npm start",
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
     "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "keywords": [],

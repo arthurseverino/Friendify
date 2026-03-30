@@ -1,80 +1,100 @@
-const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const Post = require('../models/postModel');
 const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
-const AWS = require('aws-sdk');
+const prisma = require('../config/prisma');
+const { uploadBufferToS3 } = require('../services/s3Service');
+const { defaultProfilePicture, serializeUser, serializePost } = require('../utils/serializers');
 
-// Configure AWS with your Bucketeer credentials.
-const {
-  BUCKETEER_AWS_ACCESS_KEY_ID,
-  BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  BUCKETEER_BUCKET_NAME,
-} = process.env;
+const getAuthenticatedUserId = (req) => req.user?.id || req.user?._id?.toString() || null;
 
-AWS.config.update({
-  accessKeyId: BUCKETEER_AWS_ACCESS_KEY_ID,
-  secretAccessKey: BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1', // Bucketeer is always in this region
-});
-
-const s3 = new AWS.S3();
+const findUserByAnyId = async (id) =>
+  prisma.user.findFirst({
+    where: {
+      OR: [{ id }, { legacyMongoId: id }],
+    },
+    include: {
+      following: true,
+      followers: true,
+    },
+  });
 
 // you can update a user's profile picture and that's it
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  const currentUserId = getAuthenticatedUserId(req);
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!currentUserId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const targetUser = await findUserByAnyId(id);
+  if (!targetUser) {
     return res.status(400).json({ error: 'No such user' });
+  }
+
+  if (targetUser.id !== currentUserId && targetUser.legacyMongoId !== currentUserId) {
+    return res.status(403).json({ error: 'You can only update your own profile' });
   }
 
   let location = null;
 
   if (req.file) {
-    // Setting up S3 upload parameters
-    const params = {
-      Bucket: BUCKETEER_BUCKET_NAME,
-      Key: req.file.originalname, // File name you want to save as in S3
-      Body: req.file.buffer,
-    };
-
-    // Uploading files to the bucket
     try {
-      const { Location } = await s3.upload(params).promise();
-      console.log(`File uploaded successfully. ${Location}`);
-      location = Location;
+      location = await uploadBufferToS3(req.file.buffer, req.file.originalname);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Error uploading file' });
     }
   }
 
-  const user = await User.findOneAndUpdate(
-    { _id: id },
-    // req.body contains all the previous fields in the model
-    {
-      ...req.body,
+  const user = await prisma.user.update({
+    where: { id: targetUser.id },
+    data: {
       profilePicture: location || req.body.profilePicture,
     },
-    { new: true } // This option returns the updated document
+    include: {
+      following: true,
+      followers: true,
+    },
+  });
+
+  const userResponse = serializeUser(
+    {
+      ...user,
+      following: user.following.map((f) => f.followingId),
+      followers: user.followers.map((f) => f.followerId),
+    },
+    { excludePassword: true }
   );
-
-  if (!user) {
-    return res.status(400).json({ error: 'No such user' });
-  }
-
-  res.status(200).json(user);
+  res.status(200).json(userResponse);
 });
 
 // shows all users
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({}).sort({ username: 1 });
+  const currentUserId = getAuthenticatedUserId(req);
+  if (!currentUserId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const users = await prisma.user.findMany({
+    orderBy: { username: 'asc' },
+    include: {
+      following: true,
+      followers: true,
+    },
+  });
 
   const usersWithIsFollowing = users.map((user) => ({
-    ...user._doc,
-    isFollowing: user.followers.includes(req.user._id),
+    ...serializeUser(
+      {
+        ...user,
+        following: user.following.map((f) => f.followingId),
+        followers: user.followers.map((f) => f.followerId),
+      },
+      { excludePassword: true }
+    ),
+    isFollowing: user.followers.some((follower) => follower.followerId === currentUserId),
   }));
 
   res.status(200).json(usersWithIsFollowing);
@@ -85,27 +105,36 @@ const getUsers = asyncHandler(async (req, res) => {
 
 const getUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: 'No such user' });
-  }
-
-  const user = await User.findById(id);
+  const user = await findUserByAnyId(id);
   if (!user) {
     return res.status(404).json({ error: 'No such user' });
   }
 
-  const posts = await Post.find({ author: id })
-    .sort('-createdAt')
-    .populate('author')
-    .populate({
-      path: 'comments',
-      populate: {
-        path: 'author',
-        model: 'User',
+  const posts = await prisma.post.findMany({
+    where: { authorId: user.id },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      author: true,
+      comments: {
+        include: {
+          author: true,
+        },
       },
-    });
-  res.status(200).json({ ...user._doc, posts });
+      likes: true,
+    },
+  });
+
+  res.status(200).json({
+    ...serializeUser(
+      {
+        ...user,
+        following: user.following.map((f) => f.followingId),
+        followers: user.followers.map((f) => f.followerId),
+      },
+      { excludePassword: true }
+    ),
+    posts: posts.map(serializePost),
+  });
 });
 
 // create a new user
@@ -117,7 +146,7 @@ const createUser = [
     .isLength({ min: 3 })
     .withMessage('Username must be at least 3 characters long')
     .custom(async (username) => {
-      const existingUser = await User.findOne({ username });
+      const existingUser = await prisma.user.findUnique({ where: { username } });
       if (existingUser) {
         throw new Error('Username already taken');
       }
@@ -135,11 +164,26 @@ const createUser = [
 
     const { username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({
-      username,
-      password: hashedPassword,
+    const user = await prisma.user.create({
+      data: {
+        username,
+        password: hashedPassword,
+        profilePicture: defaultProfilePicture(),
+      },
+      include: {
+        followers: true,
+        following: true,
+      },
     });
-    const userResponse = await User.findById(user._id).select('-password');
+
+    const userResponse = serializeUser(
+      {
+        ...user,
+        following: user.following.map((f) => f.followingId),
+        followers: user.followers.map((f) => f.followerId),
+      },
+      { excludePassword: true }
+    );
     return res.status(200).json(userResponse);
   }),
 ];
@@ -152,10 +196,15 @@ const loginUser = [
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const user = await prisma.user.findUnique({
+      where: { username },
+      include: {
+        followers: true,
+        following: true,
+      },
+    });
 
-    // Check if user exists and if password is correct
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
       errors.errors.push({ msg: 'Invalid username or password' });
     }
 
@@ -163,26 +212,62 @@ const loginUser = [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Password and username are correct, create a token or get a token if it already exists
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    //send token and user to the client
-    return res.status(200).json({ token, user });
+    const tokenUserId = user.legacyMongoId || user.id;
+    const token = jwt.sign({ id: tokenUserId }, process.env.JWT_SECRET);
+
+    const userResponse = serializeUser(
+      {
+        ...user,
+        following: user.following.map((f) => f.followingId),
+        followers: user.followers.map((f) => f.followerId),
+      },
+      { excludePassword: true }
+    );
+
+    return res.status(200).json({ token, user: userResponse });
   }),
 ];
 
 // In this code, the /:id/follow route receives the ID of the user to follow as a URL parameter. It finds the user with this ID and the current user in the database. If the current user is not already following the user, it adds the current user's ID to the user's followers array and the user's ID to the current user's following array. If the current user is already following the user, it sends a 403 Forbidden response.
 
 const followUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-  const currentUser = await User.findById(req.user._id);
-
-  if (!user.followers.includes(req.user._id)) {
-    await user.updateOne({ $push: { followers: req.user._id } });
-    await currentUser.updateOne({ $push: { following: req.params.id } });
-    res.status(200).json('User has been followed');
-  } else {
-    res.status(403).json('You already follow this user');
+  const currentUserId = getAuthenticatedUserId(req);
+  if (!currentUserId) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
+
+  const targetUser = await findUserByAnyId(req.params.id);
+  const currentUser = await findUserByAnyId(currentUserId);
+
+  if (!targetUser || !currentUser) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  if (targetUser.id === currentUser.id) {
+    return res.status(400).json({ error: 'You cannot follow yourself' });
+  }
+
+  const existing = await prisma.follow.findUnique({
+    where: {
+      followerId_followingId: {
+        followerId: currentUser.id,
+        followingId: targetUser.id,
+      },
+    },
+  });
+
+  if (existing) {
+    return res.status(403).json('You already follow this user');
+  }
+
+  await prisma.follow.create({
+    data: {
+      followerId: currentUser.id,
+      followingId: targetUser.id,
+    },
+  });
+
+  res.status(200).json('User has been followed');
 });
 
 module.exports = {
