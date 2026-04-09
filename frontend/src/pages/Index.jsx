@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 
 const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
           username: 'Visitor',
           password: 'visitor',
         }),
-      }
+      },
     );
 
     if (response.ok) {
@@ -33,7 +33,7 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
         setProfilePicture(data.user.profilePicture);
       } else {
         setProfilePicture(
-          `${import.meta.env.VITE_APP_API_URL}/public/profilePic.jpg`
+          `${import.meta.env.VITE_APP_API_URL}/public/profilePic.jpg`,
         );
       }
       navigate(`/api/users/${data.user._id}/posts`);
@@ -47,9 +47,7 @@ const Index = ({ setToken, setUserId, setProfilePicture, token, userId }) => {
       <div className="text-section">
         <h2 className="title">
           {Array.from('Friendify').map((char, index) => (
-            <span key={index} style={{ animationDelay: `${index * 0.3}s` }}>
-              {char}
-            </span>
+            <span key={index}>{char}</span>
           ))}
         </h2>
         <h3 className="subtitle">
